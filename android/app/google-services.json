@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "92226826992",
+    "project_id": "club-de-lecture-ref",
+    "storage_bucket": "club-de-lecture-ref.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92226826992:android:a3b93b67435faf4197c835",
+        "android_client_info": {
+          "package_name": "com.example.book_club_ref"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92226826992-dnftbfoors77hf1klcqqitosn4tsfnms.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYBEyV8W8JHS0ndX-XDyXl1OvVo42qQA4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92226826992-dnftbfoors77hf1klcqqitosn4tsfnms.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
