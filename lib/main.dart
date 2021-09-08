@@ -1,5 +1,5 @@
-import 'package:book_club_ref/screens/home/home.dart';
-import 'package:book_club_ref/states/currentUser.dart';
+import 'package:book_club_ref/models/authModel.dart';
+import 'package:book_club_ref/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,16 +16,17 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => CurrentUser(),
+    return StreamProvider<AuthModel>.value(
+      initialData: AuthModel(),
+      value: Auth().user,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Book Club',
         theme: OurTheme().buildTheme(),
         home: OurRoot(),
-        routes: {
-          '/home': (context) => const HomeScreen(),
-        },
+        // routes: {
+        //   '/home': (context) => const HomeScreen(),
+        // },
       ),
     );
   }
