@@ -1,5 +1,5 @@
 import 'package:book_club_ref/models/authModel.dart';
-import 'package:book_club_ref/screens/home/home.dart';
+import 'package:book_club_ref/screens/inGroup/inGroup.dart';
 import 'package:book_club_ref/screens/login/login.dart';
 import 'package:book_club_ref/screens/noGroup/nogroup.dart';
 import 'package:book_club_ref/screens/splashScreen/splashScreen.dart';
@@ -59,8 +59,7 @@ class _OurRootState extends State<OurRoot> {
         //retVal = OurLogin();
         break;
       case AuthStatus.notInGroup:
-        retVal = Scaffold(body: Center(child: Text("pas dans un groupe")));
-        //retVal = NoGroup();
+        retVal = InGroup();
         break;
       case AuthStatus.inGroup:
         retVal = Scaffold(body: Center(child: Text("dans un groupe")));
