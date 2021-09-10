@@ -2,9 +2,11 @@ import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Auth {
   FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Stream<AuthModel> get user {
     return _auth.authStateChanges().map(
@@ -29,20 +31,18 @@ class Auth {
     String retVal = "error";
 
     try {
-      UserCredential _authResult = await _auth.createUserWithEmailAndPassword(
+      await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      if (_authResult.user != null) {
-        // String _returnString = await OurDataBase().createUser(_user);
-        // if (_returnString == "success") {
-        //   retVal = "success";
-        // }
-      } else {
-        print("User not created");
-      }
+
+      // String _returnString = await OurDataBase().createUser(_user);
+      // if (_returnString == "success") {
+      //   retVal = "success";
+      // }
+      retVal = "success";
     } catch (signUpError) {
       if (signUpError is PlatformException) {
         if (signUpError.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
-          retVal = "$email has alread been registered.";
+          retVal = "$email has already been registered.";
         }
       }
     }
@@ -53,13 +53,8 @@ class Auth {
     bool retValue = false;
 
     try {
-      UserCredential _authResult = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-
-      if (_authResult.user != null) {
-      } else {
-        print("user not looged in");
-      }
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      retValue = true;
     } catch (e) {
       print(e);
     }

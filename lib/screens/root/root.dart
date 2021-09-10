@@ -1,14 +1,16 @@
 import 'package:book_club_ref/models/authModel.dart';
+import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/inGroup/inGroup.dart';
 import 'package:book_club_ref/screens/login/login.dart';
 import 'package:book_club_ref/screens/noGroup/nogroup.dart';
 import 'package:book_club_ref/screens/splashScreen/splashScreen.dart';
+import 'package:book_club_ref/services/dbStream.dart';
 import 'package:book_club_ref/states/currentGroup.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum AuthStatus { unknown, notLoggedIn, notInGroup, inGroup }
+enum AuthStatus { unknown, notLoggedIn, loggedIn }
 
 class OurRoot extends StatefulWidget {
   const OurRoot({Key? key}) : super(key: key);
@@ -19,6 +21,7 @@ class OurRoot extends StatefulWidget {
 
 class _OurRootState extends State<OurRoot> {
   AuthStatus _authStatus = AuthStatus.unknown;
+  String? currentUid;
 
   @override
   void didChangeDependencies() async {
@@ -27,9 +30,10 @@ class _OurRootState extends State<OurRoot> {
     //get the state, check current user, set Authstatus based on state
     AuthModel _authStream = Provider.of<AuthModel>(context);
 
-    if (_authStream != null) {
+    if (_authStream.uid != null) {
       setState(() {
-        _authStatus = AuthStatus.notInGroup;
+        _authStatus = AuthStatus.loggedIn;
+        currentUid = _authStream.uid;
       });
       print("not in Group");
     } else {
@@ -50,25 +54,37 @@ class _OurRootState extends State<OurRoot> {
 
     switch (_authStatus) {
       case AuthStatus.unknown:
-        retVal = Scaffold(body: Center(child: Text("statut inconnu")));
-        //retVal = OurSplashScreen();
+        retVal = OurSplashScreen();
         break;
       case AuthStatus.notLoggedIn:
-        retVal = Scaffold(body: Center(child: Text("pas connecté")));
+        retVal = Login();
+        break;
+      case AuthStatus.loggedIn:
+        retVal = StreamProvider<UserModel>.value(
+          value: DBStream().getcurrentUser(currentUid!),
+          initialData: UserModel(),
+          child: LoggedIn(),
+        );
+        //retVal = InGroup();
+        break;
 
-        //retVal = OurLogin();
-        break;
-      case AuthStatus.notInGroup:
-        retVal = InGroup();
-        break;
-      case AuthStatus.inGroup:
-        retVal = Scaffold(body: Center(child: Text("dans un groupe")));
-        // retVal = ChangeNotifierProvider(
-        //     create: (BuildContext context) => CurrentGroup(),
-        //     child: HomeScreen());
-
-        break;
       default:
+    }
+    return retVal;
+  }
+}
+
+class LoggedIn extends StatelessWidget {
+  const LoggedIn({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    UserModel _userStream = Provider.of<UserModel>(context);
+    Widget retVal;
+    if (_userStream.groupId != null) {
+      retVal = InGroup();
+    } else {
+      retVal = NoGroup();
     }
     return retVal;
   }

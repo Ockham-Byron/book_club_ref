@@ -5,7 +5,7 @@ import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
 
 import 'package:book_club_ref/states/currentGroup.dart';
-import 'package:book_club_ref/widgets/ourContainer.dart';
+import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
