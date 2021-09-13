@@ -35,7 +35,7 @@ class _OurRootState extends State<OurRoot> {
         _authStatus = AuthStatus.loggedIn;
         currentUid = _authStream.uid;
       });
-      print("not in Group");
+      print("loggedIn");
     } else {
       setState(() {
         _authStatus = AuthStatus.notLoggedIn;
@@ -81,10 +81,14 @@ class LoggedIn extends StatelessWidget {
   Widget build(BuildContext context) {
     UserModel _userStream = Provider.of<UserModel>(context);
     Widget retVal;
-    if (_userStream.groupId != null) {
-      retVal = InGroup();
+    if (_userStream.uid != null) {
+      if (_userStream.groupId != null) {
+        retVal = InGroup();
+      } else {
+        retVal = NoGroup();
+      }
     } else {
-      retVal = NoGroup();
+      retVal = OurSplashScreen();
     }
     return retVal;
   }

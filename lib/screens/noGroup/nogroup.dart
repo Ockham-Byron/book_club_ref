@@ -1,24 +1,55 @@
+import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/createGroup/createGroup.dart';
 import 'package:book_club_ref/screens/joinGroup/joinGroup.dart';
+import 'package:book_club_ref/screens/root/root.dart';
+import 'package:book_club_ref/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NoGroup extends StatelessWidget {
-  const NoGroup({Key? key}) : super(key: key);
+  const NoGroup({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     void _goToJoin() {
-      // Navigator.of(context)
-      //     .push(MaterialPageRoute(builder: (context) => OurJoinGroup()));
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => JoinGroup()));
     }
 
     void _goToCreate() {
-      // Navigator.of(context)
-      //     .push(MaterialPageRoute(builder: (context) => OurCreateGroup()));
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => CreateGroup()));
+    }
+
+    void _signOut(BuildContext context) async {
+      //AuthModel _authModel = Provider.of<AuthModel>(context, listen: false);
+
+      String _returnedString = await Auth().signOut();
+      if (_returnedString == "success") {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OurRoot(),
+          ),
+          (route) => false,
+        );
+      }
     }
 
     return Scaffold(
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.outbond_rounded,
+              color: Colors.white,
+            ),
+            onPressed: () => _signOut(context),
+          )
+        ],
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
