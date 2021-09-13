@@ -66,6 +66,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             hintText: "courriel",
           ),
+          style: Theme.of(context).textTheme.headline6,
         ),
         TextFormField(
           obscureText: _isHidden,
@@ -80,9 +81,11 @@ class _LoginFormState extends State<LoginForm> {
               onPressed: _togglePasswordView,
               icon: Icon(
                 _isHidden ? Icons.visibility : Icons.visibility_off,
+                color: Theme.of(context).canvasColor,
               ),
             ),
           ),
+          style: Theme.of(context).textTheme.headline6,
         ),
         SizedBox(
           height: 40,

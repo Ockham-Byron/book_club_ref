@@ -14,6 +14,10 @@ class OurTheme {
       accentColor: _apricot,
       secondaryHeaderColor: _spaceCadet,
       hintColor: _electricBlue,
+      textTheme: TextTheme(
+          headline6: TextStyle(
+        color: _sage,
+      )),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           primary: _sage,
@@ -22,6 +26,10 @@ class OurTheme {
           minimumSize: Size(150, 50),
         ),
       ),
+      inputDecorationTheme: InputDecorationTheme(
+          hintStyle: TextStyle(color: _electricBlue),
+          focusedBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: _sage))),
     );
   }
 }

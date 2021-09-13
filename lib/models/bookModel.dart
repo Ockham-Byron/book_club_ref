@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class OurBook {
+class BookModel {
   String? id;
   String? title;
   String? author;
@@ -8,7 +8,7 @@ class OurBook {
   String cover;
   Timestamp? dateCompleted;
 
-  OurBook(
+  BookModel(
       {this.id,
       this.title,
       this.author,
