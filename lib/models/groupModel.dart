@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class OurGroup {
+class GroupModel {
   String? id;
   String? name;
   String? leader;
@@ -9,7 +9,7 @@ class OurGroup {
   String? currentBookId;
   Timestamp? currentBookDue;
 
-  OurGroup(
+  GroupModel(
       {this.id,
       this.name,
       this.leader,

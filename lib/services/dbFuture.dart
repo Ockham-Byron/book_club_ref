@@ -1,8 +1,25 @@
 import 'package:book_club_ref/models/bookModel.dart';
+import 'package:book_club_ref/models/userModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DBFuture {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<String> createUser(UserModel user) async {
+    String retVal = "error";
+
+    try {
+      await _firestore.collection("users").doc(user.uid).set({
+        "pseudo": user.pseudo!.trim(),
+        "email": user.email!.trim(),
+        "accountCreated": Timestamp.now(),
+      });
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
 
   Future<String> createGroup(
       String groupName, String uid, BookModel initialBook) async {

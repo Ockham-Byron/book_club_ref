@@ -1,5 +1,7 @@
 import 'package:book_club_ref/models/authModel.dart';
+import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/services/database.dart';
+import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,13 +33,21 @@ class Auth {
     String retVal = "error";
 
     try {
-      await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      UserCredential _userCredential =
+          await _auth.createUserWithEmailAndPassword(
+              email: email.trim(), password: password);
 
-      // String _returnString = await OurDataBase().createUser(_user);
-      // if (_returnString == "success") {
-      //   retVal = "success";
-      // }
+      UserModel _user = UserModel(
+        uid: _userCredential.user!.uid,
+        email: _userCredential.user!.email,
+        pseudo: pseudo.trim(),
+        accountCreated: Timestamp.now(),
+      );
+
+      String _returnString = await DBFuture().createUser(_user);
+      if (_returnString == "success") {
+        retVal = "success";
+      }
       retVal = "success";
     } catch (signUpError) {
       if (signUpError is PlatformException) {

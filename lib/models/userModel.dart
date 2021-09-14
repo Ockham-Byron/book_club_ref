@@ -10,6 +10,8 @@ class UserModel {
   UserModel({
     this.uid,
     this.email,
+    this.pseudo,
+    this.accountCreated,
   });
 
   UserModel.fromDocumentSnapshot(

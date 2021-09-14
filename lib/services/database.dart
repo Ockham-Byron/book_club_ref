@@ -1,6 +1,6 @@
 import 'package:book_club_ref/models/bookModel.dart';
 
-import 'package:book_club_ref/models/group.dart';
+import 'package:book_club_ref/models/groupModel.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -70,8 +70,8 @@ class OurDataBase {
     return retVal;
   }
 
-  Future<OurGroup> getGroupInfo(String groupId) async {
-    OurGroup retVal = OurGroup();
+  Future<GroupModel> getGroupInfo(String groupId) async {
+    GroupModel retVal = GroupModel();
 
     try {
       DocumentSnapshot<Map<Object, dynamic>> _docSnapshot =

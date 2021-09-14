@@ -1,8 +1,8 @@
+import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class OurSignUpForm extends StatefulWidget {
   const OurSignUpForm({Key? key}) : super(key: key);
@@ -19,12 +19,10 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
 
   void _signUpUser(String email, String password, String pseudo,
       BuildContext context) async {
-    String _returnString = await Auth().signUpUser(email, password, pseudo);
-
     try {
+      String _returnString = await Auth().signUpUser(email, password, pseudo);
       if (_returnString == "success") {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => OurRoot()));
+        Navigator.pop(context);
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(_returnString)));

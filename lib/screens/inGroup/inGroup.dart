@@ -31,8 +31,6 @@ class _InGroupState extends State<InGroup> {
   }
 
   void _signOut(BuildContext context) async {
-    //AuthModel _authModel = Provider.of<AuthModel>(context, listen: false);
-
     String _returnedString = await Auth().signOut();
     if (_returnedString == "success") {
       Navigator.pushAndRemoveUntil(
