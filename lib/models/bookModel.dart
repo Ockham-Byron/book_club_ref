@@ -5,7 +5,7 @@ class BookModel {
   String? title;
   String? author;
   int? length;
-  String cover;
+  String? cover;
   Timestamp? dateCompleted;
 
   BookModel(
@@ -16,4 +16,14 @@ class BookModel {
       this.dateCompleted,
       this.cover =
           "https://cdn1.sosav.fr/es/store/69972-large_default/frame-interno-oficial-wiko-Lenny.jpg"});
+
+  BookModel.fromDocumentSnapshot(
+      {required DocumentSnapshot<Map<String, dynamic>> doc}) {
+    id = doc.id;
+    title = doc.data()!["title"];
+    author = doc.data()!["author"];
+    length = doc.data()!["length"];
+    cover = doc.data()!["cover"];
+    dateCompleted = doc.data()!['dateCompleted'];
+  }
 }

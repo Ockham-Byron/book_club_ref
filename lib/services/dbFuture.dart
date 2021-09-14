@@ -92,4 +92,22 @@ class DBFuture {
     }
     return retVal;
   }
+
+  Future<BookModel> getCurrentBook(String groupId, String bookId) async {
+    BookModel retVal = BookModel();
+
+    try {
+      DocumentSnapshot<Map<String, dynamic>> _docSnapshot = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .doc(bookId)
+          .get();
+      retVal = BookModel.fromDocumentSnapshot(doc: _docSnapshot);
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
+  }
 }
