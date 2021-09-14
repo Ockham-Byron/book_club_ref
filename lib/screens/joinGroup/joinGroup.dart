@@ -3,10 +3,10 @@ import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class JoinGroup extends StatefulWidget {
-  const JoinGroup({Key? key}) : super(key: key);
+  final UserModel userModel;
+  const JoinGroup({Key? key, required this.userModel}) : super(key: key);
 
   @override
   _JoinGroupState createState() => _JoinGroupState();
@@ -14,9 +14,8 @@ class JoinGroup extends StatefulWidget {
 
 class _JoinGroupState extends State<JoinGroup> {
   void _joinGroup(BuildContext context, String groupId) async {
-    UserModel _currentUser = Provider.of<UserModel>(context, listen: false);
-    String _returnString =
-        await DBFuture().joinGroup(groupId, _currentUser.uid!);
+    UserModel _currentUser = widget.userModel;
+    String _returnString = await DBFuture().joinGroup(groupId, _currentUser);
     if (_returnString == "success") {
       Navigator.pushAndRemoveUntil(
           context,

@@ -5,6 +5,7 @@ import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class NoGroup extends StatelessWidget {
   const NoGroup({
@@ -13,9 +14,12 @@ class NoGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserModel _currentUser = Provider.of<UserModel>(context);
     void _goToJoin() {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => JoinGroup()));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => JoinGroup(
+                userModel: _currentUser,
+              )));
     }
 
     void _goToCreate() {
@@ -24,8 +28,6 @@ class NoGroup extends StatelessWidget {
     }
 
     void _signOut(BuildContext context) async {
-      //AuthModel _authModel = Provider.of<AuthModel>(context, listen: false);
-
       String _returnedString = await Auth().signOut();
       if (_returnedString == "success") {
         Navigator.pushAndRemoveUntil(

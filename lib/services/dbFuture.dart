@@ -49,17 +49,17 @@ class DBFuture {
     return retVal;
   }
 
-  Future<String> joinGroup(String groupId, String userUid) async {
+  Future<String> joinGroup(String groupId, UserModel userModel) async {
     String retVal = "error";
     List<String> members = [];
 
     try {
-      members.add(userUid);
+      members.add(userModel.uid!);
       await _firestore.collection("groups").doc(groupId).update({
         "members": FieldValue.arrayUnion(members),
       });
-      await _firestore.collection("users").doc(userUid).update({
-        "groupId": groupId,
+      await _firestore.collection("users").doc(userModel.uid!).update({
+        "groupId": groupId.trim(),
       });
       retVal = "success";
     } catch (e) {

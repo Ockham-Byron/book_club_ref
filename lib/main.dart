@@ -24,9 +24,6 @@ class MyApp extends StatelessWidget {
         title: 'Book Club',
         theme: OurTheme().buildTheme(),
         home: OurRoot(),
-        // routes: {
-        //   '/home': (context) => const HomeScreen(),
-        // },
       ),
     );
   }
