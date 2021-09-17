@@ -3,6 +3,7 @@ import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/addBook/addBook.dart';
+import 'package:book_club_ref/screens/review/addareview.dart';
 
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
@@ -22,7 +23,7 @@ class InGroup extends StatefulWidget {
 
 class _InGroupState extends State<InGroup> {
   late AuthModel _authModel;
-  bool _doneWithBook = false;
+  bool _doneWithBook = true;
   BookModel _currentBook = BookModel();
   GroupModel _currentGroup = GroupModel();
 
@@ -33,6 +34,7 @@ class _InGroupState extends State<InGroup> {
     _currentGroup = Provider.of<GroupModel>(context);
 
     if (_currentGroup.id != null) {
+      isUserDoneWithBook();
       _currentBook = await DBFuture()
           .getCurrentBook(_currentGroup.id!, _currentGroup.currentBookId!);
     }
@@ -64,17 +66,24 @@ class _InGroupState extends State<InGroup> {
     );
   }
 
-  // void _goToReview() {
-  //   CurrentGroup _currentGroup =
-  //       Provider.of<CurrentGroup>(context, listen: false);
-  //   Navigator.of(context).push(
-  //     MaterialPageRoute(
-  //       builder: (context) => AddReview(
-  //         currentGroup: _currentGroup,
-  //       ),
-  //     ),
-  //   );
-  // }
+  isUserDoneWithBook() async {
+    if (await DBFuture().isUserDoneWithBook(
+        _currentGroup.id!, _currentGroup.currentBookId!, _authModel.uid!)) {
+      _doneWithBook = true;
+    } else {
+      _doneWithBook = false;
+    }
+  }
+
+  void _goToReview() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AddReview(
+          currentGroup: _currentGroup,
+        ),
+      ),
+    );
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,10 +172,7 @@ class _InGroupState extends State<InGroup> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 20),
                                 child: ElevatedButton(
-                                  onPressed: () {},
-                                  // onPressed: value.getDoneWithCurrentBook
-                                  //     ? null
-                                  //     : _goToReview,
+                                  onPressed: _doneWithBook ? null : _goToReview,
                                   child: Text("Livre terminé !"),
                                 ),
                               )

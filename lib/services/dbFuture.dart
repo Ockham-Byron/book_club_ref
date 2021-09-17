@@ -110,4 +110,48 @@ class DBFuture {
 
     return retVal;
   }
+
+  Future<bool> isUserDoneWithBook(
+      String groupId, String bookId, String uid) async {
+    bool retVal = false;
+
+    try {
+      DocumentSnapshot _docSnapshot = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .doc(bookId)
+          .collection("reviews")
+          .doc(uid)
+          .get();
+
+      if (_docSnapshot.exists) {
+        retVal = true;
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
+  }
+
+  Future<String> finishedBook(String groupId, String bookId, String uid,
+      int rating, String review) async {
+    String retVal = "error";
+
+    try {
+      await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .doc(bookId)
+          .collection("reviews")
+          .doc(uid)
+          .set({"rating": rating, "review": review});
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
+  }
 }
