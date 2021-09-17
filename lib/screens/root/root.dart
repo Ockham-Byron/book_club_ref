@@ -1,4 +1,5 @@
 import 'package:book_club_ref/models/authModel.dart';
+import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/inGroup/inGroup.dart';
 import 'package:book_club_ref/screens/login/login.dart';
@@ -83,7 +84,11 @@ class LoggedIn extends StatelessWidget {
     Widget retVal;
     if (_userStream.uid != null) {
       if (_userStream.groupId != null) {
-        retVal = InGroup();
+        retVal = StreamProvider<GroupModel>.value(
+          value: DBStream().getcurrentGroup(_userStream.groupId!),
+          initialData: GroupModel(),
+          child: InGroup(),
+        );
       } else {
         retVal = NoGroup();
       }

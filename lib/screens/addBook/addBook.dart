@@ -1,5 +1,6 @@
 import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
+import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
@@ -13,13 +14,18 @@ import 'package:provider/provider.dart';
 
 class AddBook extends StatefulWidget {
   final bool onGroupCreation;
+  //final bool onError;
   final String? groupName;
-  final UserModel? currentUser;
+  final GroupModel? currentGroup;
+  //final UserModel? currentUser;
   const AddBook(
       {Key? key,
       this.groupName,
       required this.onGroupCreation,
-      this.currentUser})
+      this.currentGroup
+      //required this.onError,
+      //this.currentUser
+      })
       : super(key: key);
 
   @override
@@ -154,9 +160,7 @@ class _AddBookState extends State<AddBook> {
               if (widget.onGroupCreation) {
                 _createGroup(context, widget.groupName!, book);
               } else {
-                UserModel _currentUser =
-                    Provider.of<UserModel>(context, listen: false);
-                DBFuture().addBook(_currentUser.groupId!, book);
+                DBFuture().addBook(widget.currentGroup!.id!, book);
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(

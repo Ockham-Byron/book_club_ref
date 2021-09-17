@@ -1,6 +1,7 @@
 import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
+import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/addBook/addBook.dart';
 
 import 'package:book_club_ref/screens/root/root.dart';
@@ -30,6 +31,7 @@ class _InGroupState extends State<InGroup> {
     super.didChangeDependencies();
     _authModel = Provider.of<AuthModel>(context);
     _currentGroup = Provider.of<GroupModel>(context);
+
     if (_currentGroup.id != null) {
       _currentBook = await DBFuture()
           .getCurrentBook(_currentGroup.id!, _currentGroup.currentBookId!);
@@ -50,10 +52,13 @@ class _InGroupState extends State<InGroup> {
   }
 
   void _goToAddBook() {
+    //UserModel _currentUser = Provider.of<UserModel>(context, listen: false);
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AddBook(
           onGroupCreation: false,
+          currentGroup: _currentGroup,
+          //currentUser: _currentUser,
         ),
       ),
     );
@@ -72,42 +77,21 @@ class _InGroupState extends State<InGroup> {
   // }
 
   Widget build(BuildContext context) {
-    var _currentBookTitle = _currentBook.title ?? "pas de livre choisi";
-    var today = DateTime.now();
-    var _currentBookDue = _currentGroup.currentBookDue;
-    if (_currentBookDue == null) {
-      _currentBookDue = Timestamp.now();
-    }
-
-    var _remainingDays = _currentBookDue.toDate().difference(today);
-    String _displayRemainingDays() {
-      String retVal;
-      if (_currentBookDue == Timestamp.now()) {
-        retVal = "pas de rdv fixé";
-      } else {
-        if (_remainingDays.isNegative) {
-          retVal = "le rdv a déjà eu lieu";
-        } else {
-          retVal = "Rdv pour échanger dans " +
-              _remainingDays.inDays.toString() +
-              " jours";
-        }
-      }
-
-      return retVal;
-    }
-
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.outbond_rounded,
-              color: Colors.white,
-            ),
-            onPressed: () => _signOut(context),
-          )
-        ],
+        centerTitle: true,
+        title: Consumer<GroupModel>(
+          builder: (BuildContext context, value, Widget? child) {
+            var _currentGroupName = value.name ?? "Groupe sans nom";
+            return Text(
+              _currentGroupName,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+              textAlign: TextAlign.center,
+            );
+          },
+        ),
       ),
       body: ListView(
         children: [
@@ -123,58 +107,74 @@ class _InGroupState extends State<InGroup> {
                   padding: const EdgeInsets.all(20),
                   child: ShadowContainer(
                     child: Padding(
-                        padding: const EdgeInsets.only(top: 40),
-                        child: Column(
-                          children: [
-                            Text(
-                              _currentBookTitle,
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              child: Text(
-                                _displayRemainingDays(),
+                      padding: const EdgeInsets.only(top: 40),
+                      child: Consumer<GroupModel>(
+                        builder: (BuildContext context, value, Widget? child) {
+                          var _currentBookTitle =
+                              _currentBook.title ?? "pas de livre choisi";
+                          var today = DateTime.now();
+                          var _currentBookDue = value.currentBookDue;
+                          if (_currentBookDue == null) {
+                            _currentBookDue = Timestamp.now();
+                          }
+
+                          var _remainingDays =
+                              _currentBookDue.toDate().difference(today);
+                          String _displayRemainingDays() {
+                            String retVal;
+                            if (_currentBookDue == Timestamp.now()) {
+                              retVal = "pas de rdv fixé";
+                            } else {
+                              if (_remainingDays.isNegative) {
+                                retVal = "le rdv a déjà eu lieu";
+                              } else {
+                                retVal = "Rdv pour échanger dans " +
+                                    _remainingDays.inDays.toString() +
+                                    " jours";
+                              }
+                            }
+
+                            return retVal;
+                          }
+
+                          return Column(
+                            children: [
+                              Text(
+                                _currentBookTitle,
                                 style: TextStyle(
                                   fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).accentColor,
+                                  color: Colors.white38,
                                 ),
+                                textAlign: TextAlign.left,
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                      if (states
-                                          .contains(MaterialState.pressed))
-                                        return Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(1);
-                                      else if (states
-                                          .contains(MaterialState.disabled))
-                                        return Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(0.5);
-                                      return Theme.of(context).canvasColor;
-                                    },
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  _displayRemainingDays(),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).accentColor,
                                   ),
                                 ),
-                                onPressed: () {},
-                                // onPressed: value.getDoneWithCurrentBook
-                                //     ? null
-                                //     : _goToReview,
-                                child: Text("Livre terminé !"),
                               ),
-                            )
-                          ],
-                        )),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  // onPressed: value.getDoneWithCurrentBook
+                                  //     ? null
+                                  //     : _goToReview,
+                                  child: Text("Livre terminé !"),
+                                ),
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -185,7 +185,8 @@ class _InGroupState extends State<InGroup> {
                   width: 150,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(_currentBook.cover!)),
+                        image: NetworkImage(
+                            "https://products-images.di-static.com/image/mathias-enard-la-perfection-du-tir/9782742744121-475x500-1.jpg")),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black54,
