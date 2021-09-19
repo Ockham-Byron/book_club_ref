@@ -79,7 +79,7 @@ class _CreateGroupState extends State<CreateGroup> {
                     builder: (context) => AddBook(
                       groupName: _groupNameInput.text,
                       onGroupCreation: true,
-                      //onError: false,
+                      onError: false,
                     ),
                   ),
                   (route) => false);

@@ -11,7 +11,7 @@ class OurTheme {
     return ThemeData(
       canvasColor: _electricBlue,
       primaryColor: _sage,
-      accentColor: _apricot,
+      focusColor: _apricot,
       secondaryHeaderColor: _spaceCadet,
       hintColor: _electricBlue,
       textTheme: TextTheme(
@@ -20,6 +20,7 @@ class OurTheme {
       )),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
+          onSurface: _apricot,
           primary: _sage,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

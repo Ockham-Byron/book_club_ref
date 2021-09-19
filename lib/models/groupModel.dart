@@ -7,16 +7,22 @@ class GroupModel {
   List<String>? members;
   Timestamp? groupCreated;
   String? currentBookId;
-  Timestamp? currentBookDue;
+  int? indexPickingBook;
+  String? nextBookId;
+  //Timestamp? currentBookDue;
 
-  GroupModel(
-      {this.id,
-      this.name,
-      this.leader,
-      this.members,
-      this.groupCreated,
-      this.currentBookId,
-      this.currentBookDue});
+  GroupModel({
+    this.id,
+    this.name,
+    this.leader,
+    this.members,
+    this.groupCreated,
+    this.currentBookId,
+    this.indexPickingBook,
+    this.nextBookId,
+
+    //this.currentBookDue
+  });
 
   GroupModel.fromDocumentSnapshot(
       {required DocumentSnapshot<Map<String, dynamic>> doc}) {
@@ -26,6 +32,8 @@ class GroupModel {
     members = List<String>.from(doc.data()!["members"]);
     groupCreated = doc.data()!["groupCreated"];
     currentBookId = doc.data()!["currentBookId"];
-    currentBookDue = doc.data()!["currentBookDue"];
+    indexPickingBook = doc.data()!["indexPickingBook"];
+    nextBookId = doc.data()!["nextBookId"];
+    //currentBookDue = doc.data()!["currentBookDue"];
   }
 }

@@ -14,19 +14,18 @@ import 'package:provider/provider.dart';
 
 class AddBook extends StatefulWidget {
   final bool onGroupCreation;
-  //final bool onError;
+  final bool onError;
   final String? groupName;
   final GroupModel? currentGroup;
-  //final UserModel? currentUser;
-  const AddBook(
-      {Key? key,
-      this.groupName,
-      required this.onGroupCreation,
-      this.currentGroup
-      //required this.onError,
-      //this.currentUser
-      })
-      : super(key: key);
+  final UserModel? currentUser;
+  const AddBook({
+    Key? key,
+    this.groupName,
+    required this.onGroupCreation,
+    this.currentGroup,
+    required this.onError,
+    this.currentUser,
+  }) : super(key: key);
 
   @override
   _AddBookState createState() => _AddBookState();
@@ -46,14 +45,20 @@ class _AddBookState extends State<AddBook> {
     }
   }
 
-  void _createGroup(
-    BuildContext context,
-    String groupName,
-    BookModel book,
-  ) async {
-    AuthModel _currentUser = Provider.of<AuthModel>(context, listen: false);
-    String _returnString =
-        await DBFuture().createGroup(groupName, _currentUser.uid!, book);
+  void _addBook(BuildContext context, String groupName, BookModel book) async {
+    String _returnString;
+
+    if (widget.onGroupCreation) {
+      _returnString =
+          await DBFuture().createGroup(groupName, widget.currentUser!, book);
+    } else if (widget.onError) {
+      _returnString =
+          await DBFuture().addCurrentBook(widget.currentGroup!.id!, book);
+    } else {
+      _returnString =
+          await DBFuture().addNextBook(widget.currentGroup!.id!, book);
+    }
+
     if (_returnString == "success") {
       Navigator.pushAndRemoveUntil(
           context,
@@ -157,17 +162,7 @@ class _AddBookState extends State<AddBook> {
                   author: _bookAuthorInput.text,
                   length: int.parse(_bookLengthInput.text),
                   dateCompleted: Timestamp.fromDate(_selectedDate));
-              if (widget.onGroupCreation) {
-                _createGroup(context, widget.groupName!, book);
-              } else {
-                DBFuture().addBook(widget.currentGroup!.id!, book);
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OurRoot(),
-                    ),
-                    (route) => false);
-              }
+              _addBook(context, widget.currentGroup!.name!, book);
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),

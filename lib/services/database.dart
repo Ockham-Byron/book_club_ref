@@ -82,7 +82,7 @@ class OurDataBase {
       retVal.leader = _docSnapshot.data()!["leader"];
       retVal.groupCreated = _docSnapshot.data()!["groupCreated"];
       retVal.currentBookId = _docSnapshot.data()!["currentBookId"];
-      retVal.currentBookDue = _docSnapshot.data()!["currentBookDue"];
+      //retVal.currentBookDue = _docSnapshot.data()!["currentBookDue"];
     } catch (e) {}
 
     return retVal;

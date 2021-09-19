@@ -3,7 +3,6 @@ import 'package:book_club_ref/services/auth.dart';
 import 'package:book_club_ref/screens/signup/signup.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);

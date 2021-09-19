@@ -6,7 +6,6 @@ import 'package:book_club_ref/screens/login/login.dart';
 import 'package:book_club_ref/screens/noGroup/nogroup.dart';
 import 'package:book_club_ref/screens/splashScreen/splashScreen.dart';
 import 'package:book_club_ref/services/dbStream.dart';
-import 'package:book_club_ref/states/currentGroup.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
