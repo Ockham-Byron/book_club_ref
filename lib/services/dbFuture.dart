@@ -21,21 +21,36 @@ class DBFuture {
     return retVal;
   }
 
+  Future<UserModel> getUser(String uid) async {
+    UserModel retVal = UserModel();
+
+    try {
+      DocumentSnapshot<Map<String, dynamic>> _docSnapshot =
+          await _firestore.collection("users").doc(uid).get();
+      retVal = UserModel.fromDocumentSnapshot(doc: _docSnapshot);
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
+  }
+
   Future<String> createGroup(
-      String groupName, String uid, BookModel initialBook) async {
+      String groupName, UserModel user, BookModel initialBook) async {
     String retVal = "error";
     List<String> members = [];
 
     try {
-      members.add(uid);
+      members.add(user.uid!);
       DocumentReference _docRef = await _firestore.collection("groups").add({
-        "name": groupName,
-        "leader": uid,
+        "name": groupName.trim(),
+        "leader": user.uid,
         "members": members,
         "groupCreated": Timestamp.now(),
-        "currentBookDue": initialBook.dateCompleted,
+        "nextBookId": "en attente",
+        "indexPickingBook": 0
       });
-      await _firestore.collection("users").doc(uid).update({
+      await _firestore.collection("users").doc(user.uid).update({
         "groupId": _docRef.id,
       });
 
@@ -86,6 +101,65 @@ class DBFuture {
       //add book to the Group schedule
       await _firestore.collection("groups").doc(groupId).update(
           {"currentBookId": _docRef.id, "currentBookDue": book.dateCompleted});
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  Future<String> addCurrentBook(String groupId, BookModel book) async {
+    String retVal = "error";
+
+    try {
+      DocumentReference _docRef = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .add({
+        'name': book.title!.trim(),
+        'author': book.author!.trim(),
+        'length': book.length,
+        'dateCompleted': book.dateCompleted,
+      });
+
+      //add current book to group schedule
+      await _firestore.collection("groups").doc(groupId).update({
+        "currentBookId": _docRef.id,
+        "currentBookDue": book.dateCompleted,
+      });
+
+      //adding a notification document
+
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
+  }
+
+  Future<String> addNextBook(String groupId, BookModel book) async {
+    String retVal = "error";
+
+    try {
+      DocumentReference _docRef = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .add({
+        "title": book.title,
+        "author": book.author,
+        "length": book.length,
+        "dateCompleted": book.dateCompleted
+      });
+
+      //add book to the Group schedule
+      await _firestore.collection("groups").doc(groupId).update({
+        "nextBookId": _docRef.id,
+        "nextBookDue": book.dateCompleted,
+        "indexPickingBook": FieldValue.increment(1)
+      });
       retVal = "success";
     } catch (e) {
       print(e);
