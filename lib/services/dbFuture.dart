@@ -1,4 +1,5 @@
 import 'package:book_club_ref/models/bookModel.dart';
+import 'package:book_club_ref/models/reviewModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -243,6 +244,28 @@ class DBFuture {
 
       query.docs.forEach((element) {
         retVal.add(BookModel.fromDocumentSnapshot(doc: element));
+      });
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  Future<List<ReviewModel>> getReviewHistory(
+      String groupId, String bookId) async {
+    List<ReviewModel> retVal = [];
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> query = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .doc(bookId)
+          .collection("reviews")
+          .get();
+
+      query.docs.forEach((element) {
+        retVal.add(ReviewModel.fromDocumentSnapshot(doc: element));
       });
     } catch (e) {
       print(e);

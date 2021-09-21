@@ -14,8 +14,8 @@ class EachBook extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => ReviewHistory(
-          groupId: groupId,
-          bookId: book!.id,
+          groupId: groupId!,
+          bookId: book!.id!,
         ),
       ),
     );

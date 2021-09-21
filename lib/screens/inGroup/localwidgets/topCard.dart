@@ -18,19 +18,8 @@ class TopCard extends StatefulWidget {
 class _TopCardState extends State<TopCard> {
   late AuthModel _authModel;
   bool _doneWithBook = true;
-  late BookModel _currentBook = BookModel();
+  late BookModel _currentBook;
   late GroupModel _currentGroup;
-
-  @override
-  void initState() async {
-    _authModel = Provider.of<AuthModel>(context);
-    _currentGroup = Provider.of<GroupModel>(context);
-
-    isUserDoneWithBook();
-    _currentBook = await DBFuture()
-        .getCurrentBook(_currentGroup.id!, _currentGroup.currentBookId!);
-    super.initState();
-  }
 
   @override
   void didChangeDependencies() async {
