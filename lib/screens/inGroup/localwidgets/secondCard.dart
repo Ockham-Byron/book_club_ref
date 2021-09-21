@@ -24,18 +24,17 @@ class _SecondCardState extends State<SecondCard> {
   void didChangeDependencies() async {
     _currentGroup = Provider.of<GroupModel>(context);
     _currentUser = Provider.of<UserModel>(context);
-    if (_currentGroup != null) {
-      _pickingUser = await DBFuture()
-          .getUser(_currentGroup.members![_currentGroup.indexPickingBook!]);
-      if (_currentGroup.nextBookId != null) {
-        _nextBook = await DBFuture()
-            .getCurrentBook(_currentGroup.id!, _currentGroup.nextBookId!);
-      }
 
-      if (this.mounted) {
-        setState(() {});
-      }
+    _pickingUser = await DBFuture()
+        .getUser(_currentGroup.members![_currentGroup.indexPickingBook!]);
+
+    _nextBook = await DBFuture()
+        .getCurrentBook(_currentGroup.id!, _currentGroup.nextBookId!);
+
+    if (this.mounted) {
+      setState(() {});
     }
+
     print(_currentUser.pseudo);
     print(_pickingUser.pseudo);
     super.didChangeDependencies();

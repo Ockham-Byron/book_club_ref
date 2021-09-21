@@ -139,7 +139,8 @@ class DBFuture {
     return retVal;
   }
 
-  Future<String> addNextBook(String groupId, BookModel book) async {
+  Future<String> addNextBook(
+      String groupId, BookModel book, int nextPicker) async {
     String retVal = "error";
 
     try {
@@ -158,7 +159,7 @@ class DBFuture {
       await _firestore.collection("groups").doc(groupId).update({
         "nextBookId": _docRef.id,
         "nextBookDue": book.dateCompleted,
-        "indexPickingBook": FieldValue.increment(1)
+        "indexPickingBook": nextPicker,
       });
       retVal = "success";
     } catch (e) {
@@ -226,6 +227,26 @@ class DBFuture {
       print(e);
     }
 
+    return retVal;
+  }
+
+  Future<List<BookModel>> getBookHistory(String groupId) async {
+    List<BookModel> retVal = [];
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> query = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .orderBy("dateCompleted", descending: true)
+          .get();
+
+      query.docs.forEach((element) {
+        retVal.add(BookModel.fromDocumentSnapshot(doc: element));
+      });
+    } catch (e) {
+      print(e);
+    }
     return retVal;
   }
 }

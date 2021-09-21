@@ -19,19 +19,29 @@ class _TopCardState extends State<TopCard> {
   late AuthModel _authModel;
   bool _doneWithBook = true;
   late BookModel _currentBook = BookModel();
-  GroupModel _currentGroup = GroupModel();
+  late GroupModel _currentGroup;
 
   @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
+  void initState() async {
     _authModel = Provider.of<AuthModel>(context);
     _currentGroup = Provider.of<GroupModel>(context);
 
-    if (_currentGroup.id != null) {
-      isUserDoneWithBook();
-      _currentBook = await DBFuture()
-          .getCurrentBook(_currentGroup.id!, _currentGroup.currentBookId!);
-    }
+    isUserDoneWithBook();
+    _currentBook = await DBFuture()
+        .getCurrentBook(_currentGroup.id!, _currentGroup.currentBookId!);
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    _authModel = Provider.of<AuthModel>(context);
+    _currentGroup = Provider.of<GroupModel>(context);
+
+    isUserDoneWithBook();
+    _currentBook = await DBFuture()
+        .getCurrentBook(_currentGroup.id!, _currentGroup.currentBookId!);
+
+    super.didChangeDependencies();
   }
 
   isUserDoneWithBook() async {

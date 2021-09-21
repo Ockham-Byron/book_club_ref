@@ -1,4 +1,3 @@
-import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
@@ -10,7 +9,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class AddBook extends StatefulWidget {
   final bool onGroupCreation;
@@ -55,8 +53,16 @@ class _AddBookState extends State<AddBook> {
       _returnString =
           await DBFuture().addCurrentBook(widget.currentGroup!.id!, book);
     } else {
-      _returnString =
-          await DBFuture().addNextBook(widget.currentGroup!.id!, book);
+      int _nbOfMembers = widget.currentGroup!.members!.length;
+      int? _actualPicker = widget.currentGroup!.indexPickingBook;
+      int _nextPicker;
+      if (_actualPicker == (_nbOfMembers - 1)) {
+        _nextPicker = 0;
+      } else {
+        _nextPicker = (_actualPicker! + 1);
+      }
+      _returnString = await DBFuture()
+          .addNextBook(widget.currentGroup!.id!, book, _nextPicker);
     }
 
     if (_returnString == "success") {

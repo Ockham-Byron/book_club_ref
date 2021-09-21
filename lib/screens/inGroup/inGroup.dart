@@ -1,6 +1,5 @@
 import 'package:book_club_ref/models/groupModel.dart';
-
-import 'package:book_club_ref/screens/addBook/addBook.dart';
+import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
 import 'package:book_club_ref/screens/inGroup/localwidgets/secondCard.dart';
 import 'package:book_club_ref/screens/inGroup/localwidgets/topCard.dart';
 
@@ -20,11 +19,6 @@ class InGroup extends StatefulWidget {
 class _InGroupState extends State<InGroup> {
   GroupModel _currentGroup = GroupModel();
 
-  @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-  }
-
   void _signOut(BuildContext context) async {
     String _returnedString = await Auth().signOut();
     if (_returnedString == "success") {
@@ -36,6 +30,19 @@ class _InGroupState extends State<InGroup> {
         (route) => false,
       );
     }
+  }
+
+  void _goToHistory() async {
+    GroupModel group = Provider.of<GroupModel>(context, listen: false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BookHistory(
+          groupId: group.id!,
+          groupName: group.name!,
+        ),
+      ),
+    );
   }
 
   Widget build(BuildContext context) {
@@ -81,7 +88,7 @@ class _InGroupState extends State<InGroup> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20.0),
             child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => _goToHistory(),
                 child: Text("Voir l'historique du club de lecture"),
                 style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).canvasColor,
