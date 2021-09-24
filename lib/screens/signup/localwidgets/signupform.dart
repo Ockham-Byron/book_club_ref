@@ -1,5 +1,3 @@
-import 'package:book_club_ref/models/userModel.dart';
-import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +10,29 @@ class OurSignUpForm extends StatefulWidget {
 }
 
 class _OurSignUpFormState extends State<OurSignUpForm> {
+  FocusNode? fpseudo;
+  FocusNode? fmail;
+  FocusNode? fpassword;
+  FocusNode? fpasswordbis;
+
+  @override
+  void initState() {
+    super.initState();
+    fmail = FocusNode();
+    fpassword = FocusNode();
+    fpseudo = FocusNode();
+    fpasswordbis = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    fmail?.dispose();
+    fpassword?.dispose();
+    fpseudo?.dispose();
+    fpasswordbis?.dispose();
+    super.dispose();
+  }
+
   TextEditingController _pseudoInput = TextEditingController();
   TextEditingController _emailInput = TextEditingController();
   TextEditingController _passwordInput = TextEditingController();
@@ -54,45 +75,63 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
             height: 20,
           ),
           TextFormField(
+            focusNode: fpseudo,
             controller: _pseudoInput,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.person),
-              hintText: "pseudo",
+              prefixIcon:
+                  Icon(Icons.person, color: Theme.of(context).primaryColor),
+              labelText: "pseudo",
+              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
             ),
+            style: Theme.of(context).textTheme.headline6,
           ),
           TextFormField(
+            focusNode: fmail,
             controller: _emailInput,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.alternate_email),
-              hintText: "courriel",
+              prefixIcon: Icon(Icons.alternate_email,
+                  color: Theme.of(context).primaryColor),
+              labelText: "courriel",
+              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
             ),
+            style: Theme.of(context).textTheme.headline6,
           ),
           TextFormField(
+            focusNode: fpassword,
             controller: _passwordInput,
             obscureText: _isHidden,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.lock_outline),
-              hintText: "mot de passe",
+              prefixIcon: Icon(Icons.lock_outline,
+                  color: Theme.of(context).primaryColor),
+              labelText: "mot de passe",
+              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
               suffixIcon: IconButton(
                 onPressed: _togglePasswordView,
                 icon: Icon(
                   _isHidden ? Icons.visibility : Icons.visibility_off,
+                  color: Theme.of(context).canvasColor,
                 ),
               ),
             ),
+            style: Theme.of(context).textTheme.headline6,
           ),
           TextFormField(
+            focusNode: fpasswordbis,
             controller: _passwordBisInput,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.lock_outline),
-              hintText: "mot de passe bis repetita",
+              prefixIcon: Icon(Icons.lock_outline,
+                  color: Theme.of(context).primaryColor),
+              labelText: "mot de passe bis repetita",
+              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
               suffixIcon: IconButton(
                 onPressed: _togglePasswordView,
                 icon: Icon(
                   _isHidden ? Icons.visibility : Icons.visibility_off,
+                  color: Theme.of(context).canvasColor,
                 ),
               ),
             ),
+            style: Theme.of(context).textTheme.headline6,
           ),
           SizedBox(
             height: 40,
@@ -120,17 +159,6 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              "Vous avez déjà un compte ? Connectez-vous",
-              style: TextStyle(
-                color: Theme.of(context).canvasColor,
-              ),
             ),
           ),
         ],

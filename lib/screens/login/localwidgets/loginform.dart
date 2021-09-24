@@ -12,6 +12,23 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  FocusNode? fmail;
+  FocusNode? fpassword;
+
+  @override
+  void initState() {
+    super.initState();
+    fmail = FocusNode();
+    fpassword = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    fmail?.dispose();
+    fpassword?.dispose();
+    super.dispose();
+  }
+
   TextEditingController _emailInput = TextEditingController();
   TextEditingController _passwordInput = TextEditingController();
   bool _isHidden = true;
@@ -40,83 +57,87 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return ShadowContainer(
-        child: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Salut à toi, avide de lectures !",
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        TextFormField(
-          controller: _emailInput,
-          decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.alternate_email,
-              color: Theme.of(context).canvasColor,
-            ),
-            hintText: "courriel",
-          ),
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        TextFormField(
-          obscureText: _isHidden,
-          controller: _passwordInput,
-          decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.lock_outline,
-              color: Theme.of(context).canvasColor,
-            ),
-            hintText: "mot de passe",
-            suffixIcon: IconButton(
-              onPressed: _togglePasswordView,
-              icon: Icon(
-                _isHidden ? Icons.visibility : Icons.visibility_off,
-                color: Theme.of(context).canvasColor,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Salut à toi, avide de lectures !",
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        SizedBox(
-          height: 40,
-        ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).primaryColor,
-            minimumSize: Size(250, 50),
+          SizedBox(
+            height: 20,
           ),
-          onPressed: () {
-            _loginUser(_emailInput.text, _passwordInput.text, context);
-          },
-          child: Text(
-            "Se connecter",
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          TextFormField(
+            autofocus: true,
+            focusNode: fmail,
+            onTap: () {
+              setState(() {
+                FocusScope.of(context).requestFocus(fmail);
+              });
+            },
+            textInputAction: TextInputAction.next,
+            controller: _emailInput,
+            decoration: InputDecoration(
+              labelText: "courriel",
+              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
+              prefixIcon: Icon(
+                Icons.alternate_email,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            style: Theme.of(context).textTheme.headline6,
+            onFieldSubmitted: (term) {
+              fmail!.unfocus();
+              FocusScope.of(context).requestFocus(fpassword);
+            },
           ),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SignUp()));
-          },
-          child: Text(
-            "Première visite ici ? Créez un compte",
-            style: TextStyle(
-              color: Theme.of(context).canvasColor,
+          TextFormField(
+            focusNode: fpassword,
+            obscureText: _isHidden,
+            controller: _passwordInput,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.lock_outline,
+                  color: Theme.of(context).primaryColor),
+              labelText: "mot de passe",
+              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
+              suffixIcon: IconButton(
+                onPressed: _togglePasswordView,
+                icon: Icon(
+                  _isHidden ? Icons.visibility : Icons.visibility_off,
+                  color: Theme.of(context).canvasColor,
+                ),
+              ),
+            ),
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).primaryColor,
+              minimumSize: Size(250, 50),
+            ),
+            onPressed: () {
+              _loginUser(_emailInput.text, _passwordInput.text, context);
+            },
+            child: Text(
+              "Se connecter",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
             ),
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 
   void _togglePasswordView() {

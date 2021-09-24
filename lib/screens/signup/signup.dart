@@ -9,9 +9,32 @@ class SignUp extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Container(
-            height: 450,
+            height: 550,
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: OurSignUpForm()),
+            child: Column(
+              children: [
+                OurSignUpForm(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 20.0),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        "Vous avez déjà un compte ? Connectez-vous",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).canvasColor,
+                          side: BorderSide(
+                              width: 1,
+                              color: Theme.of(context).primaryColor))),
+                ),
+              ],
+            )),
       ),
     );
   }

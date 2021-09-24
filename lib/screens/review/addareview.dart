@@ -47,22 +47,22 @@ class _AddReviewState extends State<AddReview> {
               Text(
                 "Evaluez le livre de 1 à 10",
                 style: TextStyle(
-                    fontSize: 18, color: Theme.of(context).accentColor),
+                    fontSize: 18, color: Theme.of(context).focusColor),
               ),
               DropdownButton<int>(
                   value: _dropdownValue,
                   icon: Icon(
                     Icons.arrow_downward,
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).focusColor,
                   ),
                   iconSize: 24,
                   elevation: 16,
                   style: TextStyle(
-                      fontSize: 18, color: Theme.of(context).accentColor),
+                      fontSize: 18, color: Theme.of(context).focusColor),
                   underline: Container(
                     margin: EdgeInsets.only(top: 20),
                     height: 2,
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).focusColor,
                   ),
                   onChanged: (int? newValue) {
                     setState(() {

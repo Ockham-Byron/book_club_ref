@@ -17,7 +17,7 @@ class InGroup extends StatefulWidget {
 }
 
 class _InGroupState extends State<InGroup> {
-  GroupModel _currentGroup = GroupModel();
+  //GroupModel _currentGroup = GroupModel();
 
   void _signOut(BuildContext context) async {
     String _returnedString = await Auth().signOut();

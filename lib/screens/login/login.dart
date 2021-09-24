@@ -1,4 +1,5 @@
 import 'package:book_club_ref/screens/login/localwidgets/loginform.dart';
+import 'package:book_club_ref/screens/signup/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -24,7 +25,27 @@ class Login extends StatelessWidget {
                     image: AssetImage("assets/images/logo.png"),
                   ),
                 ),
-                LoginForm()
+                LoginForm(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 20.0),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SignUp()));
+                      },
+                      child: Text(
+                        "Première visite ici ? Créez un compte",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).canvasColor,
+                          side: BorderSide(
+                              width: 1,
+                              color: Theme.of(context).primaryColor))),
+                ),
               ],
             ),
           ),

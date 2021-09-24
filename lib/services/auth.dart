@@ -1,6 +1,5 @@
 import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
-import 'package:book_club_ref/services/database.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Auth {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  //final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Stream<AuthModel> get user {
     return _auth.authStateChanges().map(

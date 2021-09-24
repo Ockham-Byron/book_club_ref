@@ -1,4 +1,3 @@
-import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/reviewModel.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:flutter/material.dart';

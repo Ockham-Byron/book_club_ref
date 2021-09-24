@@ -1,4 +1,3 @@
-import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/addBook/addBook.dart';
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
