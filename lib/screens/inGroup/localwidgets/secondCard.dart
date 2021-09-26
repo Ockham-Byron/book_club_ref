@@ -43,7 +43,7 @@ class _SecondCardState extends State<SecondCard> {
   Widget _displayNextBookInfo() {
     Widget retVal = Text("");
 
-    if (_pickingUser != null) {
+    if (_pickingUser.uid != null) {
       if (_currentGroup.nextBookId == "en attente") {
         if (_pickingUser.uid == _currentUser.uid) {
           retVal = Column(

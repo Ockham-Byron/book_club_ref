@@ -169,6 +169,28 @@ class DBFuture {
     return retVal;
   }
 
+  Future<String> changeBook(String groupId) async {
+    String retVal = "error";
+
+    try {
+      DocumentSnapshot<Map<String, dynamic>> _docSnapshot =
+          await _firestore.collection("groups").doc(groupId).get();
+
+      await _firestore.collection("groups").doc(groupId).update({
+        "currentBookId": _docSnapshot.data()!["nextBookId"],
+        "currentBookDue": _docSnapshot.data()!["nextBookDue"],
+        "nextBookId": "en attente",
+        "nextBookDue": null,
+      });
+
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
+  }
+
   Future<BookModel> getCurrentBook(String groupId, String bookId) async {
     BookModel retVal = BookModel();
 

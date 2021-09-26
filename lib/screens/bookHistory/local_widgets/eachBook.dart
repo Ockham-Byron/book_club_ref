@@ -30,7 +30,6 @@ class EachBook extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                height: 200,
                 width: 80,
                 child: Image.network(book!.cover ??
                     "https://www.azendportafolio.com/static/img/not-found.png"),

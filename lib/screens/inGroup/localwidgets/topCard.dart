@@ -18,27 +18,41 @@ class TopCard extends StatefulWidget {
 class _TopCardState extends State<TopCard> {
   late AuthModel _authModel;
   bool _doneWithBook = true;
-  late BookModel _currentBook;
+  BookModel? _currentBook;
   late GroupModel _currentGroup;
 
   @override
   void didChangeDependencies() async {
     _authModel = Provider.of<AuthModel>(context);
     _currentGroup = Provider.of<GroupModel>(context);
-
+    _changeBook();
     isUserDoneWithBook();
-    _currentBook = await DBFuture()
-        .getCurrentBook(_currentGroup.id!, _currentGroup.currentBookId!);
+    if (_currentGroup.currentBookId != null) {
+      _currentBook = await DBFuture()
+          .getCurrentBook(_currentGroup.id!, _currentGroup.currentBookId!);
+    }
 
     super.didChangeDependencies();
   }
 
   isUserDoneWithBook() async {
-    if (await DBFuture().isUserDoneWithBook(
-        _currentGroup.id!, _currentGroup.currentBookId!, _authModel.uid!)) {
-      _doneWithBook = true;
-    } else {
-      _doneWithBook = false;
+    if (_currentGroup.currentBookId != null) {
+      if (await DBFuture().isUserDoneWithBook(
+          _currentGroup.id!, _currentGroup.currentBookId!, _authModel.uid!)) {
+        _doneWithBook = true;
+      } else {
+        _doneWithBook = false;
+      }
+    }
+  }
+
+  void _changeBook() async {
+    if (_currentGroup.currentBookId != null) {
+      DateTime currentBookDue = _currentBook!.dateCompleted!.toDate();
+
+      if (currentBookDue.isBefore(DateTime.now())) {
+        await DBFuture().changeBook(_currentGroup.id!);
+      }
     }
   }
 
@@ -52,8 +66,47 @@ class _TopCardState extends State<TopCard> {
     );
   }
 
+  String _displayCurrentBookTitle() {
+    String currentBookTitle;
+
+    if (_currentBook!.title != null) {
+      currentBookTitle = _currentBook!.title!;
+    } else {
+      currentBookTitle = "pas de livre choisi";
+    }
+    return currentBookTitle;
+  }
+
+  String _displayRemainingDays() {
+    String currentBookDue;
+    var today = DateTime.now();
+
+    if (_currentBook!.id != null) {
+      var _currentBookDue = _currentBook!.dateCompleted;
+
+      var _remainingDays = _currentBookDue!.toDate().difference(today);
+      if (_currentBookDue == Timestamp.now()) {
+        currentBookDue = "pas de rdv fixé";
+      } else if (_remainingDays.isNegative) {
+        currentBookDue = "le rdv a déjà eu lieu";
+      }
+      // else if (_remainingDays == 0) {
+      //   currentBookDue = "rdv aujourd'hui !";
+      //}
+      else {
+        currentBookDue = "Rdv pour échanger dans " +
+            _remainingDays.inDays.toString() +
+            " jours";
+      }
+    } else {
+      currentBookDue = "pas de rdv établi";
+    }
+    return currentBookDue;
+  }
+
   @override
   Widget build(BuildContext context) {
+    //_currentGroup = Provider.of<GroupModel>(context);
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -66,37 +119,37 @@ class _TopCardState extends State<TopCard> {
                 padding: const EdgeInsets.only(top: 40),
                 child: Consumer<GroupModel>(
                   builder: (BuildContext context, value, Widget? child) {
-                    var _currentBookTitle =
-                        _currentBook.title ?? "pas de livre choisi";
-                    var today = DateTime.now();
-                    var _currentBookDue = _currentBook.dateCompleted;
-                    if (_currentBookDue == null) {
-                      _currentBookDue = Timestamp.now();
-                    }
+                    // var _currentBookTitle =
+                    //     _currentBook!.title ?? "pas de livre choisi";
+                    // var today = DateTime.now();
+                    // var _currentBookDue = _currentBook!.dateCompleted;
+                    // if (_currentBookDue == null) {
+                    //   _currentBookDue = Timestamp.now();
+                    // }
 
-                    var _remainingDays =
-                        _currentBookDue.toDate().difference(today);
-                    String _displayRemainingDays() {
-                      String retVal;
-                      if (_currentBookDue == Timestamp.now()) {
-                        retVal = "pas de rdv fixé";
-                      } else {
-                        if (_remainingDays.isNegative) {
-                          retVal = "le rdv a déjà eu lieu";
-                        } else {
-                          retVal = "Rdv pour échanger dans " +
-                              _remainingDays.inDays.toString() +
-                              " jours";
-                        }
-                      }
+                    // var _remainingDays =
+                    //     _currentBookDue.toDate().difference(today);
+                    // String _displayRemainingDays() {
+                    //   String retVal;
+                    //   if (_currentBookDue == Timestamp.now()) {
+                    //     retVal = "pas de rdv fixé";
+                    //   } else {
+                    //     if (_remainingDays.isNegative) {
+                    //       retVal = "le rdv a déjà eu lieu";
+                    //     } else {
+                    //       retVal = "Rdv pour échanger dans " +
+                    //           _remainingDays.inDays.toString() +
+                    //           " jours";
+                    //     }
+                    //   }
 
-                      return retVal;
-                    }
+                    //   return retVal;
+                    // }
 
                     return Column(
                       children: [
                         Text(
-                          _currentBookTitle,
+                          _displayCurrentBookTitle(),
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.white38,

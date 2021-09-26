@@ -19,6 +19,12 @@ class InGroup extends StatefulWidget {
 class _InGroupState extends State<InGroup> {
   //GroupModel _currentGroup = GroupModel();
 
+  @override
+  void didChangeDependencies() {
+    GroupModel _currentGroup = Provider.of<GroupModel>(context);
+    super.didChangeDependencies();
+  }
+
   void _signOut(BuildContext context) async {
     String _returnedString = await Auth().signOut();
     if (_returnedString == "success") {
