@@ -96,7 +96,8 @@ class DBFuture {
         "title": book.title,
         "author": book.author,
         "length": book.length,
-        "dateCompleted": book.dateCompleted
+        "dateCompleted": book.dateCompleted,
+        "cover": book.cover
       });
 
       //add book to the Group schedule

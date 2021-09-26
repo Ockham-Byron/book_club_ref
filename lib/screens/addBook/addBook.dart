@@ -14,16 +14,16 @@ class AddBook extends StatefulWidget {
   final bool onGroupCreation;
   final bool onError;
   final String? groupName;
+  final UserModel currentUser;
   final GroupModel? currentGroup;
-  final UserModel? currentUser;
-  const AddBook({
-    Key? key,
-    this.groupName,
-    required this.onGroupCreation,
-    this.currentGroup,
-    required this.onError,
-    this.currentUser,
-  }) : super(key: key);
+  const AddBook(
+      {Key? key,
+      this.groupName,
+      required this.onGroupCreation,
+      required this.onError,
+      required this.currentUser,
+      this.currentGroup})
+      : super(key: key);
 
   @override
   _AddBookState createState() => _AddBookState();
@@ -48,10 +48,10 @@ class _AddBookState extends State<AddBook> {
 
     if (widget.onGroupCreation) {
       _returnString =
-          await DBFuture().createGroup(groupName, widget.currentUser!, book);
+          await DBFuture().createGroup(groupName, widget.currentUser, book);
     } else if (widget.onError) {
       _returnString =
-          await DBFuture().addCurrentBook(widget.currentGroup!.id!, book);
+          await DBFuture().addCurrentBook(widget.currentUser.groupId!, book);
     } else {
       int _nbOfMembers = widget.currentGroup!.members!.length;
       int? _actualPicker = widget.currentGroup!.indexPickingBook;
@@ -78,6 +78,7 @@ class _AddBookState extends State<AddBook> {
   TextEditingController _bookTitleInput = TextEditingController();
   TextEditingController _bookAuthorInput = TextEditingController();
   TextEditingController _bookLengthInput = TextEditingController();
+  TextEditingController _bookCoverInput = TextEditingController();
 
   DateTime _selectedDate = DateTime.now();
 
@@ -93,6 +94,7 @@ class _AddBookState extends State<AddBook> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -105,14 +107,8 @@ class _AddBookState extends State<AddBook> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              children: [BackButton()],
-            ),
-          ),
           SizedBox(
-            height: 100,
+            height: 20,
           ),
           Padding(
             padding: const EdgeInsets.all(20),
@@ -122,9 +118,15 @@ class _AddBookState extends State<AddBook> {
                   TextFormField(
                     controller: _bookTitleInput,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.book),
-                      hintText: "Titre du livre",
+                      prefixIcon: Icon(
+                        Icons.book,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      labelText: "Titre du livre",
+                      labelStyle:
+                          TextStyle(color: Theme.of(context).canvasColor),
                     ),
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                   SizedBox(
                     height: 20,
@@ -132,9 +134,15 @@ class _AddBookState extends State<AddBook> {
                   TextFormField(
                     controller: _bookAuthorInput,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.face),
-                      hintText: "Auteur.e du livre",
+                      prefixIcon: Icon(
+                        Icons.face,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      labelText: "Auteur.e du livre",
+                      labelStyle:
+                          TextStyle(color: Theme.of(context).canvasColor),
                     ),
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                   SizedBox(
                     height: 20,
@@ -142,19 +150,50 @@ class _AddBookState extends State<AddBook> {
                   TextFormField(
                     controller: _bookLengthInput,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.format_list_numbered),
-                      hintText: "Nombre de pages",
+                      prefixIcon: Icon(
+                        Icons.format_list_numbered,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      labelText: "Nombre de pages",
+                      labelStyle:
+                          TextStyle(color: Theme.of(context).canvasColor),
                     ),
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Text(DateFormat("dd-MM à HH-mm").format(_selectedDate)),
+                  TextFormField(
+                    controller: _bookCoverInput,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.auto_stories,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      labelText: "Url de la couverture du livre",
+                      labelStyle:
+                          TextStyle(color: Theme.of(context).canvasColor),
+                    ),
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Rdv pour échanger sur ce livre le",
+                    style: TextStyle(
+                        color: Theme.of(context).canvasColor, fontSize: 20),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(DateFormat("dd/MM à HH:mm").format(_selectedDate),
+                      style: Theme.of(context).textTheme.headline6),
                   TextButton(
                     onPressed: () => _selectDate(context),
                     child: Icon(
                       Icons.calendar_today,
-                      color: Theme.of(context).canvasColor,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ],
@@ -167,8 +206,9 @@ class _AddBookState extends State<AddBook> {
                   title: _bookTitleInput.text,
                   author: _bookAuthorInput.text,
                   length: int.parse(_bookLengthInput.text),
+                  cover: _bookCoverInput.text,
                   dateCompleted: Timestamp.fromDate(_selectedDate));
-              _addBook(context, widget.currentGroup!.name!, book);
+              _addBook(context, widget.groupName!, book);
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),

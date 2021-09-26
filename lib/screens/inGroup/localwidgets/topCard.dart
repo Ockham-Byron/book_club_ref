@@ -189,8 +189,8 @@ class _TopCardState extends State<TopCard> {
             width: 150,
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: NetworkImage(
-                      "https://www.babelio.com/couv/CVT_Le-Sympathisant_4996.jpg")),
+                  image: NetworkImage(_currentBook!.cover ??
+                      "https://www.fly-academy.fr/wp-content/themes/Flyacademy/images/no-img.svg")),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black54,

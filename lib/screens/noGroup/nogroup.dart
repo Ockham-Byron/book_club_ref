@@ -16,42 +16,23 @@ class NoGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     UserModel _currentUser = Provider.of<UserModel>(context);
     void _goToJoin() {
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).push(
+        MaterialPageRoute(
           builder: (context) => JoinGroup(
+            userModel: _currentUser,
+          ),
+        ),
+      );
+    }
+
+    void _goToCreate() {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => CreateGroup(
                 userModel: _currentUser,
               )));
     }
 
-    void _goToCreate() {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => CreateGroup()));
-    }
-
-    void _signOut(BuildContext context) async {
-      String _returnedString = await Auth().signOut();
-      if (_returnedString == "success") {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OurRoot(),
-          ),
-          (route) => false,
-        );
-      }
-    }
-
     return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.outbond_rounded,
-              color: Colors.white,
-            ),
-            onPressed: () => _signOut(context),
-          )
-        ],
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
