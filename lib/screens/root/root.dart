@@ -1,7 +1,7 @@
 import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
-import 'package:book_club_ref/screens/inGroup/inGroup.dart';
+import 'package:book_club_ref/screens/inGroup/groupHome.dart';
 import 'package:book_club_ref/screens/login/login.dart';
 import 'package:book_club_ref/screens/noGroup/nogroup.dart';
 import 'package:book_club_ref/screens/splashScreen/splashScreen.dart';
@@ -86,7 +86,7 @@ class LoggedIn extends StatelessWidget {
         retVal = StreamProvider<GroupModel>.value(
           value: DBStream().getcurrentGroup(_userStream.groupId!),
           initialData: GroupModel(),
-          child: InGroup(),
+          child: GroupHome(),
         );
       } else {
         retVal = NoGroup();

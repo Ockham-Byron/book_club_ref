@@ -1,4 +1,5 @@
 import 'package:book_club_ref/models/bookModel.dart';
+import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/reviewModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -84,6 +85,20 @@ class DBFuture {
     return retVal;
   }
 
+  Future<GroupModel> getGroup(String groupId) async {
+    GroupModel retVal = GroupModel();
+
+    try {
+      DocumentSnapshot<Map<String, dynamic>> _docSnapshot =
+          await _firestore.collection("groups").doc(groupId).get();
+      retVal = GroupModel.fromDocumentSnapshot(doc: _docSnapshot);
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
+  }
+
   Future<String> addBook(String groupId, BookModel book) async {
     String retVal = "error";
 
@@ -123,6 +138,7 @@ class DBFuture {
         'author': book.author!.trim(),
         'length': book.length,
         'dateCompleted': book.dateCompleted,
+        'cover': book.cover
       });
 
       //add current book to group schedule
@@ -154,7 +170,8 @@ class DBFuture {
         "title": book.title,
         "author": book.author,
         "length": book.length,
-        "dateCompleted": book.dateCompleted
+        "dateCompleted": book.dateCompleted,
+        "cover": book.cover
       });
 
       //add book to the Group schedule

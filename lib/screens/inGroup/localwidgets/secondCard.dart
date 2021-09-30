@@ -107,7 +107,10 @@ class _SecondCardState extends State<SecondCard> {
               _nextBook.title!,
               style:
                   TextStyle(fontSize: 20, color: Theme.of(context).focusColor),
-            )
+            ),
+            ElevatedButton(
+                onPressed: () => _changeBook(),
+                child: Text("En faire le livre en cours"))
           ],
         );
       }
@@ -135,6 +138,10 @@ class _SecondCardState extends State<SecondCard> {
         ),
       ),
     );
+  }
+
+  void _changeBook() async {
+    await DBFuture().changeBook(_currentGroup.id!);
   }
 
   @override

@@ -9,16 +9,14 @@ import 'package:book_club_ref/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class InGroup extends StatefulWidget {
-  const InGroup({Key? key}) : super(key: key);
+class GroupHome extends StatefulWidget {
+  const GroupHome({Key? key}) : super(key: key);
 
   @override
-  _InGroupState createState() => _InGroupState();
+  _GroupHomeState createState() => _GroupHomeState();
 }
 
-class _InGroupState extends State<InGroup> {
-  //GroupModel _currentGroup = GroupModel();
-
+class _GroupHomeState extends State<GroupHome> {
   @override
   void didChangeDependencies() {
     GroupModel _currentGroup = Provider.of<GroupModel>(context);

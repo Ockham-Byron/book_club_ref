@@ -90,6 +90,80 @@ class _AddBookState extends State<AddBook> {
     });
   }
 
+  Widget _displayButtons() {
+    if (widget.onGroupCreation) {
+      return Column(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              BookModel? book = BookModel(
+                  title: _bookTitleInput.text,
+                  author: _bookAuthorInput.text,
+                  length: int.parse(_bookLengthInput.text),
+                  cover: _bookCoverInput.text,
+                  dateCompleted: Timestamp.fromDate(_selectedDate));
+              _addBook(context, widget.groupName!, book);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Text(
+                "Ajouter le livre".toUpperCase(),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              BookModel? book = BookModel(
+                  title: "pas déterminé", dateCompleted: Timestamp.now());
+              _addBook(context, widget.groupName!, book);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Text(
+                "Sauter cette étape".toUpperCase(),
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).canvasColor,
+              side: BorderSide(width: 1, color: Theme.of(context).primaryColor),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return ElevatedButton(
+        onPressed: () {
+          BookModel? book = BookModel(
+              title: _bookTitleInput.text,
+              author: _bookAuthorInput.text,
+              length: int.parse(_bookLengthInput.text),
+              cover: _bookCoverInput.text,
+              dateCompleted: Timestamp.fromDate(_selectedDate));
+          _addBook(context, widget.currentGroup!.name!, book);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 50),
+          child: Text(
+            "Ajoutez le livre".toUpperCase(),
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -200,27 +274,7 @@ class _AddBookState extends State<AddBook> {
               ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              BookModel? book = BookModel(
-                  title: _bookTitleInput.text,
-                  author: _bookAuthorInput.text,
-                  length: int.parse(_bookLengthInput.text),
-                  cover: _bookCoverInput.text,
-                  dateCompleted: Timestamp.fromDate(_selectedDate));
-              _addBook(context, widget.groupName!, book);
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: Text(
-                "Ajoutez le livre".toUpperCase(),
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
-            ),
-          ),
+          _displayButtons(),
         ],
       ),
     );
