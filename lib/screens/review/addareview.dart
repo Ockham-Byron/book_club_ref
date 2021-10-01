@@ -19,6 +19,7 @@ class _AddReviewState extends State<AddReview> {
   int _dropdownValue = 1;
   AuthModel _authModel = AuthModel();
   TextEditingController _reviewInput = TextEditingController();
+  FocusNode? freview;
 
   @override
   void didChangeDependencies() {
@@ -32,14 +33,8 @@ class _AddReviewState extends State<AddReview> {
       key: reviewKey,
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              children: [BackButton()],
-            ),
-          ),
           SizedBox(
-            height: 20,
+            height: 50,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -87,11 +82,22 @@ class _AddReviewState extends State<AddReview> {
               child: Column(
                 children: [
                   TextFormField(
+                    autofocus: true,
+                    focusNode: freview,
+                    onTap: () {
+                      setState(() {
+                        FocusScope.of(context).requestFocus(freview);
+                      });
+                    },
+                    textInputAction: TextInputAction.next,
                     controller: _reviewInput,
                     maxLines: 6,
                     decoration: InputDecoration(
-                      hintText: "Votre critique du livre",
+                      labelText: "Votre critique",
+                      labelStyle:
+                          TextStyle(color: Theme.of(context).canvasColor),
                     ),
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                   SizedBox(
                     height: 20,
@@ -102,26 +108,19 @@ class _AddReviewState extends State<AddReview> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (_dropdownValue != null) {
-                DBFuture().finishedBook(
-                    widget.currentGroup.id!,
-                    widget.currentGroup.currentBookId!,
-                    _authModel.uid!,
-                    _dropdownValue,
-                    _reviewInput.text);
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OurRoot(),
-                  ),
-                  (route) => false,
-                );
-              }
-              // else{
-              //   reviewKey.currentState.Sca(SnackBar(
-              //             content: Text("Need to add rating!"),
-              //           ));
-              // }
+              DBFuture().finishedBook(
+                  widget.currentGroup.id!,
+                  widget.currentGroup.currentBookId!,
+                  _authModel.uid!,
+                  _dropdownValue,
+                  _reviewInput.text);
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OurRoot(),
+                ),
+                (route) => false,
+              );
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),

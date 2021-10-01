@@ -2,6 +2,7 @@ import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/addBook/addBook.dart';
+import 'package:book_club_ref/screens/inGroup/groupHome.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _SecondCardState extends State<SecondCard> {
         .getUser(_currentGroup.members![_currentGroup.indexPickingBook!]);
 
     _nextBook = await DBFuture()
-        .getCurrentBook(_currentGroup.id!, _currentGroup.nextBookId!);
+        .getCurrentBook(_currentGroup.id!, _currentGroup.currentBookId!);
 
     if (this.mounted) {
       setState(() {});
@@ -41,12 +42,10 @@ class _SecondCardState extends State<SecondCard> {
   }
 
   Widget _displayNextBookInfo() {
-    Widget retVal = Text("");
-
     if (_pickingUser.uid != null) {
-      if (_currentGroup.nextBookId == "en attente") {
+      if (_currentGroup.currentBookId == "en attente") {
         if (_pickingUser.uid == _currentUser.uid) {
-          retVal = Column(
+          return Column(
             children: [
               Text(
                 "C'est à ton tour de choisir le livre",
@@ -70,7 +69,7 @@ class _SecondCardState extends State<SecondCard> {
         } else {
           String _pickingUserPseudo =
               _pickingUser.pseudo ?? "pas encore déterminé";
-          retVal = Column(
+          return Column(
             children: [
               Text(
                 "Prochain livre choisi par",
@@ -93,7 +92,7 @@ class _SecondCardState extends State<SecondCard> {
           );
         }
       } else {
-        retVal = Column(
+        return Column(
           children: [
             Text(
               "Voici le prochain livre",
@@ -115,7 +114,7 @@ class _SecondCardState extends State<SecondCard> {
         );
       }
     } else {
-      retVal = Text(
+      return Text(
         "pas encore déterminé",
         style: TextStyle(
           fontSize: 20,
@@ -123,8 +122,6 @@ class _SecondCardState extends State<SecondCard> {
         ),
       );
     }
-
-    return retVal;
   }
 
   void _goToAddBook() {
@@ -142,6 +139,8 @@ class _SecondCardState extends State<SecondCard> {
 
   void _changeBook() async {
     await DBFuture().changeBook(_currentGroup.id!);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => GroupHome()));
   }
 
   @override

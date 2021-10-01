@@ -1,8 +1,7 @@
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/createGroup/createGroup.dart';
 import 'package:book_club_ref/screens/joinGroup/joinGroup.dart';
-import 'package:book_club_ref/screens/root/root.dart';
-import 'package:book_club_ref/services/auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

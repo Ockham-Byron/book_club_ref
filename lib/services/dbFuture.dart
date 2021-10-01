@@ -176,8 +176,8 @@ class DBFuture {
 
       //add book to the Group schedule
       await _firestore.collection("groups").doc(groupId).update({
-        "nextBookId": _docRef.id,
-        "nextBookDue": book.dateCompleted,
+        "currentBookId": _docRef.id,
+        "currentBookDue": book.dateCompleted,
         "indexPickingBook": nextPicker,
       });
       retVal = "success";
