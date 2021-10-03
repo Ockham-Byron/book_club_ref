@@ -1,4 +1,5 @@
 import 'package:book_club_ref/models/bookModel.dart';
+import 'package:book_club_ref/models/groupModel.dart';
 
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
@@ -11,7 +12,12 @@ import 'local_widgets/eachBook.dart';
 class BookHistory extends StatefulWidget {
   final String groupId;
   final String groupName;
-  const BookHistory({Key? key, required this.groupId, required this.groupName})
+  final GroupModel currentGroup;
+  const BookHistory(
+      {Key? key,
+      required this.groupId,
+      required this.groupName,
+      required this.currentGroup})
       : super(key: key);
 
   @override
@@ -88,6 +94,7 @@ class _BookHistoryState extends State<BookHistory> {
                     child: EachBook(
                       book: snapshot.data![index - 1],
                       groupId: widget.groupId,
+                      currentGroup: widget.currentGroup,
                     ),
                   );
                 }

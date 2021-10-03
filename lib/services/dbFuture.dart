@@ -38,7 +38,10 @@ class DBFuture {
   }
 
   Future<String> createGroup(
-      String groupName, UserModel user, BookModel initialBook) async {
+    String groupName,
+    UserModel user,
+    //BookModel initialBook
+  ) async {
     String retVal = "error";
     List<String> members = [];
 
@@ -49,7 +52,7 @@ class DBFuture {
         "leader": user.uid,
         "members": members,
         "groupCreated": Timestamp.now(),
-        "nextBookId": "en attente",
+        "currentBookId": null,
         "indexPickingBook": 0
       });
       await _firestore.collection("users").doc(user.uid).update({
@@ -57,7 +60,7 @@ class DBFuture {
       });
 
       //add firstBook
-      addBook(_docRef.id, initialBook);
+      //addBook(_docRef.id, initialBook);
       retVal = "success";
     } catch (e) {
       print(e);

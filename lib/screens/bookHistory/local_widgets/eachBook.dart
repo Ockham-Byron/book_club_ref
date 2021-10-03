@@ -1,4 +1,5 @@
 import 'package:book_club_ref/models/bookModel.dart';
+import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +8,23 @@ import '../reviewHistory.dart';
 class EachBook extends StatelessWidget {
   final BookModel? book;
   final String? groupId;
-  const EachBook({Key? key, this.book, this.groupId}) : super(key: key);
+  final GroupModel currentGroup;
+  const EachBook(
+      {Key? key, this.book, this.groupId, required this.currentGroup})
+      : super(key: key);
+
+  String _currentBookCoverUrl() {
+    String currentBookCoverUrl;
+
+    if (book!.cover == "") {
+      currentBookCoverUrl =
+          "https://www.azendportafolio.com/static/img/not-found.png";
+    } else {
+      currentBookCoverUrl = book!.cover!;
+    }
+
+    return currentBookCoverUrl;
+  }
 
   void _goToReviewHistory(BuildContext context) {
     Navigator.push(
@@ -16,6 +33,7 @@ class EachBook extends StatelessWidget {
         builder: (context) => ReviewHistory(
           groupId: groupId!,
           bookId: book!.id!,
+          currentGroup: currentGroup,
         ),
       ),
     );
@@ -31,8 +49,7 @@ class EachBook extends StatelessWidget {
             children: [
               Container(
                 width: 80,
-                child: Image.network(book!.cover ??
-                    "https://www.azendportafolio.com/static/img/not-found.png"),
+                child: Image.network(_currentBookCoverUrl()),
               ),
               Column(
                 children: [

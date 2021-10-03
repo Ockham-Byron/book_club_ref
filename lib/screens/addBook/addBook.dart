@@ -14,14 +14,14 @@ class AddBook extends StatefulWidget {
   final bool onGroupCreation;
   final bool onError;
   final String? groupName;
-  final UserModel currentUser;
+  final UserModel? currentUser;
   final GroupModel? currentGroup;
   const AddBook(
       {Key? key,
       this.groupName,
       required this.onGroupCreation,
       required this.onError,
-      required this.currentUser,
+      this.currentUser,
       this.currentGroup})
       : super(key: key);
 
@@ -48,10 +48,10 @@ class _AddBookState extends State<AddBook> {
 
     if (widget.onGroupCreation) {
       _returnString =
-          await DBFuture().createGroup(groupName, widget.currentUser, book);
+          await DBFuture().createGroup(groupName, widget.currentUser!);
     } else if (widget.onError) {
       _returnString =
-          await DBFuture().addCurrentBook(widget.currentUser.groupId!, book);
+          await DBFuture().addCurrentBook(widget.currentUser!.groupId!, book);
     } else {
       int _nbOfMembers = widget.currentGroup!.members!.length;
       int? _actualPicker = widget.currentGroup!.indexPickingBook;

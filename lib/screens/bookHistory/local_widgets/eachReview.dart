@@ -29,17 +29,17 @@ class _EachReviewState extends State<EachReview> {
       child: Column(
         children: [
           Text(
-            (user.uid != null) ? user.pseudo! : "loading...",
+            (user.uid != null) ? user.pseudo! : "c'est quoi déjà votre nom ?",
             style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).focusColor),
           ),
           SizedBox(
             height: 10,
           ),
           Text(
-            "Rating: " + widget.review.rating.toString(),
+            "Note : " + widget.review.rating.toString(),
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -49,9 +49,7 @@ class _EachReviewState extends State<EachReview> {
               ? Text(
                   widget.review.review!,
                   style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.grey[600],
-                  ),
+                      fontSize: 20, color: Theme.of(context).primaryColor),
                 )
               : Text(""),
         ],

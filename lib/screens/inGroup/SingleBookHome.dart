@@ -16,29 +16,43 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class GroupSingleBookHome extends StatefulWidget {
+class SingleBookHome extends StatefulWidget {
   final GroupModel currentGroup;
-  const GroupSingleBookHome({Key? key, required this.currentGroup})
+  final String groupId;
+  final AuthModel authModel;
+  final UserModel currentUser;
+  const SingleBookHome(
+      {Key? key,
+      required this.currentGroup,
+      required this.groupId,
+      required this.authModel,
+      required this.currentUser})
       : super(key: key);
 
   @override
-  _GroupSingleBookHomeState createState() => _GroupSingleBookHomeState();
+  _SingleBookHomeState createState() => _SingleBookHomeState();
 }
 
-class _GroupSingleBookHomeState extends State<GroupSingleBookHome> {
-  late AuthModel _authModel;
+class _SingleBookHomeState extends State<SingleBookHome> {
+  late BookModel _currentBook = BookModel();
+  //late UserModel _currentUser = UserModel();
+  late UserModel _pickingUser = UserModel();
+
   bool _doneWithBook = true;
 
-  //late GroupModel _currentGroup;
-  late UserModel _pickingUser = UserModel();
-  late UserModel _currentUser;
-  BookModel _currentBook = BookModel();
-
   @override
-  void didChangeDependencies() async {
-    _authModel = Provider.of<AuthModel>(context);
-    //_currentGroup = Provider.of<GroupModel>(context);
-    _currentUser = Provider.of<UserModel>(context);
+  void initState() {
+    super.initState();
+
+    _initBook().whenComplete(() {
+      setState(() {});
+    });
+  }
+
+  Future _initBook() async {
+    _currentBook = await DBFuture()
+        .getCurrentBook(widget.groupId, widget.currentGroup.currentBookId!);
+    //_currentUser = Provider.of<UserModel>(context, listen: false);
     if (widget.currentGroup.currentBookId != null) {
       _currentBook = await DBFuture().getCurrentBook(
           widget.currentGroup.id!, widget.currentGroup.currentBookId!);
@@ -47,26 +61,9 @@ class _GroupSingleBookHomeState extends State<GroupSingleBookHome> {
     _pickingUser = await DBFuture().getUser(
         widget.currentGroup.members![widget.currentGroup.indexPickingBook!]);
 
-    isUserDoneWithBook();
-    super.didChangeDependencies();
-  }
-
-  // _getFutures() async {
-  //   if (_currentGroup.currentBookId != null) {
-  //     _currentBook = await DBFuture()
-  //         .getCurrentBook(_currentGroup.id!, _currentGroup.currentBookId!);
-  //   }
-
-  //   _pickingUser = await DBFuture()
-  //       .getUser(_currentGroup.members![_currentGroup.indexPickingBook!]);
-
-  //   isUserDoneWithBook();
-  // }
-
-  isUserDoneWithBook() async {
     if (widget.currentGroup.currentBookId != null) {
       if (await DBFuture().isUserDoneWithBook(widget.currentGroup.id!,
-          widget.currentGroup.currentBookId!, _authModel.uid!)) {
+          widget.currentGroup.currentBookId!, widget.authModel.uid!)) {
         _doneWithBook = true;
       } else {
         _doneWithBook = false;
@@ -74,65 +71,31 @@ class _GroupSingleBookHomeState extends State<GroupSingleBookHome> {
     }
   }
 
-  void _signOut(BuildContext context) async {
-    String _returnedString = await Auth().signOut();
-    if (_returnedString == "success") {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OurRoot(),
-        ),
-        (route) => false,
-      );
-    }
-  }
+  // isUserDoneWithBook() async {
+  //   if (widget.currentGroup.currentBookId != null) {
+  //     if (await DBFuture().isUserDoneWithBook(widget.currentGroup.id!,
+  //         widget.currentGroup.currentBookId!, widget.authModel.uid!)) {
+  //       _doneWithBook = true;
+  //     } else {
+  //       _doneWithBook = false;
+  //     }
+  //   }
+  // }
 
-  void _goToHistory() async {
-    GroupModel group = Provider.of<GroupModel>(context, listen: false);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BookHistory(
-          groupId: group.id!,
-          groupName: group.name!,
-          currentGroup: widget.currentGroup,
-        ),
-      ),
-    );
-  }
-
-  void _goToReview() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => AddReview(
-          currentGroup: widget.currentGroup,
-        ),
-      ),
-    );
-  }
-
-  String _displayCurrentBookTitle() {
-    String currentBookTitle;
-
+  String _displayBookTitle() {
     if (_currentBook.title != null) {
-      currentBookTitle = _currentBook.title!;
+      return _currentBook.title!;
     } else {
-      currentBookTitle = "prochain livre pas encore choisi";
+      return "pas de titre défini";
     }
-    return currentBookTitle;
   }
 
-  String _currentBookCoverUrl() {
-    String currentBookCoverUrl;
-
-    if (_currentBook.cover == "") {
-      currentBookCoverUrl =
-          "https://www.azendportafolio.com/static/img/not-found.png";
+  String _displayPickingUserPseudo() {
+    if (_pickingUser.pseudo != null) {
+      return _pickingUser.pseudo!;
     } else {
-      currentBookCoverUrl = _currentBook.cover!;
+      return "no name";
     }
-
-    return currentBookCoverUrl;
   }
 
   String _displayRemainingDays() {
@@ -162,6 +125,19 @@ class _GroupSingleBookHomeState extends State<GroupSingleBookHome> {
     return currentBookDue;
   }
 
+  String _currentBookCoverUrl() {
+    String currentBookCoverUrl;
+
+    if (_currentBook.cover == "") {
+      currentBookCoverUrl =
+          "https://www.azendportafolio.com/static/img/not-found.png";
+    } else {
+      currentBookCoverUrl = _currentBook.cover!;
+    }
+
+    return currentBookCoverUrl;
+  }
+
   Widget _displayCurrentBookInfo() {
     return Stack(
       alignment: Alignment.center,
@@ -180,7 +156,7 @@ class _GroupSingleBookHomeState extends State<GroupSingleBookHome> {
                       child: Column(
                         children: [
                           Text(
-                            _displayCurrentBookTitle(),
+                            _displayBookTitle(),
                             style: TextStyle(
                               fontSize: 20,
                               color: Colors.white38,
@@ -237,21 +213,8 @@ class _GroupSingleBookHomeState extends State<GroupSingleBookHome> {
     );
   }
 
-  void _goToAddInitialBook() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => AddBook(
-          onGroupCreation: false,
-          onError: true,
-          currentGroup: widget.currentGroup,
-          currentUser: _pickingUser,
-        ),
-      ),
-    );
-  }
-
   Widget _displayNextBookInfo() {
-    if (_pickingUser.uid == _currentUser.uid) {
+    if (_pickingUser.uid == widget.currentUser.uid) {
       return Column(
         children: [
           Text(
@@ -305,17 +268,52 @@ class _GroupSingleBookHomeState extends State<GroupSingleBookHome> {
           onGroupCreation: false,
           onError: false,
           currentGroup: widget.currentGroup,
-          currentUser: _pickingUser,
+          //currentUser: _pickingUser,
         ),
       ),
     );
   }
 
+  void _goToHistory() async {
+    //GroupModel group = Provider.of<GroupModel>(context, listen: false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BookHistory(
+          groupId: widget.groupId,
+          groupName: widget.currentGroup.name!,
+          currentGroup: widget.currentGroup,
+        ),
+      ),
+    );
+  }
+
+  void _goToReview() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AddReview(
+          currentGroup: widget.currentGroup,
+        ),
+      ),
+    );
+  }
+
+  void _signOut(BuildContext context) async {
+    String _returnedString = await Auth().signOut();
+    if (_returnedString == "success") {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OurRoot(),
+        ),
+        (route) => false,
+      );
+    }
+  }
+
   Widget build(BuildContext context) {
-    // _authModel = Provider.of<AuthModel>(context);
-    // _currentGroup = Provider.of<GroupModel>(context);
-    // _currentUser = Provider.of<UserModel>(context);
     // _getFutures();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -355,6 +353,15 @@ class _GroupSingleBookHomeState extends State<GroupSingleBookHome> {
           SizedBox(
             height: 10,
           ),
+          // MaterialButton(
+          //   color: Theme.of(context).primaryColor,
+          //   shape: CircleBorder(),
+          //   onPressed: () => _goToAddNextBook(),
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(10),
+          //     child: Icon(Icons.add),
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20.0),
             child: ElevatedButton(

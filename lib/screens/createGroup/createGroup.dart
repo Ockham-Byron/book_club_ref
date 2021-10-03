@@ -1,7 +1,9 @@
 import 'package:book_club_ref/screens/addBook/addBook.dart';
+import 'package:book_club_ref/screens/inGroup/groupHome.dart';
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/services/auth.dart';
+import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +17,18 @@ class CreateGroup extends StatefulWidget {
 
 class _CreateGroupState extends State<CreateGroup> {
   FocusNode? fgrname;
+  String? _groupName;
+
+  void _createGroup(String groupName, UserModel user) async {
+    String _returnString;
+
+    _returnString = await DBFuture().createGroup(groupName, user);
+
+    if (_returnString == "success") {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => OurRoot()));
+    }
+  }
 
   void _signOut(BuildContext context) async {
     String _returnedString = await Auth().signOut();
@@ -77,16 +91,9 @@ class _CreateGroupState extends State<CreateGroup> {
                 ElevatedButton(
                   onPressed: () {
                     UserModel currentUser = widget.userModel;
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) => AddBook(
-                            groupName: _groupNameInput.text,
-                            currentUser: currentUser,
-                            onGroupCreation: true,
-                            onError: false,
-                          ),
-                        ),
-                        (route) => false);
+                    _groupName = _groupNameInput.text;
+
+                    _createGroup(_groupName!, currentUser);
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 50),
