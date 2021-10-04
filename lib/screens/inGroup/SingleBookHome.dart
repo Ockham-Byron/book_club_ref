@@ -61,6 +61,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     _pickingUser = await DBFuture().getUser(
         widget.currentGroup.members![widget.currentGroup.indexPickingBook!]);
 
+    //check if the user is done with book
     if (widget.currentGroup.currentBookId != null) {
       if (await DBFuture().isUserDoneWithBook(widget.currentGroup.id!,
           widget.currentGroup.currentBookId!, widget.authModel.uid!)) {
@@ -283,6 +284,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
           groupId: widget.groupId,
           groupName: widget.currentGroup.name!,
           currentGroup: widget.currentGroup,
+          currentUser: widget.currentUser,
         ),
       ),
     );

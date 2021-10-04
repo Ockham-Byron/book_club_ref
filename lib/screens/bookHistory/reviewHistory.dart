@@ -1,5 +1,6 @@
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/reviewModel.dart';
+import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/review/addareview.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'local_widgets/eachReview.dart';
 
 class ReviewHistory extends StatefulWidget {
+  final UserModel currentUser;
   final String bookId;
   final String groupId;
   final GroupModel currentGroup;
@@ -14,7 +16,8 @@ class ReviewHistory extends StatefulWidget {
       {Key? key,
       required this.bookId,
       required this.groupId,
-      required this.currentGroup})
+      required this.currentGroup,
+      required this.currentUser})
       : super(key: key);
 
   @override
@@ -24,10 +27,21 @@ class ReviewHistory extends StatefulWidget {
 class _ReviewHistoryState extends State<ReviewHistory> {
   late Future<List<ReviewModel>> reviews =
       DBFuture().getReviewHistory(widget.groupId, widget.bookId);
+  bool _doneWithBook = false;
 
   @override
   void didChangeDependencies() async {
     reviews = DBFuture().getReviewHistory(widget.groupId, widget.bookId);
+    //check if the user is done with book
+    if (widget.currentGroup.currentBookId != null) {
+      if (await DBFuture().isUserDoneWithBook(widget.currentGroup.id!,
+          widget.currentGroup.currentBookId!, widget.currentUser.uid!)) {
+        _doneWithBook = true;
+      } else {
+        _doneWithBook = false;
+      }
+      print(_doneWithBook);
+    }
     super.didChangeDependencies();
   }
 
@@ -41,6 +55,19 @@ class _ReviewHistoryState extends State<ReviewHistory> {
     );
   }
 
+  Widget _displayAddReview() {
+    if (!_doneWithBook) {
+      return Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: ElevatedButton(
+            onPressed: () => _goToReview(),
+            child: Text("Indique que, toi, aussi, tu as terminé ce livre")),
+      );
+    } else {
+      return Text("");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,10 +78,12 @@ class _ReviewHistoryState extends State<ReviewHistory> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data!.length > 0) {
               return ListView.builder(
+                // scrollDirection: Axis.vertical,
+                // shrinkWrap: true,
                 itemCount: snapshot.data!.length + 1,
                 itemBuilder: (BuildContext context, int index) {
                   if (index == 0) {
-                    return Text("");
+                    return _displayAddReview();
                   } else {
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -81,9 +110,9 @@ class _ReviewHistoryState extends State<ReviewHistory> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
-                      "Il n'y a pas encore de livre dans ce groupe ;(",
+                      "Il n'y a pas encore de critique pour ce livre ;(",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).primaryColor,
                         fontSize: 20,
                       ),
                       textAlign: TextAlign.center,

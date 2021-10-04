@@ -96,6 +96,7 @@ class _GroupSingleBookHomeState extends State<GroupSingleBookHome> {
           groupId: group.id!,
           groupName: group.name!,
           currentGroup: widget.currentGroup,
+          currentUser: _currentUser,
         ),
       ),
     );

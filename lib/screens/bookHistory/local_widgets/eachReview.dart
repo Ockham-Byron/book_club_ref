@@ -26,30 +26,50 @@ class _EachReviewState extends State<EachReview> {
   @override
   Widget build(BuildContext context) {
     return ShadowContainer(
-      child: Column(
+      child: Row(
         children: [
-          Text(
-            (user.uid != null) ? user.pseudo! : "c'est quoi déjà votre nom ?",
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).focusColor),
+          Column(
+            children: [
+              Text(
+                (user.uid != null)
+                    ? user.pseudo!
+                    : "c'est quoi déjà votre nom ?",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 10.0, 0),
+                child: Text(
+                  "Note : " + widget.review.rating.toString(),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).focusColor),
+                ),
+              ),
+            ],
           ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            "Note : " + widget.review.rating.toString(),
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+          Container(
+            height: 80,
+            child: VerticalDivider(
+              thickness: 1,
+              width: 10,
+              color: Theme.of(context).focusColor,
             ),
           ),
           (widget.review.review != null)
-              ? Text(
-                  widget.review.review!,
-                  style: TextStyle(
-                      fontSize: 20, color: Theme.of(context).primaryColor),
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    widget.review.review!,
+                    style: TextStyle(
+                        fontSize: 20, color: Theme.of(context).primaryColor),
+                  ),
                 )
               : Text(""),
         ],
