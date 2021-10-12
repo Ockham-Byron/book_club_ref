@@ -141,7 +141,9 @@ class DBFuture {
         'author': book.author!.trim(),
         'length': book.length,
         'dateCompleted': book.dateCompleted,
-        'cover': book.cover
+        'cover': book.cover,
+        'owner': book.ownerId,
+        'lender': book.lenderId,
       });
 
       //add current book to group schedule
@@ -231,7 +233,7 @@ class DBFuture {
   }
 
   Future<bool> isUserDoneWithBook(
-      String groupId, String bookId, String uid) async {
+      String groupId, String bookId, String userId) async {
     bool retVal = false;
 
     try {
@@ -241,7 +243,7 @@ class DBFuture {
           .collection("books")
           .doc(bookId)
           .collection("reviews")
-          .doc(uid)
+          .doc(userId)
           .get();
 
       if (_docSnapshot.exists) {

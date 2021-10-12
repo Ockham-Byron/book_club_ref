@@ -7,6 +7,9 @@ class BookModel {
   int? length;
   String? cover;
   Timestamp? dateCompleted;
+  String? ownerId;
+  String? lenderId;
+  List<String>? nbOfReaders;
 
   BookModel(
       {this.id,
@@ -14,6 +17,9 @@ class BookModel {
       this.author,
       this.length,
       this.dateCompleted,
+      this.ownerId,
+      this.lenderId,
+      this.nbOfReaders,
       this.cover =
           "https://cdn1.sosav.fr/es/store/69972-large_default/frame-interno-oficial-wiko-Lenny.jpg"});
 
@@ -25,5 +31,8 @@ class BookModel {
     length = doc.data()!["length"];
     cover = doc.data()!["cover"];
     dateCompleted = doc.data()!['dateCompleted'];
+    ownerId = doc.data()!["ownerId"];
+    lenderId = doc.data()!["lenderId"];
+    nbOfReaders = doc.data()!["nbOfReaders"];
   }
 }
