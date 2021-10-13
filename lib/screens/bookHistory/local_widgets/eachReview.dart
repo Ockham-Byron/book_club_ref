@@ -31,9 +31,7 @@ class _EachReviewState extends State<EachReview> {
           Column(
             children: [
               Text(
-                (user.uid != null)
-                    ? user.pseudo!
-                    : "c'est quoi déjà votre nom ?",
+                (user.uid != null) ? user.pseudo! : "pas de nom ?",
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -63,12 +61,14 @@ class _EachReviewState extends State<EachReview> {
             ),
           ),
           (widget.review.review != null)
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    widget.review.review!,
-                    style: TextStyle(
-                        fontSize: 20, color: Theme.of(context).primaryColor),
+              ? Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      widget.review.review!,
+                      style: TextStyle(
+                          fontSize: 20, color: Theme.of(context).primaryColor),
+                    ),
                   ),
                 )
               : Text(""),

@@ -267,7 +267,8 @@ class DBFuture {
           .collection("books")
           .doc(bookId)
           .collection("reviews")
-          .add({"rating": rating, "review": review});
+          .doc(uid)
+          .set({"rating": rating, "review": review});
     } catch (e) {
       print(e);
     }

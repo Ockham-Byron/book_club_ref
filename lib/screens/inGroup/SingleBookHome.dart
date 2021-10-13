@@ -4,16 +4,20 @@ import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/addBook/addBook.dart';
 import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
+import 'package:book_club_ref/screens/groupManage.dart';
 
 import 'package:book_club_ref/screens/review/addareview.dart';
 
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
+import 'package:book_club_ref/widgets/appDrawer.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
+import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:provider/provider.dart';
 
 class SingleBookHome extends StatefulWidget {
@@ -91,13 +95,13 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     }
   }
 
-  String _displayPickingUserPseudo() {
-    if (_pickingUser.pseudo != null) {
-      return _pickingUser.pseudo!;
-    } else {
-      return "no name";
-    }
-  }
+  // String _displayPickingUserPseudo() {
+  //   if (_pickingUser.pseudo != null) {
+  //     return _pickingUser.pseudo!;
+  //   } else {
+  //     return "no name";
+  //   }
+  // }
 
   String _displayRemainingDays() {
     String currentBookDue;
@@ -295,9 +299,15 @@ class _SingleBookHomeState extends State<SingleBookHome> {
       MaterialPageRoute(
         builder: (context) => AddReview(
           currentGroup: widget.currentGroup,
+          bookId: widget.currentGroup.currentBookId!,
         ),
       ),
     );
+  }
+
+  void _goToGroupManage() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => GroupManage()));
   }
 
   void _signOut(BuildContext context) async {
@@ -320,6 +330,17 @@ class _SingleBookHomeState extends State<SingleBookHome> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
+        leading: Builder(
+          builder: (context) => InkWell(
+            onTap: () => Scaffold.of(context).openDrawer(),
+            child: ProfilePicture(
+              name: widget.currentUser.pseudo,
+              fontsize: 20,
+              random: true,
+              radius: 20,
+            ),
+          ),
+        ),
         title: Consumer<GroupModel>(
           builder: (BuildContext context, value, Widget? child) {
             var _currentGroupName = value.name ?? "Groupe sans nom";
@@ -376,6 +397,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
           ),
         ],
       ),
+      drawer: AppDrawer(),
     );
   }
 }

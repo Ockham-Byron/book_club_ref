@@ -1,4 +1,5 @@
 import 'package:book_club_ref/models/authModel.dart';
+import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
@@ -8,7 +9,9 @@ import 'package:provider/provider.dart';
 
 class AddReview extends StatefulWidget {
   final GroupModel currentGroup;
-  const AddReview({Key? key, required this.currentGroup}) : super(key: key);
+  final String bookId;
+  const AddReview({Key? key, required this.currentGroup, required this.bookId})
+      : super(key: key);
 
   @override
   _AddReviewState createState() => _AddReviewState();
@@ -108,12 +111,8 @@ class _AddReviewState extends State<AddReview> {
           ),
           ElevatedButton(
             onPressed: () {
-              DBFuture().finishedBook(
-                  widget.currentGroup.id!,
-                  widget.currentGroup.currentBookId!,
-                  _authModel.uid!,
-                  _dropdownValue,
-                  _reviewInput.text);
+              DBFuture().finishedBook(widget.currentGroup.id!, widget.bookId,
+                  _authModel.uid!, _dropdownValue, _reviewInput.text);
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(

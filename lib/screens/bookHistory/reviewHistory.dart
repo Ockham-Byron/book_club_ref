@@ -34,13 +34,15 @@ class _ReviewHistoryState extends State<ReviewHistory> {
     reviews = DBFuture().getReviewHistory(widget.groupId, widget.bookId);
     //check if the user is done with book
     if (widget.currentGroup.currentBookId != null) {
-      if (await DBFuture().isUserDoneWithBook(widget.currentGroup.id!,
-          widget.currentGroup.currentBookId!, widget.currentUser.uid!)) {
+      if (await DBFuture().isUserDoneWithBook(
+          widget.currentGroup.id!, widget.bookId, widget.currentUser.uid!)) {
         _doneWithBook = true;
       } else {
         _doneWithBook = false;
       }
       print(_doneWithBook);
+
+      print(widget.currentUser.uid);
     }
     super.didChangeDependencies();
   }
@@ -50,6 +52,7 @@ class _ReviewHistoryState extends State<ReviewHistory> {
       MaterialPageRoute(
         builder: (context) => AddReview(
           currentGroup: widget.currentGroup,
+          bookId: widget.bookId,
         ),
       ),
     );

@@ -57,6 +57,7 @@ class _TopCardState extends State<TopCard> {
       MaterialPageRoute(
         builder: (context) => AddReview(
           currentGroup: _currentGroup,
+          bookId: _currentGroup.currentBookId!,
         ),
       ),
     );
