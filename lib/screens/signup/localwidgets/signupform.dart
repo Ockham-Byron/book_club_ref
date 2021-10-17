@@ -14,6 +14,7 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
   FocusNode? fmail;
   FocusNode? fpassword;
   FocusNode? fpasswordbis;
+  FocusNode? fpicture;
 
   @override
   void initState() {
@@ -37,11 +38,13 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
   TextEditingController _emailInput = TextEditingController();
   TextEditingController _passwordInput = TextEditingController();
   TextEditingController _passwordBisInput = TextEditingController();
+  TextEditingController _pictureInput = TextEditingController();
 
   void _signUpUser(String email, String password, String pseudo,
-      BuildContext context) async {
+      String pictureUrl, BuildContext context) async {
     try {
-      String _returnString = await Auth().signUpUser(email, password, pseudo);
+      String _returnString =
+          await Auth().signUpUser(email, password, pseudo, pictureUrl);
       if (_returnString == "success") {
         Navigator.pop(context);
       } else {
@@ -133,8 +136,16 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
             ),
             style: Theme.of(context).textTheme.headline6,
           ),
-          SizedBox(
-            height: 40,
+          TextFormField(
+            focusNode: fpicture,
+            controller: _pictureInput,
+            decoration: InputDecoration(
+              prefixIcon:
+                  Icon(Icons.camera, color: Theme.of(context).primaryColor),
+              labelText: "adresse url de votre photo de profil",
+              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
+            ),
+            style: Theme.of(context).textTheme.headline6,
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -144,7 +155,7 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
             onPressed: () {
               if (_passwordInput.text == _passwordBisInput.text) {
                 _signUpUser(_emailInput.text, _passwordInput.text,
-                    _pseudoInput.text, context);
+                    _pseudoInput.text, _pictureInput.text, context);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

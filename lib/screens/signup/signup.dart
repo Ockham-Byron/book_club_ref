@@ -9,11 +9,14 @@ class SignUp extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Container(
-            height: 550,
+            height: 600,
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
                 OurSignUpForm(),
+                SizedBox(
+                  height: 15,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 8.0, horizontal: 20.0),

@@ -6,12 +6,16 @@ class UserModel {
   Timestamp? accountCreated;
   String? pseudo;
   String? groupId;
+  String pictureUrl =
+      "https://digitalpainting.school/static/img/default_avatar.png";
 
   UserModel({
     this.uid,
     this.email,
     this.pseudo,
     this.accountCreated,
+    this.pictureUrl =
+        "https://digitalpainting.school/static/img/default_avatar.png",
   });
 
   UserModel.fromDocumentSnapshot(
@@ -21,5 +25,6 @@ class UserModel {
     pseudo = doc.data()!["pseudo"];
     accountCreated = doc.data()!["accountCreated"];
     groupId = doc.data()!["groupId"];
+    pictureUrl = doc.data()!["pictureUrl"];
   }
 }

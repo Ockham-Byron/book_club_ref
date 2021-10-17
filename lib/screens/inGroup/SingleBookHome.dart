@@ -4,7 +4,6 @@ import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/addBook/addBook.dart';
 import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
-import 'package:book_club_ref/screens/groupManage.dart';
 
 import 'package:book_club_ref/screens/review/addareview.dart';
 
@@ -17,7 +16,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
-import 'package:flutter_profile_picture/flutter_profile_picture.dart';
+
 import 'package:provider/provider.dart';
 
 class SingleBookHome extends StatefulWidget {
@@ -294,6 +293,15 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     );
   }
 
+  bool withProfilePicture() {
+    if (widget.currentUser.pictureUrl ==
+        "https://digitalpainting.school/static/img/default_avatar.png") {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   void _goToReview() {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -303,11 +311,6 @@ class _SingleBookHomeState extends State<SingleBookHome> {
         ),
       ),
     );
-  }
-
-  void _goToGroupManage() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => GroupManage()));
   }
 
   void _signOut(BuildContext context) async {
@@ -325,19 +328,47 @@ class _SingleBookHomeState extends State<SingleBookHome> {
 
   Widget build(BuildContext context) {
     // _getFutures();
+    Widget displayCircularAvatar() {
+      if (withProfilePicture()) {
+        return CircularProfileAvatar(
+          widget.currentUser.pictureUrl,
+          showInitialTextAbovePicture: false,
+        );
+      } else {
+        return CircularProfileAvatar(
+          widget.currentUser.pictureUrl,
+          foregroundColor: Theme.of(context).focusColor.withOpacity(0.5),
+          initialsText: Text(
+            widget.currentUser.pseudo![0].toUpperCase(),
+            style: TextStyle(
+                fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          showInitialTextAbovePicture: true,
+        );
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
-        leading: Builder(
-          builder: (context) => InkWell(
-            onTap: () => Scaffold.of(context).openDrawer(),
-            child: ProfilePicture(
-              name: widget.currentUser.pseudo,
-              fontsize: 20,
-              random: true,
-              radius: 20,
+        // leading: Builder(
+        //   builder: (context) => InkWell(
+        //     onTap: () => Scaffold.of(context).openDrawer(),
+        //     child: ProfilePicture(
+        //       name: widget.currentUser.pseudo,
+        //       fontsize: 20,
+        //       random: true,
+        //       radius: 20,
+        //     ),
+        //   ),
+        // ),
+        leading: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Builder(
+            builder: (context) => GestureDetector(
+              child: displayCircularAvatar(),
+              onTap: () => Scaffold.of(context).openDrawer(),
             ),
           ),
         ),

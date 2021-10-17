@@ -14,6 +14,7 @@ class DBFuture {
       await _firestore.collection("users").doc(user.uid).set({
         "pseudo": user.pseudo!.trim(),
         "email": user.email!.trim(),
+        "pictureUrl": user.pictureUrl.trim(),
         "accountCreated": Timestamp.now(),
       });
       retVal = "success";

@@ -28,7 +28,7 @@ class Auth {
   }
 
   Future<String> signUpUser(
-      String email, String password, String pseudo) async {
+      String email, String password, String pseudo, String pictureUrl) async {
     String retVal = "error";
 
     try {
@@ -36,10 +36,19 @@ class Auth {
           await _auth.createUserWithEmailAndPassword(
               email: email.trim(), password: password);
 
+      String userPicture() {
+        if (pictureUrl != null) {
+          return pictureUrl;
+        } else {
+          return "https://digitalpainting.school/static/img/default_avatar.png";
+        }
+      }
+
       UserModel _user = UserModel(
         uid: _userCredential.user!.uid,
         email: _userCredential.user!.email,
         pseudo: pseudo.trim(),
+        pictureUrl: userPicture().trim(),
         accountCreated: Timestamp.now(),
       );
 
