@@ -1,15 +1,29 @@
-import 'package:book_club_ref/screens/groupManage.dart';
+import 'package:book_club_ref/models/groupModel.dart';
+import 'package:book_club_ref/models/userModel.dart';
+import 'package:book_club_ref/screens/administration/groupManage.dart';
+import 'package:book_club_ref/screens/administration/profileManage.dart';
 
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({Key? key}) : super(key: key);
+  final GroupModel currentGroup;
+  final UserModel currentUser;
+  const AppDrawer(
+      {Key? key, required this.currentGroup, required this.currentUser})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     void _goToGroupManage() {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => GroupManage(
+                currentGroup: currentGroup,
+              )));
+    }
+
+    void _goToProfileManage() {
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => GroupManage()));
+          .push(MaterialPageRoute(builder: (context) => ProfileManage()));
     }
 
     return Drawer(
@@ -28,13 +42,9 @@ class AppDrawer extends StatelessWidget {
             child: Column(
               children: [
                 ListTile(
-                  leading: Icon(Icons.person),
-                  title: const Text("Profil"),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                  },
-                ),
+                    leading: Icon(Icons.person),
+                    title: const Text("Profil"),
+                    onTap: () => _goToProfileManage()),
                 ListTile(
                   leading: Icon(Icons.group),
                   title: const Text("Groupe"),

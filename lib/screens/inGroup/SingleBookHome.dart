@@ -428,7 +428,10 @@ class _SingleBookHomeState extends State<SingleBookHome> {
           ),
         ],
       ),
-      drawer: AppDrawer(),
+      drawer: AppDrawer(
+        currentGroup: widget.currentGroup,
+        currentUser: widget.currentUser,
+      ),
     );
   }
 }
