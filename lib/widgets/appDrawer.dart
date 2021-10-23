@@ -1,5 +1,6 @@
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
+import 'package:book_club_ref/screens/administration/groupManage%20copy.dart';
 import 'package:book_club_ref/screens/administration/groupManage.dart';
 import 'package:book_club_ref/screens/administration/profileManage.dart';
 
@@ -16,7 +17,7 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     void _goToGroupManage() {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => GroupManage(
+          builder: (context) => GroupManageRef(
                 currentGroup: currentGroup,
               )));
     }

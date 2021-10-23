@@ -318,4 +318,39 @@ class DBFuture {
     }
     return retVal;
   }
+
+  // Future<List<UserModel>> getGroupMembers(
+  //     String groupId, String userId) async {
+  //   List<UserModel> retVal = [];
+
+  //   try {
+  //     QuerySnapshot<Map<String, dynamic>> query = await _firestore
+  //         .collection("groups")
+  //         .doc(groupId)
+  //         .get();
+
+  //     query.docs.forEach((element) {
+  //       retVal.add(ReviewModel.fromDocumentSnapshot(doc: element));
+  //     });
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  //   return retVal;
+  // }
+
+  Future<List<UserModel>> getAllUsers() async {
+    List<UserModel> retVal = [];
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> query =
+          await _firestore.collection("users").get();
+
+      query.docs.forEach((element) {
+        retVal.add(UserModel.fromDocumentSnapshot(doc: element));
+      });
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
 }
