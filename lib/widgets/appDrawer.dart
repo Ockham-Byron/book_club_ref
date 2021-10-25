@@ -1,7 +1,7 @@
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
-import 'package:book_club_ref/screens/administration/groupManage%20copy.dart';
-import 'package:book_club_ref/screens/administration/groupManage.dart';
+import 'package:book_club_ref/screens/administration/groupManageRef.dart';
+
 import 'package:book_club_ref/screens/administration/profileManage.dart';
 
 import 'package:flutter/material.dart';
@@ -38,18 +38,40 @@ class AppDrawer extends StatelessWidget {
               children: [Text("data")],
             ),
           ),
-          Container(
-            color: Colors.white,
+          Expanded(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ListTile(
-                    leading: Icon(Icons.person),
-                    title: const Text("Profil"),
+                    leading: Icon(
+                      Icons.person,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    title: Text(
+                      "Profil",
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor, fontSize: 20),
+                    ),
                     onTap: () => _goToProfileManage()),
                 ListTile(
-                  leading: Icon(Icons.group),
-                  title: const Text("Groupe"),
+                  leading: Icon(
+                    Icons.group,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  title: Text(
+                    "Groupe",
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor, fontSize: 20),
+                  ),
                   onTap: () => _goToGroupManage(),
+                ),
+                SizedBox(
+                  height: 100,
+                ),
+                Image.network(
+                  "https://cdn.pixabay.com/photo/2018/04/24/11/32/book-3346785_1280.png",
+                  fit: BoxFit.contain,
+                  width: 250,
                 ),
               ],
             ),

@@ -9,6 +9,7 @@ class DBFuture {
 
   Future<String> createUser(UserModel user) async {
     String retVal = "error";
+    List<String> readBooks = [];
 
     try {
       await _firestore.collection("users").doc(user.uid).set({
@@ -16,6 +17,7 @@ class DBFuture {
         "email": user.email!.trim(),
         "pictureUrl": user.pictureUrl.trim(),
         "accountCreated": Timestamp.now(),
+        "readBooks": readBooks,
       });
       retVal = "success";
     } catch (e) {
@@ -54,7 +56,8 @@ class DBFuture {
         "members": members,
         "groupCreated": Timestamp.now(),
         "currentBookId": null,
-        "indexPickingBook": 0
+        "indexPickingBook": 0,
+        "nbOfBooks": 0
       });
       await _firestore.collection("users").doc(user.uid).update({
         "groupId": _docRef.id,
@@ -120,8 +123,12 @@ class DBFuture {
       });
 
       //add book to the Group schedule
-      await _firestore.collection("groups").doc(groupId).update(
-          {"currentBookId": _docRef.id, "currentBookDue": book.dateCompleted});
+      await _firestore.collection("groups").doc(groupId).update({
+        "currentBookId": _docRef.id,
+        "currentBookDue": book.dateCompleted,
+        "nbOfBooks": FieldValue.increment(1)
+      });
+
       retVal = "success";
     } catch (e) {
       print(e);
@@ -151,9 +158,8 @@ class DBFuture {
       await _firestore.collection("groups").doc(groupId).update({
         "currentBookId": _docRef.id,
         "currentBookDue": book.dateCompleted,
+        "nbOfBooks": FieldValue.increment(1)
       });
-
-      //adding a notification document
 
       retVal = "success";
     } catch (e) {
@@ -185,6 +191,7 @@ class DBFuture {
         "currentBookId": _docRef.id,
         "currentBookDue": book.dateCompleted,
         "indexPickingBook": nextPicker,
+        "nbOfBooks": FieldValue.increment(1),
       });
       retVal = "success";
     } catch (e) {
@@ -260,6 +267,7 @@ class DBFuture {
   Future<String> finishedBook(String groupId, String bookId, String uid,
       int rating, String review) async {
     String retVal = "error";
+    List<String> readBooks = [];
 
     try {
       await _firestore
@@ -270,6 +278,12 @@ class DBFuture {
           .collection("reviews")
           .doc(uid)
           .set({"rating": rating, "review": review});
+
+      //add finished Book in user profile
+      readBooks.add(bookId);
+      await _firestore.collection("users").doc(uid).update({
+        "readBooks": FieldValue.arrayUnion(readBooks),
+      });
     } catch (e) {
       print(e);
     }
@@ -338,7 +352,7 @@ class DBFuture {
   //   return retVal;
   // }
 
-  Future<List<UserModel>> getAllUsers() async {
+  Future<List<UserModel>> getAllUsers(GroupModel currentGroup) async {
     List<UserModel> retVal = [];
 
     try {
@@ -346,7 +360,9 @@ class DBFuture {
           await _firestore.collection("users").get();
 
       query.docs.forEach((element) {
-        retVal.add(UserModel.fromDocumentSnapshot(doc: element));
+        if (currentGroup.members!.contains(element.id)) {
+          retVal.add(UserModel.fromDocumentSnapshot(doc: element));
+        }
       });
     } catch (e) {
       print(e);

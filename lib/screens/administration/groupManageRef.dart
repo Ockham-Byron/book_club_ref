@@ -15,12 +15,13 @@ class GroupManageRef extends StatefulWidget {
 }
 
 class _GroupManageRefState extends State<GroupManageRef> {
-  late Future<List<UserModel>> members = DBFuture().getAllUsers();
+  late Future<List<UserModel>> members =
+      DBFuture().getAllUsers(widget.currentGroup);
   late Future<List<UserModel>> groupMembers = [] as Future<List<UserModel>>;
 
   @override
   void didChangeDependencies() async {
-    members = DBFuture().getAllUsers();
+    members = DBFuture().getAllUsers(widget.currentGroup);
 
     super.didChangeDependencies();
   }
@@ -65,46 +66,57 @@ class _GroupManageRefState extends State<GroupManageRef> {
             (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return ListView.builder(
-              itemCount: snapshot.data!.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                if (index == 0) {
-                  return Column(
-                    children: [
-                      Text("Id du groupe à partager aux nouveaux membres"),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(_getGroupId()!),
-                          SizedBox(
-                            width: 20,
+                itemCount: snapshot.data!.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return Column(
+                      children: [
+                        Container(
+                          width: 350,
+                          padding: EdgeInsets.all(20),
+                          margin: EdgeInsets.symmetric(vertical: 20),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 1,
+                                  color: Theme.of(context).primaryColor)),
+                          child: Column(
+                            children: [
+                              Text(
+                                  "Id du groupe à partager aux nouveaux membres"),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(_getGroupId()!),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  GestureDetector(
+                                    child: Icon(
+                                      Icons.copy,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    onTap: _copyToClipboard,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          GestureDetector(
-                            child: Icon(Icons.copy),
-                            onTap: _copyToClipboard,
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Text("Membres"),
-                    ],
-                  );
-                } else {
-                  if (getGroupMembers()!
-                      .contains(snapshot.data![index - 1].uid)) {
+                        ),
+                      ],
+                    );
+                  } else {
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                       child: MemberCard(
                         user: snapshot.data![index - 1],
+                        currentGroup: widget.currentGroup,
                       ),
                     );
-                  } else {
-                    return Text("");
                   }
-                }
-              },
-            );
+                });
           } else {
             return Center(
               child: CircularProgressIndicator(),

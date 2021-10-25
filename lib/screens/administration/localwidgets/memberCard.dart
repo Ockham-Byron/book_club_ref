@@ -1,11 +1,14 @@
+import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
-import 'package:book_club_ref/services/dbFuture.dart';
+
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
 
 class MemberCard extends StatelessWidget {
   final UserModel user;
-  const MemberCard({Key? key, required this.user}) : super(key: key);
+  final GroupModel currentGroup;
+  const MemberCard({Key? key, required this.user, required this.currentGroup})
+      : super(key: key);
 
   bool withProfilePicture() {
     if (user.pictureUrl ==
@@ -23,7 +26,27 @@ class MemberCard extends StatelessWidget {
     } else {
       userPseudo = user.pseudo!;
     }
-    return userPseudo;
+    return "${userPseudo[0].toUpperCase()}${userPseudo.substring(1)}";
+  }
+
+  int getUserReadBooks() {
+    int readBooks;
+    if (user.readBooks != null) {
+      readBooks = user.readBooks!.length;
+    } else {
+      readBooks = 0;
+    }
+    return readBooks;
+  }
+
+  int getnbOfGroupBooks() {
+    int nbOfGroupBooks;
+    if (currentGroup.nbOfBooks != null) {
+      nbOfGroupBooks = currentGroup.nbOfBooks!;
+    } else {
+      nbOfGroupBooks = 0;
+    }
+    return nbOfGroupBooks;
   }
 
   @override
@@ -52,14 +75,60 @@ class MemberCard extends StatelessWidget {
     return Container(
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: displayCircularAvatar(),
+          Container(
+            height: 100,
+            width: 100,
+            padding: const EdgeInsets.all(20.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: displayCircularAvatar(),
+            ),
           ),
-          Column(
-            children: [
-              Text(getUserPseudo()),
-            ],
+          Container(
+            padding: const EdgeInsets.all(20),
+            height: 100,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  getUserPseudo(),
+                  style: TextStyle(
+                      fontSize: 20, color: Theme.of(context).primaryColor),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.auto_stories,
+                      color: Theme.of(context).focusColor,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Livres lus : ",
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor, fontSize: 15),
+                    ),
+                    Text(
+                      getUserReadBooks().toString(),
+                      style: TextStyle(
+                          color: Theme.of(context).focusColor, fontSize: 15),
+                    ),
+                    Text(
+                      " / ",
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor, fontSize: 15),
+                    ),
+                    Text(
+                      getnbOfGroupBooks().toString(),
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor, fontSize: 15),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ],
       ),
