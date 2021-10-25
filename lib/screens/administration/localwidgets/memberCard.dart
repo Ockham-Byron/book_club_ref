@@ -1,8 +1,8 @@
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
-
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:random_color/random_color.dart';
 
 class MemberCard extends StatelessWidget {
   final UserModel user;
@@ -11,8 +11,7 @@ class MemberCard extends StatelessWidget {
       : super(key: key);
 
   bool withProfilePicture() {
-    if (user.pictureUrl ==
-        "https://digitalpainting.school/static/img/default_avatar.png") {
+    if (user.pictureUrl == "") {
       return false;
     } else {
       return true;
@@ -51,6 +50,10 @@ class MemberCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    RandomColor _randomColor = RandomColor();
+    Color _foregroundColor =
+        _randomColor.randomColor(colorBrightness: ColorBrightness.dark);
+
     Widget displayCircularAvatar() {
       if (withProfilePicture()) {
         return CircularProfileAvatar(
@@ -60,8 +63,8 @@ class MemberCard extends StatelessWidget {
         );
       } else {
         return CircularProfileAvatar(
-          user.pictureUrl,
-          foregroundColor: Theme.of(context).focusColor.withOpacity(0.5),
+          "https://digitalpainting.school/static/img/default_avatar.png",
+          foregroundColor: _foregroundColor,
           initialsText: Text(
             getUserPseudo()[0].toUpperCase(),
             style: TextStyle(

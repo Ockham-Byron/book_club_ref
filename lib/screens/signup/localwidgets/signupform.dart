@@ -39,6 +39,7 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
   TextEditingController _passwordInput = TextEditingController();
   TextEditingController _passwordBisInput = TextEditingController();
   TextEditingController _pictureInput = TextEditingController();
+  String pictureUrl = "";
 
   void _signUpUser(String email, String password, String pseudo,
       String pictureUrl, BuildContext context) async {

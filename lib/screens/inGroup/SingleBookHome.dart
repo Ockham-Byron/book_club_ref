@@ -294,8 +294,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
   }
 
   bool withProfilePicture() {
-    if (widget.currentUser.pictureUrl ==
-        "https://digitalpainting.school/static/img/default_avatar.png") {
+    if (widget.currentUser.pictureUrl == "") {
       return false;
     } else {
       return true;
@@ -336,7 +335,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
         );
       } else {
         return CircularProfileAvatar(
-          widget.currentUser.pictureUrl,
+          "https://digitalpainting.school/static/img/default_avatar.png",
           foregroundColor: Theme.of(context).focusColor.withOpacity(0.5),
           initialsText: Text(
             widget.currentUser.pseudo![0].toUpperCase(),
@@ -352,17 +351,6 @@ class _SingleBookHomeState extends State<SingleBookHome> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
-        // leading: Builder(
-        //   builder: (context) => InkWell(
-        //     onTap: () => Scaffold.of(context).openDrawer(),
-        //     child: ProfilePicture(
-        //       name: widget.currentUser.pseudo,
-        //       fontsize: 20,
-        //       random: true,
-        //       radius: 20,
-        //     ),
-        //   ),
-        // ),
         leading: Padding(
           padding: const EdgeInsets.all(4.0),
           child: Builder(

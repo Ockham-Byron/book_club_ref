@@ -36,19 +36,11 @@ class Auth {
           await _auth.createUserWithEmailAndPassword(
               email: email.trim(), password: password);
 
-      String userPicture() {
-        if (pictureUrl != null) {
-          return pictureUrl;
-        } else {
-          return "https://digitalpainting.school/static/img/default_avatar.png";
-        }
-      }
-
       UserModel _user = UserModel(
         uid: _userCredential.user!.uid,
         email: _userCredential.user!.email,
         pseudo: pseudo.trim(),
-        pictureUrl: userPicture().trim(),
+        pictureUrl: pictureUrl,
         accountCreated: Timestamp.now(),
       );
 

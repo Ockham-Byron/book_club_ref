@@ -3,6 +3,7 @@ import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/administration/groupManageRef.dart';
 
 import 'package:book_club_ref/screens/administration/profileManage.dart';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
 import 'package:flutter/material.dart';
 
@@ -23,8 +24,46 @@ class AppDrawer extends StatelessWidget {
     }
 
     void _goToProfileManage() {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => ProfileManage()));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ProfileManage(currentUser: currentUser)));
+    }
+
+    bool withProfilePicture() {
+      if (currentUser.pictureUrl == "") {
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    Widget displayCircularAvatar() {
+      if (withProfilePicture()) {
+        return CircularProfileAvatar(
+          currentUser.pictureUrl,
+          showInitialTextAbovePicture: false,
+        );
+      } else {
+        return CircularProfileAvatar(
+          "https://digitalpainting.school/static/img/default_avatar.png",
+          foregroundColor: Theme.of(context).focusColor.withOpacity(0.5),
+          initialsText: Text(
+            currentUser.pseudo![0].toUpperCase(),
+            style: TextStyle(
+                fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          showInitialTextAbovePicture: false,
+        );
+      }
+    }
+
+    String getUserPseudo() {
+      String userPseudo;
+      if (currentUser.pseudo == null) {
+        userPseudo = "personne";
+      } else {
+        userPseudo = currentUser.pseudo!;
+      }
+      return "${userPseudo[0].toUpperCase()}${userPseudo.substring(1)}";
     }
 
     return Drawer(
@@ -33,9 +72,22 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blueGrey),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        width: 3, color: Theme.of(context).focusColor))),
             child: Row(
-              children: [Text("data")],
+              children: [
+                displayCircularAvatar(),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  getUserPseudo(),
+                  style: TextStyle(
+                      color: Theme.of(context).focusColor, fontSize: 20),
+                )
+              ],
             ),
           ),
           Expanded(
