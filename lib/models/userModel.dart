@@ -9,6 +9,7 @@ class UserModel {
   String pictureUrl =
       "https://digitalpainting.school/static/img/default_avatar.png";
   List<String>? readBooks;
+  int? readPages;
 
   UserModel({
     this.uid,
@@ -16,6 +17,7 @@ class UserModel {
     this.pseudo,
     this.accountCreated,
     this.readBooks,
+    this.readPages,
     this.pictureUrl =
         "https://digitalpainting.school/static/img/default_avatar.png",
   });
@@ -28,6 +30,7 @@ class UserModel {
     accountCreated = doc.data()!["accountCreated"];
     groupId = doc.data()!["groupId"];
     readBooks = List<String>.from(doc.data()!["readBooks"]);
+    readPages = doc.data()!["readPages"];
     pictureUrl = doc.data()!["pictureUrl"];
   }
 }

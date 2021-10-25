@@ -1,4 +1,5 @@
 import 'package:book_club_ref/models/authModel.dart';
+import 'package:book_club_ref/models/bookModel.dart';
 
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/screens/root/root.dart';
@@ -10,8 +11,12 @@ import 'package:provider/provider.dart';
 class AddReview extends StatefulWidget {
   final GroupModel currentGroup;
   final String bookId;
-  const AddReview({Key? key, required this.currentGroup, required this.bookId})
-      : super(key: key);
+
+  const AddReview({
+    Key? key,
+    required this.currentGroup,
+    required this.bookId,
+  }) : super(key: key);
 
   @override
   _AddReviewState createState() => _AddReviewState();
@@ -21,12 +26,15 @@ class _AddReviewState extends State<AddReview> {
   final reviewKey = GlobalKey<ScaffoldState>();
   int _dropdownValue = 1;
   AuthModel _authModel = AuthModel();
+  late BookModel _reviewedBook = BookModel();
   TextEditingController _reviewInput = TextEditingController();
   FocusNode? freview;
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     _authModel = Provider.of<AuthModel>(context);
+    _reviewedBook =
+        await DBFuture().getBook(widget.bookId, widget.currentGroup.id!);
     super.didChangeDependencies();
   }
 
@@ -111,8 +119,13 @@ class _AddReviewState extends State<AddReview> {
           ),
           ElevatedButton(
             onPressed: () {
-              DBFuture().finishedBook(widget.currentGroup.id!, widget.bookId,
-                  _authModel.uid!, _dropdownValue, _reviewInput.text);
+              DBFuture().finishedBook(
+                  widget.currentGroup.id!,
+                  widget.bookId,
+                  _authModel.uid!,
+                  _dropdownValue,
+                  _reviewInput.text,
+                  _reviewedBook.length!);
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(

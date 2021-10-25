@@ -18,6 +18,7 @@ class DBFuture {
         "pictureUrl": user.pictureUrl.trim(),
         "accountCreated": Timestamp.now(),
         "readBooks": readBooks,
+        "readPages": user.readPages
       });
       retVal = "success";
     } catch (e) {
@@ -99,6 +100,24 @@ class DBFuture {
       DocumentSnapshot<Map<String, dynamic>> _docSnapshot =
           await _firestore.collection("groups").doc(groupId).get();
       retVal = GroupModel.fromDocumentSnapshot(doc: _docSnapshot);
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
+  }
+
+  Future<BookModel> getBook(String bookId, String groupId) async {
+    BookModel retVal = BookModel();
+
+    try {
+      DocumentSnapshot<Map<String, dynamic>> _docSnapshot = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .doc(bookId)
+          .get();
+      retVal = BookModel.fromDocumentSnapshot(doc: _docSnapshot);
     } catch (e) {
       print(e);
     }
@@ -265,7 +284,7 @@ class DBFuture {
   }
 
   Future<String> finishedBook(String groupId, String bookId, String uid,
-      int rating, String review) async {
+      int rating, String review, int nbPages) async {
     String retVal = "error";
     List<String> readBooks = [];
 
@@ -283,6 +302,7 @@ class DBFuture {
       readBooks.add(bookId);
       await _firestore.collection("users").doc(uid).update({
         "readBooks": FieldValue.arrayUnion(readBooks),
+        "readPages": FieldValue.increment(nbPages)
       });
     } catch (e) {
       print(e);
