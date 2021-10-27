@@ -38,7 +38,6 @@ class SingleBookHome extends StatefulWidget {
 
 class _SingleBookHomeState extends State<SingleBookHome> {
   late BookModel _currentBook = BookModel();
-  //late UserModel _currentUser = UserModel();
   late UserModel _pickingUser = UserModel();
 
   bool _doneWithBook = true;
@@ -55,7 +54,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
   Future _initBook() async {
     _currentBook = await DBFuture()
         .getCurrentBook(widget.groupId, widget.currentGroup.currentBookId!);
-    //_currentUser = Provider.of<UserModel>(context, listen: false);
+
     if (widget.currentGroup.currentBookId != null) {
       _currentBook = await DBFuture().getCurrentBook(
           widget.currentGroup.id!, widget.currentGroup.currentBookId!);
@@ -74,17 +73,6 @@ class _SingleBookHomeState extends State<SingleBookHome> {
       }
     }
   }
-
-  // isUserDoneWithBook() async {
-  //   if (widget.currentGroup.currentBookId != null) {
-  //     if (await DBFuture().isUserDoneWithBook(widget.currentGroup.id!,
-  //         widget.currentGroup.currentBookId!, widget.authModel.uid!)) {
-  //       _doneWithBook = true;
-  //     } else {
-  //       _doneWithBook = false;
-  //     }
-  //   }
-  // }
 
   String _displayBookTitle() {
     if (_currentBook.title != null) {
@@ -217,6 +205,14 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     );
   }
 
+  void _changePickingUser() {
+    DBFuture().changePicker(widget.currentGroup.id!);
+    setState(() async {
+      _pickingUser = await DBFuture().getUser(
+          widget.currentGroup.members![widget.currentGroup.indexPickingBook!]);
+    });
+  }
+
   Widget _displayNextBookInfo() {
     if (_pickingUser.uid == widget.currentUser.uid) {
       return Column(
@@ -228,14 +224,25 @@ class _SingleBookHomeState extends State<SingleBookHome> {
           SizedBox(
             height: 5,
           ),
-          MaterialButton(
-            color: Theme.of(context).primaryColor,
-            shape: CircleBorder(),
-            onPressed: () => _goToAddNextBook(),
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Icon(Icons.add),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MaterialButton(
+                color: Theme.of(context).primaryColor,
+                shape: CircleBorder(),
+                onPressed: () => _goToAddNextBook(),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Icon(Icons.add),
+                ),
+              ),
+              TextButton(
+                  onPressed: () => _changePickingUser(),
+                  child: Text(
+                    "Je préfère passer mon tour",
+                    style: TextStyle(color: Theme.of(context).focusColor),
+                  ))
+            ],
           ),
         ],
       );
@@ -395,15 +402,6 @@ class _SingleBookHomeState extends State<SingleBookHome> {
           SizedBox(
             height: 10,
           ),
-          // MaterialButton(
-          //   color: Theme.of(context).primaryColor,
-          //   shape: CircleBorder(),
-          //   onPressed: () => _goToAddNextBook(),
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(10),
-          //     child: Icon(Icons.add),
-          //   ),
-          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20.0),
             child: ElevatedButton(
