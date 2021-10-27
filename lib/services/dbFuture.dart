@@ -27,6 +27,48 @@ class DBFuture {
     return retVal;
   }
 
+  Future<String> editUserPseudo(String userId, String pseudo) async {
+    String retVal = "error";
+
+    try {
+      await _firestore.collection("users").doc(userId).update({
+        "pseudo": pseudo.trim(),
+      });
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  Future<String> editMailPseudo(String userId, String mail) async {
+    String retVal = "error";
+
+    try {
+      await _firestore.collection("users").doc(userId).update({
+        "email": mail.trim(),
+      });
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  //Delete User
+  Future<String> deleteUser(String userId) async {
+    String retVal = "error";
+
+    try {
+      await _firestore.collection("users").doc(userId).delete();
+
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
   Future<UserModel> getUser(String uid) async {
     UserModel retVal = UserModel();
 
@@ -353,25 +395,6 @@ class DBFuture {
     return retVal;
   }
 
-  // Future<List<UserModel>> getGroupMembers(
-  //     String groupId, String userId) async {
-  //   List<UserModel> retVal = [];
-
-  //   try {
-  //     QuerySnapshot<Map<String, dynamic>> query = await _firestore
-  //         .collection("groups")
-  //         .doc(groupId)
-  //         .get();
-
-  //     query.docs.forEach((element) {
-  //       retVal.add(ReviewModel.fromDocumentSnapshot(doc: element));
-  //     });
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  //   return retVal;
-  // }
-
   Future<List<UserModel>> getAllUsers(GroupModel currentGroup) async {
     List<UserModel> retVal = [];
 
@@ -387,6 +410,19 @@ class DBFuture {
     } catch (e) {
       print(e);
     }
+    return retVal;
+  }
+
+  Future<String> changePicker(String groupId) async {
+    String retVal = "error";
+
+    try {
+      await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .update({"indexPickingBook": FieldValue.increment(1)});
+    } catch (e) {}
+
     return retVal;
   }
 }

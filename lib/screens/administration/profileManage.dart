@@ -1,14 +1,39 @@
 import 'package:book_club_ref/models/userModel.dart';
+
+import 'package:book_club_ref/screens/root/root.dart';
+import 'package:book_club_ref/services/auth.dart';
+import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-class ProfileManage extends StatelessWidget {
+class ProfileManage extends StatefulWidget {
   final UserModel currentUser;
-  const ProfileManage({Key? key, required this.currentUser}) : super(key: key);
+  ProfileManage({Key? key, required this.currentUser}) : super(key: key);
+
+  @override
+  _ProfileManageState createState() => _ProfileManageState();
+}
+
+class _ProfileManageState extends State<ProfileManage> {
+  TextEditingController _pseudoInput = TextEditingController();
+  TextEditingController _mailInput = TextEditingController();
+
+  void _signOut(BuildContext context) async {
+    String _returnedString = await Auth().signOut();
+    if (_returnedString == "success") {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OurRoot(),
+        ),
+        (route) => false,
+      );
+    }
+  }
 
   bool withProfilePicture() {
-    if (currentUser.pictureUrl == "") {
+    if (widget.currentUser.pictureUrl == "") {
       return false;
     } else {
       return true;
@@ -17,36 +42,121 @@ class ProfileManage extends StatelessWidget {
 
   String getUserPseudo() {
     String userPseudo;
-    if (currentUser.pseudo == null) {
+    if (widget.currentUser.pseudo == null) {
       userPseudo = "personne";
     } else {
-      userPseudo = currentUser.pseudo!;
+      userPseudo = widget.currentUser.pseudo!;
     }
     return "${userPseudo[0].toUpperCase()}${userPseudo.substring(1)}";
   }
 
-  Widget _buildPopupDialog(BuildContext context) {
+  void _resetPassword(String email) async {
+    try {
+      String _returnString = await Auth().sendPasswordResetEmail(email);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _editUserPseudo(
+      String pseudo, String userId, BuildContext context) async {
+    try {
+      String _returnString = await DBFuture().editUserPseudo(userId, pseudo);
+      if (_returnString == "success") {
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(_returnString)));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _editUserMail(String email, String userId, BuildContext context) async {
+    try {
+      String _returnString = await Auth().resetEmail(email);
+
+      if (_returnString == "success") {
+        DBFuture().editMailPseudo(userId, email);
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(_returnString)));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _deleteUser(String userId, BuildContext context) async {
+    try {
+      String _returnString = await Auth().deleteUser();
+
+      if (_returnString == "success") {
+        DBFuture().deleteUser(userId);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                "Pour supprimer votre compte, vous devez d'abord vous reconnecter pour nous assurer que quelqu'un d'autre ne vous joue pas des tours")));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Widget _buildPopupDialogPseudo(BuildContext context, String userId) {
     return new AlertDialog(
-      title: const Text('Popup example'),
-      content: new Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text("Hello"),
-        ],
+      title: Text("Changer de pseudo"),
+      content: TextField(
+        controller: _pseudoInput,
       ),
       actions: <Widget>[
         new ElevatedButton(
           onPressed: () {
+            _editUserPseudo(_pseudoInput.text, userId, context);
             Navigator.of(context).pop();
           },
-          child: const Text('Modifier'),
+          child: const Text('Ok'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPopupDialogEmail(BuildContext context, String userId) {
+    return new AlertDialog(
+      title: Text("Changer de courriel"),
+      content: TextField(
+        controller: _mailInput,
+      ),
+      actions: <Widget>[
+        new ElevatedButton(
+          onPressed: () {
+            _editUserMail(_mailInput.text, userId, context);
+            Navigator.of(context).pop();
+          },
+          child: const Text('Ok'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPopupDialogDeleteUser(BuildContext context, String userId) {
+    return new AlertDialog(
+      title: Text("Avez-vous perdu la tête ??"),
+      content: Text(
+          "Mais bon si vous confirmez que vous souhitez supprimer votre compte, vous êtes libre..."),
+      actions: <Widget>[
+        new ElevatedButton(
+          onPressed: () {
+            _deleteUser(userId, context);
+            Navigator.of(context).pop();
+          },
+          child: const Text('Je pars'),
         ),
         new ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Annuler'),
+          child: const Text('Finalement je reste'),
         ),
       ],
     );
@@ -57,7 +167,7 @@ class ProfileManage extends StatelessWidget {
     Widget displayCircularAvatar() {
       if (withProfilePicture()) {
         return CircularProfileAvatar(
-          currentUser.pictureUrl,
+          widget.currentUser.pictureUrl,
           showInitialTextAbovePicture: false,
         );
       } else {
@@ -65,7 +175,7 @@ class ProfileManage extends StatelessWidget {
           "https://digitalpainting.school/static/img/default_avatar.png",
           foregroundColor: Theme.of(context).focusColor.withOpacity(0.5),
           initialsText: Text(
-            currentUser.pseudo![0].toUpperCase(),
+            widget.currentUser.pseudo![0].toUpperCase(),
             style: TextStyle(
                 fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
           ),
@@ -76,8 +186,8 @@ class ProfileManage extends StatelessWidget {
 
     int getUserReadBooks() {
       int readBooks;
-      if (currentUser.readBooks != null) {
-        readBooks = currentUser.readBooks!.length;
+      if (widget.currentUser.readBooks != null) {
+        readBooks = widget.currentUser.readBooks!.length;
       } else {
         readBooks = 0;
       }
@@ -86,8 +196,8 @@ class ProfileManage extends StatelessWidget {
 
     int getUserReadPages() {
       int readPages;
-      if (currentUser.readPages != null) {
-        readPages = currentUser.readPages!;
+      if (widget.currentUser.readPages != null) {
+        readPages = widget.currentUser.readPages!;
       } else {
         readPages = 0;
       }
@@ -125,119 +235,188 @@ class ProfileManage extends StatelessWidget {
     }
 
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Container(
-            height: 350,
-          ),
-          Positioned(
-              height: 250,
-              width: MediaQuery.of(context).size.width,
-              child: Container(
-                color: Theme.of(context).focusColor,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 30,
-                    ),
-                    displayCircularAvatar(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Container(
+                height: 350,
+              ),
+              Positioned(
+                  top: 0,
+                  height: 250,
+                  width: MediaQuery.of(context).size.width,
+                  child: Container(
+                    color: Theme.of(context).focusColor,
+                    child: Column(
                       children: [
-                        Text(
-                          getUserPseudo(),
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                        SizedBox(
+                          height: 30,
                         ),
-                        InkWell(
-                          child: Icon(Icons.edit),
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  _buildPopupDialog(context),
-                            );
-                          },
+                        displayCircularAvatar(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              getUserPseudo(),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            InkWell(
+                                child: Icon(Icons.edit),
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return _buildPopupDialogPseudo(
+                                            context, widget.currentUser.uid!);
+                                      });
+                                })
+                          ],
                         )
                       ],
-                    )
-                  ],
-                ),
-              )),
-          Positioned(
-            top: 250,
-            //left: 60,
-            width: 350,
-            height: 250,
-            child: Container(
+                    ),
+                  )),
+              Positioned(
+                top: 200,
+                //left: 60,
                 width: 350,
                 height: 100,
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      width: 150,
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Livres lus".toUpperCase(),
-                            style: TextStyle(
-                                color: Theme.of(context).canvasColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Text(
-                            getUserReadBooks().toString(),
-                            style: TextStyle(
-                                color: Theme.of(context).focusColor,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
+                child: Container(
+                  width: 350,
+                  height: 100,
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        width: 150,
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Livres lus".toUpperCase(),
+                              style: TextStyle(
+                                  color: Theme.of(context).canvasColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              getUserReadBooks().toString(),
+                              style: TextStyle(
+                                  color: Theme.of(context).focusColor,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: VerticalDivider(
+                      VerticalDivider(
                           thickness: 5, color: Theme.of(context).focusColor),
-                    ),
-                    Container(
-                      width: 150,
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Pages lues".toUpperCase(),
-                            style: TextStyle(
-                                color: Theme.of(context).canvasColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Text(
-                            getUserReadPages().toString(),
-                            style: TextStyle(
-                                color: Theme.of(context).focusColor,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
+                      Container(
+                        width: 150,
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Pages lues".toUpperCase(),
+                              style: TextStyle(
+                                  color: Theme.of(context).canvasColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              getUserReadPages().toString(),
+                              style: TextStyle(
+                                  color: Theme.of(context).focusColor,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                )),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.currentUser.email!,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
+              InkWell(
+                child: Icon(Icons.edit),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => _buildPopupDialogEmail(
+                        context, widget.currentUser.uid!),
+                  );
+                },
+              )
+            ],
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          ElevatedButton(
+              onPressed: () => _resetPassword(widget.currentUser.email!),
+              child: Text("Modifier mot de passe")),
+          SizedBox(
+            height: 50,
+          ),
+          InkWell(
+            onTap: () => _signOut(context),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.outbond_rounded,
+                  color: Colors.white,
+                ),
+                Text("Déconnecter"),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => _buildPopupDialogDeleteUser(
+                    context, widget.currentUser.uid!),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.follow_the_signs,
+                  color: Colors.white,
+                ),
+                Text(
+                  "Supprimer mon compte",
+                  style: TextStyle(color: Theme.of(context).primaryColor),
+                ),
+              ],
+            ),
           ),
         ],
       ),

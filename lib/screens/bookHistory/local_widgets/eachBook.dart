@@ -51,30 +51,35 @@ class EachBook extends StatelessWidget {
     return ShadowContainer(
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 80,
-                child: Image.network(_currentBookCoverUrl()),
-              ),
-              Column(
-                children: [
-                  Text(
-                    book!.title ?? "Pas de titre",
-                    style: TextStyle(
-                        fontSize: 20, color: Theme.of(context).focusColor),
+          SizedBox(
+            height: 300,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 80,
+                  child: Image.network(_currentBookCoverUrl()),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        book!.title ?? "Pas de titre",
+                        style: TextStyle(
+                            fontSize: 20, color: Theme.of(context).focusColor),
+                      ),
+                      Text(
+                        book!.author ?? "Pas d'auteur",
+                        style: TextStyle(fontSize: 20, color: Colors.grey),
+                      ),
+                    ],
                   ),
-                  Text(
-                    book!.author ?? "Pas d'auteur",
-                    style: TextStyle(fontSize: 20, color: Colors.grey),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: 80,
-              )
-            ],
+                ),
+                SizedBox(
+                  width: 80,
+                )
+              ],
+            ),
           ),
           ElevatedButton(
               onPressed: () => _goToReviewHistory(context),

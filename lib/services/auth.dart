@@ -71,4 +71,40 @@ class Auth {
 
     return retValue;
   }
+
+  // Reset Password
+  Future<String> sendPasswordResetEmail(String email) async {
+    String retVal = "error";
+    try {
+      _auth.sendPasswordResetEmail(email: email);
+      retVal = "sucess";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  // Reset email
+  Future<String> resetEmail(String email) async {
+    String retVal = "error";
+    try {
+      _auth.currentUser!.updateEmail(email);
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  //Delete User
+  Future<String> deleteUser() async {
+    String retVal = "error";
+    try {
+      _auth.currentUser!.delete();
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
 }

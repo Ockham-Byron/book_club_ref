@@ -53,6 +53,41 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
+  void _resetPassword(String email) async {
+    try {
+      String _returnString = await Auth().sendPasswordResetEmail(email);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Widget _buildPopupResetPassword(BuildContext context) {
+    return new AlertDialog(
+      title: Text("Ca arrive aux meilleurs..."),
+      content: SizedBox(
+        height: 110,
+        child: Column(
+          children: [
+            Text(
+                "Indiquez votre email et nous vous enverrons un lien pour changer votre mot de passe"),
+            TextField(
+              controller: _emailInput,
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        new ElevatedButton(
+          onPressed: () {
+            _resetPassword(_emailInput.text);
+            Navigator.of(context).pop();
+          },
+          child: const Text('Ok'),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ShadowContainer(
@@ -134,6 +169,16 @@ class _LoginFormState extends State<LoginForm> {
                   fontWeight: FontWeight.bold),
             ),
           ),
+          TextButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => _buildPopupResetPassword(context));
+              },
+              child: Text(
+                "Oubli du mot de passe ?",
+                style: TextStyle(color: Theme.of(context).canvasColor),
+              ))
         ],
       ),
     );
