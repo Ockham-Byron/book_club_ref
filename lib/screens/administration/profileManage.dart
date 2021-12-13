@@ -1,3 +1,4 @@
+import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 
 import 'package:book_club_ref/screens/root/root.dart';
@@ -9,7 +10,10 @@ import 'package:flutter/painting.dart';
 
 class ProfileManage extends StatefulWidget {
   final UserModel currentUser;
-  ProfileManage({Key? key, required this.currentUser}) : super(key: key);
+  final GroupModel currentGroup;
+  ProfileManage(
+      {Key? key, required this.currentUser, required this.currentGroup})
+      : super(key: key);
 
   @override
   _ProfileManageState createState() => _ProfileManageState();
@@ -18,6 +22,7 @@ class ProfileManage extends StatefulWidget {
 class _ProfileManageState extends State<ProfileManage> {
   TextEditingController _pseudoInput = TextEditingController();
   TextEditingController _mailInput = TextEditingController();
+  TextEditingController _pictureUrlInput = TextEditingController();
 
   void _signOut(BuildContext context) async {
     String _returnedString = await Auth().signOut();
@@ -77,7 +82,7 @@ class _ProfileManageState extends State<ProfileManage> {
       String _returnString = await Auth().resetEmail(email);
 
       if (_returnString == "success") {
-        DBFuture().editMailPseudo(userId, email);
+        DBFuture().editUserMail(userId, email);
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(_returnString)));
@@ -87,12 +92,28 @@ class _ProfileManageState extends State<ProfileManage> {
     }
   }
 
-  void _deleteUser(String userId, BuildContext context) async {
+  void _editUsePicture(
+      String pictureUrl, String userId, BuildContext context) async {
+    try {
+      String _returnString =
+          await DBFuture().editUserPicture(userId, pictureUrl);
+
+      if (_returnString == "success") {
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(_returnString)));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _deleteUser(String userId, String groupId, BuildContext context) async {
     try {
       String _returnString = await Auth().deleteUser();
 
       if (_returnString == "success") {
-        DBFuture().deleteUser(userId);
+        DBFuture().deleteUser(userId, groupId);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
@@ -139,7 +160,26 @@ class _ProfileManageState extends State<ProfileManage> {
     );
   }
 
-  Widget _buildPopupDialogDeleteUser(BuildContext context, String userId) {
+  Widget _buildPopupDialogPicture(BuildContext context, String userId) {
+    return new AlertDialog(
+      title: Text("Changer de tête"),
+      content: TextField(
+        controller: _pictureUrlInput,
+      ),
+      actions: <Widget>[
+        new ElevatedButton(
+          onPressed: () {
+            _editUsePicture(_pictureUrlInput.text, userId, context);
+            Navigator.of(context).pop();
+          },
+          child: const Text('Ok'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPopupDialogDeleteUser(
+      BuildContext context, String userId, String groupId) {
     return new AlertDialog(
       title: Text("Avez-vous perdu la tête ??"),
       content: Text(
@@ -147,7 +187,7 @@ class _ProfileManageState extends State<ProfileManage> {
       actions: <Widget>[
         new ElevatedButton(
           onPressed: () {
-            _deleteUser(userId, context);
+            _deleteUser(userId, groupId, context);
             Navigator.of(context).pop();
           },
           child: const Text('Je pars'),
@@ -281,6 +321,30 @@ class _ProfileManageState extends State<ProfileManage> {
                     ),
                   )),
               Positioned(
+                top: 90,
+                left: 200,
+                height: 40,
+                child: MaterialButton(
+                  color: Theme.of(context).focusColor,
+                  shape: CircleBorder(),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return _buildPopupDialogPicture(
+                              context, widget.currentUser.uid!);
+                        });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Icon(
+                      Icons.add_a_photo,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
                 top: 200,
                 //left: 60,
                 width: 350,
@@ -401,7 +465,7 @@ class _ProfileManageState extends State<ProfileManage> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialogDeleteUser(
-                    context, widget.currentUser.uid!),
+                    context, widget.currentUser.uid!, widget.currentGroup.id!),
               );
             },
             child: Row(

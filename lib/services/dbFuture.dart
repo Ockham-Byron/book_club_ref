@@ -41,7 +41,7 @@ class DBFuture {
     return retVal;
   }
 
-  Future<String> editMailPseudo(String userId, String mail) async {
+  Future<String> editUserMail(String userId, String mail) async {
     String retVal = "error";
 
     try {
@@ -55,12 +55,31 @@ class DBFuture {
     return retVal;
   }
 
-  //Delete User
-  Future<String> deleteUser(String userId) async {
+  Future<String> editUserPicture(String userId, String pictureUrl) async {
     String retVal = "error";
 
     try {
+      await _firestore.collection("users").doc(userId).update({
+        "pictureUrl": pictureUrl.trim(),
+      });
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  //Delete User
+  Future<String> deleteUser(String userId, String groupId) async {
+    String retVal = "error";
+    List<String> members = [];
+
+    try {
+      members.remove(userId);
       await _firestore.collection("users").doc(userId).delete();
+      await _firestore.collection("groups").doc(groupId).update({
+        "members": FieldValue.arrayUnion(members),
+      });
 
       retVal = "success";
     } catch (e) {

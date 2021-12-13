@@ -82,14 +82,6 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     }
   }
 
-  // String _displayPickingUserPseudo() {
-  //   if (_pickingUser.pseudo != null) {
-  //     return _pickingUser.pseudo!;
-  //   } else {
-  //     return "no name";
-  //   }
-  // }
-
   String _displayRemainingDays() {
     String currentBookDue;
     var today = DateTime.now();
@@ -286,7 +278,6 @@ class _SingleBookHomeState extends State<SingleBookHome> {
   }
 
   void _goToHistory() async {
-    //GroupModel group = Provider.of<GroupModel>(context, listen: false);
     Navigator.push(
       context,
       MaterialPageRoute(
