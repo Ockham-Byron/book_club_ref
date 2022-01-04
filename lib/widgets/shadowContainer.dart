@@ -10,10 +10,7 @@ class ShadowContainer extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(
-                  "https://st2.depositphotos.com/4196725/i/600/depositphotos_62170067-stock-photo-black-fabric-texture.jpg"),
-              fit: BoxFit.cover),
+          color: Colors.blueGrey,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(

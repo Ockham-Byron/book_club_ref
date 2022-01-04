@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 class AppDrawer extends StatelessWidget {
   final GroupModel currentGroup;
   final UserModel currentUser;
+
   const AppDrawer(
       {Key? key, required this.currentGroup, required this.currentUser})
       : super(key: key);

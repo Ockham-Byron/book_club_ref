@@ -9,7 +9,7 @@ class OurTheme {
 
   ThemeData buildTheme() {
     return ThemeData(
-      canvasColor: _electricBlue,
+      canvasColor: Colors.amber[50],
       primaryColor: _sage,
       focusColor: _apricot,
       secondaryHeaderColor: _spaceCadet,

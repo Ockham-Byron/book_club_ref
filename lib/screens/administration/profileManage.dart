@@ -1,18 +1,23 @@
+import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
+import 'package:book_club_ref/widgets/bookSection.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 class ProfileManage extends StatefulWidget {
   final UserModel currentUser;
   final GroupModel currentGroup;
+  final BookModel currentBook;
   ProfileManage(
-      {Key? key, required this.currentUser, required this.currentGroup})
+      {Key? key,
+      required this.currentUser,
+      required this.currentGroup,
+      required this.currentBook})
       : super(key: key);
 
   @override
@@ -183,7 +188,7 @@ class _ProfileManageState extends State<ProfileManage> {
     return new AlertDialog(
       title: Text("Avez-vous perdu la tête ??"),
       content: Text(
-          "Mais bon si vous confirmez que vous souhitez supprimer votre compte, vous êtes libre..."),
+          "Mais bon si vous confirmez que vous souhaitez supprimer votre compte, vous êtes libre..."),
       actions: <Widget>[
         new ElevatedButton(
           onPressed: () {
@@ -244,246 +249,146 @@ class _ProfileManageState extends State<ProfileManage> {
       return readPages;
     }
 
-    Widget _displayTopCardUserInfo() {
-      return Stack(
-        alignment: Alignment.center,
-        children: [
-          Stack(
-            children: [
-              Container(
-                color: Theme.of(context).focusColor,
-                height: 200,
-              ),
-              Container(
-                child: Text("profilimage"),
-              ),
-            ],
-          ),
-          Positioned(
-            top: 150,
-            child: Container(
-              height: 100,
-              width: 300,
-              color: Colors.white,
-              child: Row(
-                children: [],
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-
     return Scaffold(
-      body: Column(
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                height: 350,
-              ),
+      body: Container(
+        alignment: Alignment.bottomCenter,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/background.jpg'),
+              fit: BoxFit.cover),
+        ),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.93,
+          width: MediaQuery.of(context).size.width,
+          child: Stack(
+            children: [
               Positioned(
-                  top: 0,
-                  height: 250,
+                bottom: 0,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.83,
                   width: MediaQuery.of(context).size.width,
-                  child: Container(
-                    color: Theme.of(context).focusColor,
+                  decoration: BoxDecoration(
+                    color: Colors.amber[50],
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.1,
+                      left: 20,
+                      right: 20,
+                    ),
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 30,
+                        Text(
+                          getUserPseudo(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 36,
+                          ),
                         ),
-                        displayCircularAvatar(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              getUserPseudo(),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            InkWell(
-                                child: Icon(Icons.edit),
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return _buildPopupDialogPseudo(
-                                            context, widget.currentUser.uid!);
-                                      });
-                                })
-                          ],
-                        )
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            "MODIFIER",
+                            style: TextStyle(color: Colors.red[300]),
+                          ),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(top: 10),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    "LIVRES LUS",
+                                    style: kTitleStyle,
+                                  ),
+                                  Text(
+                                    "PAGES LUES",
+                                    style: kTitleStyle,
+                                  ),
+                                  Text(
+                                    "FAVORIS",
+                                    style: kTitleStyle,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    getUserReadBooks().toString(),
+                                    style: kSubtitleStyle,
+                                  ),
+                                  Text(
+                                    getUserReadPages().toString(),
+                                    style: kSubtitleStyle,
+                                  ),
+                                  Text(
+                                    "47",
+                                    style: kSubtitleStyle,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                              padding: EdgeInsets.only(
+                                top: 20,
+                                left: 20,
+                                right: 20,
+                              ),
+                              alignment: Alignment.bottomCenter,
+                              child: BookSection(
+                                  currentGroup: widget.currentGroup,
+                                  currentUser: widget.currentUser,
+                                  currentBook: widget.currentBook,
+                                  heading: "Continuer de lire")),
+                        ),
                       ],
                     ),
-                  )),
-              Positioned(
-                top: 90,
-                left: 200,
-                height: 40,
-                child: MaterialButton(
-                  color: Theme.of(context).focusColor,
-                  shape: CircleBorder(),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return _buildPopupDialogPicture(
-                              context, widget.currentUser.uid!);
-                        });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Icon(
-                      Icons.add_a_photo,
-                      color: Colors.white,
-                    ),
                   ),
                 ),
               ),
-              Positioned(
-                top: 200,
-                //left: 60,
-                width: 350,
-                height: 100,
-                child: Container(
-                  width: 350,
-                  height: 100,
-                  color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        width: 150,
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Livres lus".toUpperCase(),
-                              style: TextStyle(
-                                  color: Theme.of(context).canvasColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              getUserReadBooks().toString(),
-                              style: TextStyle(
-                                  color: Theme.of(context).focusColor,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                      VerticalDivider(
-                          thickness: 5, color: Theme.of(context).focusColor),
-                      Container(
-                        width: 150,
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Pages lues".toUpperCase(),
-                              style: TextStyle(
-                                  color: Theme.of(context).canvasColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              getUserReadPages().toString(),
-                              style: TextStyle(
-                                  color: Theme.of(context).focusColor,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+              Container(
+                alignment: Alignment.center,
+                height: MediaQuery.of(context).size.height * 0.2,
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.amber[50]),
+                child: ClipRect(
+                  child: displayCircularAvatar(),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                widget.currentUser.email!,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-              InkWell(
-                child: Icon(Icons.edit),
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => _buildPopupDialogEmail(
-                        context, widget.currentUser.uid!),
-                  );
-                },
               )
             ],
           ),
-          SizedBox(
-            height: 50,
-          ),
-          ElevatedButton(
-              onPressed: () => _resetPassword(widget.currentUser.email!),
-              child: Text("Modifier mot de passe")),
-          SizedBox(
-            height: 50,
-          ),
-          InkWell(
-            onTap: () => _signOut(context),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.outbond_rounded,
-                  color: Colors.white,
-                ),
-                Text("Déconnecter"),
-              ],
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) => _buildPopupDialogDeleteUser(
-                    context, widget.currentUser.uid!, widget.currentGroup.id!),
-              );
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.follow_the_signs,
-                  color: Colors.white,
-                ),
-                Text(
-                  "Supprimer mon compte",
-                  style: TextStyle(color: Theme.of(context).primaryColor),
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
+
+final kTitleStyle = TextStyle(
+  fontSize: 20,
+  color: Colors.grey,
+  fontWeight: FontWeight.w700,
+);
+
+final kSubtitleStyle = TextStyle(
+  fontSize: 26,
+  color: Colors.red[300],
+  fontWeight: FontWeight.w700,
+);
