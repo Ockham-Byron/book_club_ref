@@ -408,6 +408,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
       drawer: AppDrawer(
         currentGroup: widget.currentGroup,
         currentUser: widget.currentUser,
+        currentBook: _currentBook,
       ),
     );
   }
