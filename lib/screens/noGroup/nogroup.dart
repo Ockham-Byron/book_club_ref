@@ -68,7 +68,10 @@ class NoGroup extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () => _goToJoin(),
-                  child: Text("Rejoindre un club"),
+                  child: Text(
+                    "Rejoindre un club",
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).canvasColor,
                     side: BorderSide(

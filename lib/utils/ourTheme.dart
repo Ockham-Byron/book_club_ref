@@ -10,18 +10,18 @@ class OurTheme {
   ThemeData buildTheme() {
     return ThemeData(
       canvasColor: Colors.amber[50],
-      primaryColor: _sage,
+      primaryColor: Colors.red[300],
       focusColor: _apricot,
       secondaryHeaderColor: _spaceCadet,
       hintColor: _electricBlue,
       textTheme: TextTheme(
           headline6: TextStyle(
-        color: _sage,
+        color: Colors.black,
       )),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           onSurface: _apricot,
-          primary: _sage,
+          primary: Colors.red[300],
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           minimumSize: Size(150, 50),

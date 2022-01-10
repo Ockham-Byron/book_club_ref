@@ -2,14 +2,14 @@ import 'package:book_club_ref/services/auth.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:flutter/material.dart';
 
-class OurSignUpForm extends StatefulWidget {
-  const OurSignUpForm({Key? key}) : super(key: key);
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({Key? key}) : super(key: key);
 
   @override
-  _OurSignUpFormState createState() => _OurSignUpFormState();
+  _SignUpFormState createState() => _SignUpFormState();
 }
 
-class _OurSignUpFormState extends State<OurSignUpForm> {
+class _SignUpFormState extends State<SignUpForm> {
   FocusNode? fpseudo;
   FocusNode? fmail;
   FocusNode? fpassword;
@@ -69,7 +69,7 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
             child: Text(
               "Tout commence par un incipit",
               style: TextStyle(
-                color: Theme.of(context).primaryColor,
+                color: Colors.black,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -82,10 +82,15 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
             focusNode: fpseudo,
             controller: _pseudoInput,
             decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Theme.of(context).canvasColor)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Theme.of(context).primaryColor)),
               prefixIcon:
                   Icon(Icons.person, color: Theme.of(context).primaryColor),
               labelText: "pseudo",
-              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
+              labelStyle: TextStyle(color: Theme.of(context).primaryColor),
             ),
             style: Theme.of(context).textTheme.headline6,
           ),
@@ -93,10 +98,15 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
             focusNode: fmail,
             controller: _emailInput,
             decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Theme.of(context).canvasColor)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Theme.of(context).primaryColor)),
               prefixIcon: Icon(Icons.alternate_email,
                   color: Theme.of(context).primaryColor),
               labelText: "courriel",
-              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
+              labelStyle: TextStyle(color: Theme.of(context).primaryColor),
             ),
             style: Theme.of(context).textTheme.headline6,
           ),
@@ -105,15 +115,20 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
             controller: _passwordInput,
             obscureText: _isHidden,
             decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Theme.of(context).canvasColor)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Theme.of(context).primaryColor)),
               prefixIcon: Icon(Icons.lock_outline,
                   color: Theme.of(context).primaryColor),
               labelText: "mot de passe",
-              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
+              labelStyle: TextStyle(color: Theme.of(context).primaryColor),
               suffixIcon: IconButton(
                 onPressed: _togglePasswordView,
                 icon: Icon(
                   _isHidden ? Icons.visibility : Icons.visibility_off,
-                  color: Theme.of(context).canvasColor,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),
@@ -123,15 +138,20 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
             focusNode: fpasswordbis,
             controller: _passwordBisInput,
             decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Theme.of(context).canvasColor)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Theme.of(context).primaryColor)),
               prefixIcon: Icon(Icons.lock_outline,
                   color: Theme.of(context).primaryColor),
               labelText: "mot de passe bis repetita",
-              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
+              labelStyle: TextStyle(color: Theme.of(context).primaryColor),
               suffixIcon: IconButton(
                 onPressed: _togglePasswordView,
                 icon: Icon(
                   _isHidden ? Icons.visibility : Icons.visibility_off,
-                  color: Theme.of(context).canvasColor,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),
@@ -141,12 +161,20 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
             focusNode: fpicture,
             controller: _pictureInput,
             decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Theme.of(context).canvasColor)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Theme.of(context).primaryColor)),
               prefixIcon:
                   Icon(Icons.camera, color: Theme.of(context).primaryColor),
               labelText: "adresse url de votre photo de profil",
-              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
+              labelStyle: TextStyle(color: Theme.of(context).primaryColor),
             ),
             style: Theme.of(context).textTheme.headline6,
+          ),
+          SizedBox(
+            height: 10,
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -166,11 +194,12 @@ class _OurSignUpFormState extends State<OurSignUpForm> {
               }
             },
             child: Text(
-              "S'inscrire",
+              "S'INSCRIRE",
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],

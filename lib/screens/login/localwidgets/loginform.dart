@@ -98,7 +98,7 @@ class _LoginFormState extends State<LoginForm> {
             child: Text(
               "Salut à toi, avide de lectures !",
               style: TextStyle(
-                color: Theme.of(context).primaryColor,
+                color: Colors.black,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -118,8 +118,13 @@ class _LoginFormState extends State<LoginForm> {
             textInputAction: TextInputAction.next,
             controller: _emailInput,
             decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Theme.of(context).canvasColor)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Theme.of(context).primaryColor)),
               labelText: "courriel",
-              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
+              labelStyle: TextStyle(color: Theme.of(context).primaryColor),
               prefixIcon: Icon(
                 Icons.alternate_email,
                 color: Theme.of(context).primaryColor,
@@ -136,15 +141,20 @@ class _LoginFormState extends State<LoginForm> {
             obscureText: _isHidden,
             controller: _passwordInput,
             decoration: InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Theme.of(context).canvasColor)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Theme.of(context).primaryColor)),
               prefixIcon: Icon(Icons.lock_outline,
                   color: Theme.of(context).primaryColor),
               labelText: "mot de passe",
-              labelStyle: TextStyle(color: Theme.of(context).canvasColor),
+              labelStyle: TextStyle(color: Theme.of(context).primaryColor),
               suffixIcon: IconButton(
                 onPressed: _togglePasswordView,
                 icon: Icon(
                   _isHidden ? Icons.visibility : Icons.visibility_off,
-                  color: Theme.of(context).canvasColor,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),
@@ -162,7 +172,7 @@ class _LoginFormState extends State<LoginForm> {
               _loginUser(_emailInput.text, _passwordInput.text, context);
             },
             child: Text(
-              "Se connecter",
+              "SE CONNECTER",
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,

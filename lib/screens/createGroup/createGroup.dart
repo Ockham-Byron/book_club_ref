@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/services/auth.dart';
@@ -58,53 +60,64 @@ class _CreateGroupState extends State<CreateGroup> {
           )
         ],
       ),
-      body: Center(
-        child: Container(
-          height: 200,
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: ShadowContainer(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                TextFormField(
-                  autofocus: true,
-                  focusNode: fgrname,
-                  onTap: () {
-                    setState(() {
-                      FocusScope.of(context).requestFocus(fgrname);
-                    });
-                  },
-                  textInputAction: TextInputAction.next,
-                  controller: _groupNameInput,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.group,
-                      color: Theme.of(context).primaryColor,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/background.jpg'),
+              fit: BoxFit.cover),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child: Center(
+            child: Container(
+              height: 200,
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: ShadowContainer(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextFormField(
+                      autofocus: true,
+                      focusNode: fgrname,
+                      onTap: () {
+                        setState(() {
+                          FocusScope.of(context).requestFocus(fgrname);
+                        });
+                      },
+                      textInputAction: TextInputAction.next,
+                      controller: _groupNameInput,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.group,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        labelText: "Nom du groupe",
+                        labelStyle:
+                            TextStyle(color: Theme.of(context).primaryColor),
+                      ),
+                      style: Theme.of(context).textTheme.headline6,
                     ),
-                    labelText: "Nom du groupe",
-                    labelStyle: TextStyle(color: Theme.of(context).canvasColor),
-                  ),
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    UserModel currentUser = widget.userModel;
-                    _groupName = _groupNameInput.text;
+                    ElevatedButton(
+                      onPressed: () {
+                        UserModel currentUser = widget.userModel;
+                        _groupName = _groupNameInput.text;
 
-                    _createGroup(_groupName!, currentUser);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: Text(
-                      "Créez le groupe".toUpperCase(),
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                        _createGroup(_groupName!, currentUser);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 50),
+                        child: Text(
+                          "Créez le groupe".toUpperCase(),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

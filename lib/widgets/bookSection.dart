@@ -72,6 +72,10 @@ class BookSection extends StatelessWidget {
                               Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(currentBook.cover!,
+                                        scale: 1),
+                                  ),
                                   borderRadius: BorderRadius.circular(20),
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
@@ -81,13 +85,6 @@ class BookSection extends StatelessWidget {
                                       spreadRadius: 1,
                                     )
                                   ],
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.asset(
-                                    bookList[i].cover!,
-                                    fit: BoxFit.fill,
-                                  ),
                                 ),
                               ),
                               Container(
