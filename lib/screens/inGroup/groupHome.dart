@@ -4,6 +4,7 @@ import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/addBook/addBook.dart';
 import 'package:book_club_ref/screens/inGroup/SingleBookHome.dart';
+import 'package:book_club_ref/screens/inGroup/localwidgets/groupWithoutBook.dart';
 
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
@@ -59,65 +60,71 @@ class _GroupHomeState extends State<GroupHome> {
   @override
   Widget build(BuildContext context) {
     if (_currentGroup.currentBookId == null) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          centerTitle: true,
-          title: Consumer<GroupModel>(
-            builder: (BuildContext context, value, Widget? child) {
-              var _currentGroupName = value.name ?? "Groupe sans nom";
-              return Text(
-                _currentGroupName,
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              );
-            },
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.logout_rounded,
-                color: Colors.white,
-              ),
-              onPressed: () => _signOut(context),
-            )
-          ],
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              height: 300,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(
-                        "https://cdn.pixabay.com/photo/2017/05/27/20/51/book-2349419_1280.png"),
-                    fit: BoxFit.contain),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Text(
-                "Il n'y a pas encore de livre dans ce groupe ;(",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () => _goToAddBook(),
-              child: Text("Ajouter le premier livre"),
-            ),
-            SizedBox(
-              height: 20,
-            )
-          ],
-        ),
+      return GroupWithoutBook(
+        currentGroup: _currentGroup,
+        currentUser: _currentUser,
+        authModel: _authModel,
       );
+
+      // Scaffold(
+      //   appBar: AppBar(
+      //     backgroundColor: Theme.of(context).primaryColor,
+      //     centerTitle: true,
+      //     title: Consumer<GroupModel>(
+      //       builder: (BuildContext context, value, Widget? child) {
+      //         var _currentGroupName = value.name ?? "Groupe sans nom";
+      //         return Text(
+      //           _currentGroupName,
+      //           style: TextStyle(
+      //             color: Colors.white,
+      //           ),
+      //           textAlign: TextAlign.center,
+      //         );
+      //       },
+      //     ),
+      //     actions: <Widget>[
+      //       IconButton(
+      //         icon: Icon(
+      //           Icons.logout_rounded,
+      //           color: Colors.white,
+      //         ),
+      //         onPressed: () => _signOut(context),
+      //       )
+      //     ],
+      //   ),
+      //   body: Column(
+      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //     children: [
+      //       Container(
+      //         height: 300,
+      //         decoration: BoxDecoration(
+      //           image: DecorationImage(
+      //               image: NetworkImage(
+      //                   "https://cdn.pixabay.com/photo/2017/05/27/20/51/book-2349419_1280.png"),
+      //               fit: BoxFit.contain),
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      //         child: Text(
+      //           "Il n'y a pas encore de livre dans ce groupe ;(",
+      //           style: TextStyle(
+      //             color: Theme.of(context).primaryColor,
+      //             fontSize: 20,
+      //           ),
+      //           textAlign: TextAlign.center,
+      //         ),
+      //       ),
+      //       ElevatedButton(
+      //         onPressed: () => _goToAddBook(),
+      //         child: Text("Ajouter le premier livre"),
+      //       ),
+      //       SizedBox(
+      //         height: 20,
+      //       )
+      //     ],
+      //   ),
+      // );
     } else {
       return SingleBookHome(
         currentGroup: _currentGroup,
