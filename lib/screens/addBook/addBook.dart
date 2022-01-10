@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
@@ -167,115 +169,140 @@ class _AddBookState extends State<AddBook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.outbond_rounded,
-              color: Colors.white,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/background.jpg'),
+              fit: BoxFit.cover),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 50,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: ShadowContainer(
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _bookTitleInput,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).canvasColor)),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor)),
+                            prefixIcon: Icon(
+                              Icons.book,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            labelText: "Titre du livre",
+                            labelStyle: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          ),
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          controller: _bookAuthorInput,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).canvasColor)),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor)),
+                            prefixIcon: Icon(
+                              Icons.face,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            labelText: "Auteur.e du livre",
+                            labelStyle: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          ),
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          controller: _bookLengthInput,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).canvasColor)),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor)),
+                            prefixIcon: Icon(
+                              Icons.format_list_numbered,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            labelText: "Nombre de pages",
+                            labelStyle: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          ),
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          controller: _bookCoverInput,
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).canvasColor)),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor)),
+                            prefixIcon: Icon(
+                              Icons.auto_stories,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            labelText: "Url de la couverture du livre",
+                            labelStyle: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          ),
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "Rdv pour échanger sur ce livre le",
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 20),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(DateFormat("dd/MM à HH:mm").format(_selectedDate),
+                            style: Theme.of(context).textTheme.headline6),
+                        TextButton(
+                          onPressed: () => _selectDate(context),
+                          child: Icon(
+                            Icons.calendar_today,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                _displayButtons(),
+              ],
             ),
-            onPressed: () => _signOut(context),
-          )
-        ],
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: ShadowContainer(
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _bookTitleInput,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.book,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      labelText: "Titre du livre",
-                      labelStyle:
-                          TextStyle(color: Theme.of(context).canvasColor),
-                    ),
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: _bookAuthorInput,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.face,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      labelText: "Auteur.e du livre",
-                      labelStyle:
-                          TextStyle(color: Theme.of(context).canvasColor),
-                    ),
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: _bookLengthInput,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.format_list_numbered,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      labelText: "Nombre de pages",
-                      labelStyle:
-                          TextStyle(color: Theme.of(context).canvasColor),
-                    ),
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: _bookCoverInput,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.auto_stories,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      labelText: "Url de la couverture du livre",
-                      labelStyle:
-                          TextStyle(color: Theme.of(context).canvasColor),
-                    ),
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Rdv pour échanger sur ce livre le",
-                    style: TextStyle(
-                        color: Theme.of(context).canvasColor, fontSize: 20),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(DateFormat("dd/MM à HH:mm").format(_selectedDate),
-                      style: Theme.of(context).textTheme.headline6),
-                  TextButton(
-                    onPressed: () => _selectDate(context),
-                    child: Icon(
-                      Icons.calendar_today,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          _displayButtons(),
-        ],
+        ),
       ),
     );
   }
