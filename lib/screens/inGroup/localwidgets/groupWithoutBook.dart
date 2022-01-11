@@ -101,10 +101,10 @@ class GroupWithoutBook extends StatelessWidget {
             ),
             Expanded(
               child: Container(
+                width: double.infinity,
                 padding: EdgeInsets.only(
                   top: 50,
                 ),
-                width: double.infinity,
                 decoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.only(
@@ -114,68 +114,75 @@ class GroupWithoutBook extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Bonjour",
-                          style: TextStyle(
-                            fontSize: 35,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Text(
-                          currentUser.pseudo!,
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                            top: 15,
-                            bottom: 30,
-                          ),
-                          width: 100,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 300,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    "https://cdn.pixabay.com/photo/2017/05/27/20/51/book-2349419_1280.png"),
-                                fit: BoxFit.contain),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text(
-                            "Il n'y a pas encore de livre dans ce groupe ;(",
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.only(
+                        left: 50,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Bonjour",
                             style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 20,
+                              fontSize: 35,
+                              fontWeight: FontWeight.w500,
                             ),
-                            textAlign: TextAlign.center,
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ElevatedButton(
-                          onPressed: () => _goToAddBook(),
-                          child: Text("Ajouter le premier livre"),
-                        ),
-                      ],
+                          Text(
+                            currentUser.pseudo!,
+                            style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: 15,
+                              bottom: 30,
+                            ),
+                            width: 100,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(
+                              right: 50,
+                            ),
+                            child: Image.network(
+                                "https://cdn.pixabay.com/photo/2017/05/27/20/51/book-2349419_1280.png"),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text(
+                              "Il n'y a pas encore de livre dans ce groupe ;(",
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _goToAddBook(),
+                            child: Text("Ajouter le premier livre"),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
