@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
@@ -13,6 +15,7 @@ import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/appDrawer.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:flutter/material.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
@@ -74,6 +77,14 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     }
   }
 
+  String _displayGroupName() {
+    if (widget.currentGroup.name != null) {
+      return widget.currentGroup.name!;
+    } else {
+      return "Groupe sans nom";
+    }
+  }
+
   String _displayBookTitle() {
     if (_currentBook.title != null) {
       return _currentBook.title!;
@@ -107,6 +118,14 @@ class _SingleBookHomeState extends State<SingleBookHome> {
       currentBookDue = "pas de rdv établi";
     }
     return currentBookDue;
+  }
+
+  String _displayDueDate() {
+    var dueDate = _currentBook.dateCompleted!.toDate();
+    String dueDay = dueDate.day.toString();
+    String dueMonth = dueDate.month.toString();
+
+    return dueDay + " / " + dueMonth;
   }
 
   String _currentBookCoverUrl() {
@@ -346,69 +365,149 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        centerTitle: true,
-        leading: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Builder(
-            builder: (context) => GestureDetector(
-              child: displayCircularAvatar(),
-              onTap: () => Scaffold.of(context).openDrawer(),
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/background.jpg"),
+            fit: BoxFit.cover,
           ),
         ),
-        title: Consumer<GroupModel>(
-          builder: (BuildContext context, value, Widget? child) {
-            var _currentGroupName = value.name ?? "Groupe sans nom";
-            return Text(
-              _currentGroupName,
-              style: TextStyle(
-                color: Colors.white,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(
+                left: 10,
+                right: 10,
+                top: 50,
+                bottom: 20,
               ),
-              textAlign: TextAlign.center,
-            );
-          },
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.outbond_rounded,
-              color: Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Builder(
+                        builder: (context) => GestureDetector(
+                          child: displayCircularAvatar(),
+                          onTap: () => Scaffold.of(context).openDrawer(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: Container(
+                      width: 200.0,
+                      decoration: new BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          color: Colors.grey.shade200.withOpacity(0.5)),
+                      child: Text(
+                        _displayGroupName(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.logout_rounded,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => _signOut(context),
+                  )
+                ],
+              ),
             ),
-            onPressed: () => _signOut(context),
-          )
-        ],
-      ),
-      body: ListView(
-        children: [
-          SizedBox(
-            height: 10,
-          ),
-          _displayCurrentBookInfo(),
-          SizedBox(
-            height: 2,
-          ),
-          _displayNextBookInfo(),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20.0),
-            child: ElevatedButton(
-                onPressed: () => _goToHistory(),
-                child: Text("Voir l'historique du club de lecture"),
-                style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).canvasColor,
-                    side: BorderSide(
-                        width: 1, color: Theme.of(context).primaryColor))),
-          ),
-        ],
-      ),
-      drawer: AppDrawer(
-        currentGroup: widget.currentGroup,
-        currentUser: widget.currentUser,
-        currentBook: _currentBook,
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.only(
+                  top: 50,
+                ),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.only(
+                        left: 50,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Bonjour",
+                            style: TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            widget.currentUser.pseudo!,
+                            style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: 15,
+                              bottom: 30,
+                            ),
+                            width: 100,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Prochain livre à lire pour le ",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w500),
+                              ),
+                              Text(
+                                _displayDueDate(),
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

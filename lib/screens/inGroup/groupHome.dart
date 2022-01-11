@@ -3,7 +3,7 @@ import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/addBook/addBook.dart';
-import 'package:book_club_ref/screens/inGroup/SingleBookHome.dart';
+import 'package:book_club_ref/screens/inGroup/localwidgets/SingleBookHome.dart';
 import 'package:book_club_ref/screens/inGroup/localwidgets/groupWithoutBook.dart';
 
 import 'package:book_club_ref/screens/root/root.dart';

@@ -10,15 +10,16 @@ class GroupModel {
   int? indexPickingBook;
   int? nbOfBooks;
 
-  GroupModel(
-      {this.id,
-      this.name,
-      this.leader,
-      this.members,
-      this.groupCreated,
-      this.currentBookId,
-      this.indexPickingBook,
-      this.nbOfBooks});
+  GroupModel({
+    this.id,
+    this.name,
+    this.leader,
+    this.members,
+    this.groupCreated,
+    this.currentBookId,
+    this.indexPickingBook,
+    this.nbOfBooks,
+  });
 
   GroupModel.fromDocumentSnapshot(
       {required DocumentSnapshot<Map<String, dynamic>> doc}) {
