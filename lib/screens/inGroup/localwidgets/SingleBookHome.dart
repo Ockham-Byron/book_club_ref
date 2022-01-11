@@ -141,7 +141,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     return currentBookCoverUrl;
   }
 
-  Widget _displayCurrentBookInfo() {
+  Widget _displayCurrentBookInfo2() {
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -212,6 +212,32 @@ class _SingleBookHomeState extends State<SingleBookHome> {
             ),
           ),
         ),
+      ],
+    );
+  }
+
+  Widget _displayCurrentBookInfo() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Container(
+          height: 210,
+          width: 70,
+          decoration: BoxDecoration(
+              image:
+                  DecorationImage(image: NetworkImage(_currentBookCoverUrl()))),
+        ),
+        Column(
+          children: [
+            Text(_displayBookTitle()),
+            Text(_currentBook.author!),
+            Text(_currentBook.length!.toString() + "pages"),
+            ElevatedButton(
+              onPressed: _doneWithBook ? null : _goToReview,
+              child: Text("Livre terminé !"),
+            ),
+          ],
+        )
       ],
     );
   }
@@ -497,6 +523,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
                                     fontWeight: FontWeight.w500,
                                     color: Theme.of(context).primaryColor),
                               ),
+                              _displayCurrentBookInfo()
                             ],
                           )
                         ],
