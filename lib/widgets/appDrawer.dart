@@ -84,15 +84,17 @@ class AppDrawer extends StatelessWidget {
     }
 
     return Drawer(
-      child: ListView(
+      child: Column(
         // Important: Remove any padding from the ListView.
-        padding: EdgeInsets.zero,
+
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                        width: 3, color: Theme.of(context).focusColor))),
+              border: Border(
+                bottom:
+                    BorderSide(width: 3, color: Theme.of(context).primaryColor),
+              ),
+            ),
             child: Row(
               children: [
                 displayCircularAvatar(),
@@ -102,7 +104,7 @@ class AppDrawer extends StatelessWidget {
                 Text(
                   getUserPseudo(),
                   style: TextStyle(
-                      color: Theme.of(context).focusColor, fontSize: 20),
+                      color: Theme.of(context).primaryColor, fontSize: 20),
                 )
               ],
             ),
