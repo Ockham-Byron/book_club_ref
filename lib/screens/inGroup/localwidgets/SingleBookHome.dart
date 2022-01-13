@@ -11,13 +11,12 @@ import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/appDrawer.dart';
-import 'package:book_club_ref/widgets/shadowContainer.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
-
-import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class SingleBookHome extends StatefulWidget {
   final GroupModel currentGroup;
@@ -119,10 +118,9 @@ class _SingleBookHomeState extends State<SingleBookHome> {
 
   String _displayDueDate() {
     var dueDate = _currentBook.dateCompleted!.toDate();
-    String dueDay = dueDate.day.toString();
-    String dueMonth = dueDate.month.toString();
+    String rdv = DateFormat("dd/MM").format(dueDate);
 
-    return dueDay + " / " + dueMonth;
+    return rdv;
   }
 
   String _currentBookCoverUrl() {
@@ -138,104 +136,42 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     return currentBookCoverUrl;
   }
 
-  Widget _displayCurrentBookInfo2() {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 160),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 40),
-              child: Consumer<GroupModel>(
-                builder: (BuildContext context, value, Widget? child) {
-                  return ShadowContainer(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Column(
-                        children: [
-                          Text(
-                            _displayBookTitle(),
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white38,
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: Text(
-                              _displayRemainingDays(),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).focusColor,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: ElevatedButton(
-                              onPressed: _doneWithBook ? null : _goToReview,
-                              child: Text("Livre terminé !"),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          top: 40,
-          child: Container(
-            height: 200,
-            width: 150,
+  Widget _displayCurrentBookInfo() {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            height: 210,
+            width: 100,
             decoration: BoxDecoration(
-              image:
-                  DecorationImage(image: NetworkImage(_currentBookCoverUrl())),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black54,
-                  blurRadius: 10.0,
-                  spreadRadius: 1.0,
-                  offset: Offset(1.0, 1.0),
+                image: DecorationImage(
+                    image: NetworkImage(_currentBookCoverUrl()))),
+          ),
+          Container(
+            height: 150,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  _displayBookTitle(),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Text(_currentBook.author!),
+                Text(_currentBook.length!.toString() + "pages"),
+                ElevatedButton(
+                  onPressed: _doneWithBook ? null : _goToReview,
+                  child: Text("Livre terminé !"),
                 ),
               ],
             ),
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _displayCurrentBookInfo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Container(
-          height: 210,
-          width: 70,
-          decoration: BoxDecoration(
-              image:
-                  DecorationImage(image: NetworkImage(_currentBookCoverUrl()))),
-        ),
-        Column(
-          children: [
-            Text(_displayBookTitle()),
-            Text(_currentBook.author!),
-            Text(_currentBook.length!.toString() + "pages"),
-            ElevatedButton(
-              onPressed: _doneWithBook ? null : _goToReview,
-              child: Text("Livre terminé !"),
-            ),
-          ],
-        )
-      ],
+          Transform.rotate(
+            angle: 300,
+            child: Text("MODIFIER"),
+          )
+        ],
+      ),
     );
   }
 
@@ -248,36 +184,57 @@ class _SingleBookHomeState extends State<SingleBookHome> {
   }
 
   Widget _displayNextBookInfo() {
+    Widget passerTour;
+    if (widget.currentGroup.members!.length <= 1) {
+      passerTour = Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          MaterialButton(
+            color: Theme.of(context).primaryColor,
+            shape: CircleBorder(),
+            onPressed: () => _goToAddNextBook(),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Icon(Icons.add),
+            ),
+          ),
+        ],
+      );
+    } else {
+      passerTour = Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          MaterialButton(
+            color: Theme.of(context).primaryColor,
+            shape: CircleBorder(),
+            onPressed: () => _goToAddNextBook(),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Icon(Icons.add),
+            ),
+          ),
+          TextButton(
+              onPressed: () => _changePickingUser(),
+              child: Text(
+                "Je préfère passer mon tour",
+                style: TextStyle(color: Theme.of(context).focusColor),
+              ))
+        ],
+      );
+    }
+
     if (_pickingUser.uid == widget.currentUser.uid) {
       return Column(
         children: [
           Text(
             "C'est à ton tour de choisir le prochain livre",
-            style: TextStyle(fontSize: 20, color: Theme.of(context).focusColor),
+            style:
+                TextStyle(fontSize: 20, color: Theme.of(context).primaryColor),
           ),
           SizedBox(
-            height: 5,
+            height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MaterialButton(
-                color: Theme.of(context).primaryColor,
-                shape: CircleBorder(),
-                onPressed: () => _goToAddNextBook(),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Icon(Icons.add),
-                ),
-              ),
-              TextButton(
-                  onPressed: () => _changePickingUser(),
-                  child: Text(
-                    "Je préfère passer mon tour",
-                    style: TextStyle(color: Theme.of(context).focusColor),
-                  ))
-            ],
-          ),
+          passerTour,
         ],
       );
     } else {
@@ -453,7 +410,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.only(
-                  top: 50,
+                  top: 20,
                 ),
                 decoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
@@ -509,18 +466,23 @@ class _SingleBookHomeState extends State<SingleBookHome> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "Prochain livre à lire pour le ",
+                                "Livre à lire pour le ",
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
+                                    fontSize: 30, fontWeight: FontWeight.w500),
                               ),
                               Text(
                                 _displayDueDate(),
                                 style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 30,
                                     fontWeight: FontWeight.w500,
                                     color: Theme.of(context).primaryColor),
                               ),
-                              _displayCurrentBookInfo()
+                              Text(_displayRemainingDays()),
+                              _displayCurrentBookInfo(),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              _displayNextBookInfo(),
                             ],
                           )
                         ],
