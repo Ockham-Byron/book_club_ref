@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:book_club_ref/models/userModel.dart';
+import 'package:book_club_ref/screens/noGroup/nogroup.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:book_club_ref/screens/root/root.dart';
@@ -28,56 +31,97 @@ class _JoinGroupState extends State<JoinGroup> {
     }
   }
 
+  void _goToNogroup() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => NoGroup()));
+  }
+
   TextEditingController _groupIdInput = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: Container(
-        height: 200,
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
-        child: ShadowContainer(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextFormField(
-                autofocus: true,
-                focusNode: fid,
-                onTap: () {
-                  setState(() {
-                    FocusScope.of(context).requestFocus(fid);
-                  });
-                },
-                textInputAction: TextInputAction.next,
-                controller: _groupIdInput,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.group,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  labelText: "code du groupe",
-                  labelStyle: TextStyle(color: Theme.of(context).canvasColor),
+        body: Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+        image: AssetImage(
+          "assets/images/background.jpg",
+        ),
+        fit: BoxFit.cover,
+      )),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 200,
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: ShadowContainer(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextFormField(
+                      autofocus: true,
+                      focusNode: fid,
+                      onTap: () {
+                        setState(() {
+                          FocusScope.of(context).requestFocus(fid);
+                        });
+                      },
+                      textInputAction: TextInputAction.next,
+                      controller: _groupIdInput,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.group,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        labelText: "code du groupe",
+                        labelStyle:
+                            TextStyle(color: Theme.of(context).primaryColor),
+                      ),
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton(
+                      onPressed: () => _joinGroup(context, _groupIdInput.text),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 50),
+                        child: Text(
+                          "Joindre le groupe".toUpperCase(),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                style: Theme.of(context).textTheme.headline6,
               ),
-              SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                onPressed: () => _joinGroup(context, _groupIdInput.text),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Text(
-                    "Joindre le groupe".toUpperCase(),
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                  ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).canvasColor,
+                  side: BorderSide(
+                      width: 1, color: Theme.of(context).primaryColor)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50),
+                child: Text(
+                  "Annuler".toUpperCase(),
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     ));
