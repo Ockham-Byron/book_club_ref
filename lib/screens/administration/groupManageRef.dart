@@ -1,13 +1,23 @@
+import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/administration/localwidgets/memberCard.dart';
+import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
+import 'package:book_club_ref/widgets/appDrawer.dart';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class GroupManageRef extends StatefulWidget {
   final GroupModel currentGroup;
-  const GroupManageRef({Key? key, required this.currentGroup})
+  final UserModel currentUser;
+  final BookModel currentBook;
+  const GroupManageRef(
+      {Key? key,
+      required this.currentGroup,
+      required this.currentUser,
+      required this.currentBook})
       : super(key: key);
 
   @override
@@ -36,6 +46,56 @@ class _GroupManageRefState extends State<GroupManageRef> {
     return groupId;
   }
 
+  String _displayGroupName() {
+    if (widget.currentGroup.name != null) {
+      return widget.currentGroup.name!;
+    } else {
+      return "Groupe sans nom";
+    }
+  }
+
+  bool withProfilePicture() {
+    if (widget.currentUser.pictureUrl == "") {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Widget displayCircularAvatar() {
+    if (withProfilePicture()) {
+      return CircularProfileAvatar(
+        widget.currentUser.pictureUrl,
+        showInitialTextAbovePicture: false,
+      );
+    } else {
+      return CircularProfileAvatar(
+        "https://digitalpainting.school/static/img/default_avatar.png",
+        foregroundColor: Theme.of(context).focusColor.withOpacity(0.5),
+        initialsText: Text(
+          widget.currentUser.pseudo![0].toUpperCase(),
+          style: TextStyle(
+              fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        showInitialTextAbovePicture: true,
+      );
+    }
+  }
+
+  void _goToHistory() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BookHistory(
+          groupId: widget.currentGroup.id!,
+          groupName: widget.currentGroup.name!,
+          currentGroup: widget.currentGroup,
+          currentUser: widget.currentUser,
+        ),
+      ),
+    );
+  }
+
   // This key will be used to show the snack bar
   //final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
@@ -60,69 +120,151 @@ class _GroupManageRefState extends State<GroupManageRef> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: members,
-        builder:
-            (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return ListView.builder(
-                itemCount: snapshot.data!.length + 1,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == 0) {
-                    return Column(
-                      children: [
-                        Container(
-                          width: 350,
-                          padding: EdgeInsets.all(20),
-                          margin: EdgeInsets.symmetric(vertical: 20),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 1,
-                                  color: Theme.of(context).primaryColor)),
-                          child: Column(
-                            children: [
-                              Text(
-                                  "Id du groupe à partager aux nouveaux membres"),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(_getGroupId()!),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  GestureDetector(
-                                    child: Icon(
-                                      Icons.copy,
-                                      color: Theme.of(context).primaryColor,
+      body: Container(
+        alignment: Alignment.bottomCenter,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/background.jpg'),
+              fit: BoxFit.cover),
+        ),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.93,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: Theme.of(context).canvasColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(50),
+              topRight: Radius.circular(50),
+            ),
+          ),
+          child: FutureBuilder(
+            future: members,
+            builder: (BuildContext context,
+                AsyncSnapshot<List<UserModel>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return ListView.builder(
+                    itemCount: snapshot.data!.length + 1,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (index == 0) {
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Builder(
+                                      builder: (context) => GestureDetector(
+                                        child: displayCircularAvatar(),
+                                        onTap: () =>
+                                            Scaffold.of(context).openDrawer(),
+                                      ),
                                     ),
-                                    onTap: _copyToClipboard,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    width: 200.0,
+                                    decoration: new BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        color: Colors.grey.shade200
+                                            .withOpacity(0.5)),
+                                    child: Text(
+                                      _displayGroupName(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 30),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                // IconButton(
+                                //   icon: Icon(
+                                //     Icons.logout_rounded,
+                                //     color: Colors.white,
+                                //   ),
+                                //   onPressed: () => _signOut(context),
+                                // )
+                              ],
+                            ),
+                            Container(
+                              width: 350,
+                              padding: EdgeInsets.all(20),
+                              margin: EdgeInsets.symmetric(vertical: 20),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1,
+                                      color: Theme.of(context).primaryColor)),
+                              child: Column(
+                                children: [
+                                  Text(
+                                      "Id du groupe à partager aux nouveaux membres"),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(_getGroupId()!),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      GestureDetector(
+                                        child: Icon(
+                                          Icons.copy,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        onTap: _copyToClipboard,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
+                            ElevatedButton(
+                                onPressed: _goToHistory,
+                                child: Text("Voir tous les livres du groupe")),
+                            SizedBox(
+                              height: 50,
+                            ),
+                            Text(
+                              "Membres du groupe",
+                              style: TextStyle(
+                                  fontSize: 30, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          child: MemberCard(
+                            user: snapshot.data![index - 1],
+                            currentGroup: widget.currentGroup,
                           ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: MemberCard(
-                        user: snapshot.data![index - 1],
-                        currentGroup: widget.currentGroup,
-                      ),
-                    );
-                  }
-                });
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+                        );
+                      }
+                    });
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ),
+      ),
+      drawer: AppDrawer(
+        currentGroup: widget.currentGroup,
+        currentUser: widget.currentUser,
+        currentBook: widget.currentBook,
       ),
     );
   }

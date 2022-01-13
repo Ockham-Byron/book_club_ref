@@ -97,6 +97,14 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     }
   }
 
+  String _displayBookPages() {
+    if (_currentBook.length != null) {
+      return _currentBook.length!.toString() + " pages";
+    } else {
+      return "";
+    }
+  }
+
   String _displayRemainingDays() {
     String currentBookDue;
     var today = DateTime.now();
@@ -169,8 +177,8 @@ class _SingleBookHomeState extends State<SingleBookHome> {
                   _displayBookTitle(),
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                Text(_currentBook.author!),
-                Text(_currentBook.length!.toString() + "pages"),
+                Text(_displayBookAuthor()),
+                Text(_displayBookPages()),
                 ElevatedButton(
                   onPressed: _doneWithBook ? null : _goToReview,
                   child: Text("Livre terminé !"),
@@ -283,20 +291,6 @@ class _SingleBookHomeState extends State<SingleBookHome> {
           onError: false,
           currentGroup: widget.currentGroup,
           //currentUser: _pickingUser,
-        ),
-      ),
-    );
-  }
-
-  void _goToHistory() async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BookHistory(
-          groupId: widget.groupId,
-          groupName: widget.currentGroup.name!,
-          currentGroup: widget.currentGroup,
-          currentUser: widget.currentUser,
         ),
       ),
     );

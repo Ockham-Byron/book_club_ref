@@ -27,6 +27,8 @@ class AppDrawer extends StatelessWidget {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => GroupManageRef(
                 currentGroup: currentGroup,
+                currentUser: currentUser,
+                currentBook: currentBook,
               )));
     }
 
