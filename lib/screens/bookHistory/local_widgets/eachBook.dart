@@ -48,43 +48,59 @@ class EachBook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ShadowContainer(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 300,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 80,
-                  child: Image.network(_currentBookCoverUrl()),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        book!.title ?? "Pas de titre",
-                        style: TextStyle(
-                            fontSize: 20, color: Theme.of(context).focusColor),
-                      ),
-                      Text(
-                        book!.author ?? "Pas d'auteur",
-                        style: TextStyle(fontSize: 20, color: Colors.grey),
-                      ),
-                    ],
+    return GestureDetector(
+      onTap: () => _goToReviewHistory(context),
+      child: ShadowContainer(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 200,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 100,
+                    child: Image.network(_currentBookCoverUrl()),
                   ),
-                ),
-                SizedBox(
-                  width: 80,
-                )
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          book!.title ?? "Pas de titre",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Theme.of(context).focusColor),
+                        ),
+                        Text(
+                          book!.author ?? "Pas d'auteur",
+                          style: TextStyle(fontSize: 20, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Transform.rotate(
+                    angle: 300,
+                    child: Text("MODIFIER"),
+                  )
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.check),
+                    label: Text("Lu")),
+                TextButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.favorite),
+                    label: Text("Favori"))
               ],
             ),
-          ),
-          ElevatedButton(
-              onPressed: () => _goToReviewHistory(context),
-              child: Text("Voir les critiques"))
-        ],
+          ],
+        ),
       ),
     );
   }
