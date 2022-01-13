@@ -7,7 +7,7 @@ import 'package:book_club_ref/services/auth.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/bookSection.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
-
+import 'package:drop_shadow_image/drop_shadow_image.dart';
 import 'package:flutter/material.dart';
 
 class ProfileManage extends StatefulWidget {

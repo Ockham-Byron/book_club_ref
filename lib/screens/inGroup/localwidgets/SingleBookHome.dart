@@ -89,6 +89,14 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     }
   }
 
+  String _displayBookAuthor() {
+    if (_currentBook.author != null) {
+      return _currentBook.author!;
+    } else {
+      return "pas d'auteur précisé";
+    }
+  }
+
   String _displayRemainingDays() {
     String currentBookDue;
     var today = DateTime.now();
@@ -117,9 +125,13 @@ class _SingleBookHomeState extends State<SingleBookHome> {
   }
 
   String _displayDueDate() {
-    var dueDate = _currentBook.dateCompleted!.toDate();
-    String rdv = DateFormat("dd/MM").format(dueDate);
-
+    String rdv;
+    if (_currentBook.dateCompleted != null) {
+      var dueDate = _currentBook.dateCompleted!.toDate();
+      rdv = DateFormat("dd/MM").format(dueDate);
+    } else {
+      rdv = "pas de rdv établi";
+    }
     return rdv;
   }
 

@@ -76,15 +76,7 @@ class BookSection extends StatelessWidget {
                                     image: NetworkImage(currentBook.cover!,
                                         scale: 1),
                                   ),
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.4),
-                                      blurRadius: 5,
-                                      offset: Offset(8, 8),
-                                      spreadRadius: 1,
-                                    )
-                                  ],
+                                  //borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
                               Container(
@@ -93,15 +85,6 @@ class BookSection extends StatelessWidget {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
-                                  gradient: new LinearGradient(
-                                    colors: [
-                                      Colors.black.withOpacity(0.4),
-                                      Colors.transparent,
-                                      Colors.black.withOpacity(0.4),
-                                    ],
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                  ),
                                 ),
                               ),
                             ],
