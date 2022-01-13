@@ -82,6 +82,26 @@ class _GroupManageRefState extends State<GroupManageRef> {
     }
   }
 
+  int getGroupBooks() {
+    int groupBooks;
+    if (widget.currentGroup.nbOfBooks != null) {
+      groupBooks = widget.currentGroup.nbOfBooks!;
+    } else {
+      groupBooks = 0;
+    }
+    return groupBooks;
+  }
+
+  int getNbGroupMembers() {
+    int groupMembers;
+    if (widget.currentGroup.members != null) {
+      groupMembers = widget.currentGroup.members!.length;
+    } else {
+      groupMembers = 0;
+    }
+    return groupMembers;
+  }
+
   void _goToHistory() async {
     Navigator.push(
       context,
@@ -148,8 +168,11 @@ class _GroupManageRefState extends State<GroupManageRef> {
                       if (index == 0) {
                         return Column(
                           children: [
+                            SizedBox(
+                              height: 20,
+                            ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
                                   width: 50,
@@ -168,21 +191,24 @@ class _GroupManageRefState extends State<GroupManageRef> {
                                 SizedBox(
                                   width: 20,
                                 ),
-                                Expanded(
-                                  child: Container(
-                                    width: 200.0,
-                                    decoration: new BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        color: Colors.grey.shade200
-                                            .withOpacity(0.5)),
-                                    child: Text(
+                                Column(
+                                  children: [
+                                    Text(
                                       _displayGroupName(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 30),
                                     ),
-                                  ),
+                                    TextButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          "MODIFIER",
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor),
+                                        ))
+                                  ],
                                 ),
+
                                 SizedBox(
                                   width: 20,
                                 ),
@@ -193,6 +219,49 @@ class _GroupManageRefState extends State<GroupManageRef> {
                                 //   ),
                                 //   onPressed: () => _signOut(context),
                                 // )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      "LIVRES",
+                                      style: kTitleStyle,
+                                    ),
+                                    Text(
+                                      "MEMBRES",
+                                      style: kTitleStyle,
+                                    ),
+                                    Text(
+                                      "CRITIQUES",
+                                      style: kTitleStyle,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      getGroupBooks().toString(),
+                                      style: kSubtitleStyle,
+                                    ),
+                                    Text(
+                                      getNbGroupMembers().toString(),
+                                      style: kSubtitleStyle,
+                                    ),
+                                    Text(
+                                      "47",
+                                      style: kSubtitleStyle,
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                             Container(
@@ -269,3 +338,15 @@ class _GroupManageRefState extends State<GroupManageRef> {
     );
   }
 }
+
+final kTitleStyle = TextStyle(
+  fontSize: 20,
+  color: Colors.grey,
+  fontWeight: FontWeight.w700,
+);
+
+final kSubtitleStyle = TextStyle(
+  fontSize: 26,
+  color: Colors.red[300],
+  fontWeight: FontWeight.w700,
+);

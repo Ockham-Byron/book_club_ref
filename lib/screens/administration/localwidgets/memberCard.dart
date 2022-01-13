@@ -96,37 +96,33 @@ class MemberCard extends StatelessWidget {
               children: [
                 Text(
                   getUserPseudo(),
-                  style: TextStyle(
-                      fontSize: 20, color: Theme.of(context).primaryColor),
+                  style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
                 Row(
                   children: [
                     Icon(
                       Icons.auto_stories,
-                      color: Theme.of(context).focusColor,
+                      color: Theme.of(context).primaryColor,
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Text(
                       "Livres lus : ",
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor, fontSize: 15),
+                      style: TextStyle(color: Colors.black, fontSize: 15),
                     ),
                     Text(
                       getUserReadBooks().toString(),
                       style: TextStyle(
-                          color: Theme.of(context).focusColor, fontSize: 15),
+                          color: Theme.of(context).primaryColor, fontSize: 15),
                     ),
                     Text(
                       " / ",
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor, fontSize: 15),
+                      style: TextStyle(color: Colors.black, fontSize: 15),
                     ),
                     Text(
                       getnbOfGroupBooks().toString(),
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor, fontSize: 15),
+                      style: TextStyle(color: Colors.black, fontSize: 15),
                     )
                   ],
                 )

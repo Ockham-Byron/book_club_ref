@@ -138,18 +138,6 @@ class AppDrawer extends StatelessWidget {
                   ),
                   onTap: () => _goToGroupManage(),
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.ten_k_sharp,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  title: Text(
-                    "Groupe",
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor, fontSize: 20),
-                  ),
-                  onTap: () => _goToTestScreen(),
-                ),
                 SizedBox(
                   height: 100,
                 ),
