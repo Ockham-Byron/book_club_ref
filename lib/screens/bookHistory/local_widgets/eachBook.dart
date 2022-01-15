@@ -68,9 +68,10 @@ class EachBook extends StatelessWidget {
                       children: [
                         Text(
                           book!.title ?? "Pas de titre",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 20,
-                              color: Theme.of(context).focusColor),
+                              color: Theme.of(context).primaryColor),
                         ),
                         Text(
                           book!.author ?? "Pas d'auteur",
@@ -91,7 +92,9 @@ class EachBook extends StatelessWidget {
               children: [
                 TextButton.icon(
                     onPressed: () {},
-                    icon: Icon(Icons.check),
+                    icon: Icon(
+                      Icons.check,
+                    ),
                     label: Text("Lu")),
                 TextButton.icon(
                     onPressed: () {},
