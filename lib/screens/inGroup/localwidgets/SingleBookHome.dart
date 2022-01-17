@@ -505,6 +505,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
         currentGroup: widget.currentGroup,
         currentUser: widget.currentUser,
         currentBook: _currentBook,
+        authModel: widget.authModel,
       ),
     );
   }

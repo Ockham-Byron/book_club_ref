@@ -1,3 +1,4 @@
+import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
@@ -13,11 +14,13 @@ class GroupManageRef extends StatefulWidget {
   final GroupModel currentGroup;
   final UserModel currentUser;
   final BookModel currentBook;
+  final AuthModel authModel;
   const GroupManageRef(
       {Key? key,
       required this.currentGroup,
       required this.currentUser,
-      required this.currentBook})
+      required this.currentBook,
+      required this.authModel})
       : super(key: key);
 
   @override
@@ -334,6 +337,7 @@ class _GroupManageRefState extends State<GroupManageRef> {
         currentGroup: widget.currentGroup,
         currentUser: widget.currentUser,
         currentBook: widget.currentBook,
+        authModel: widget.authModel,
       ),
     );
   }

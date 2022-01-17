@@ -1,6 +1,8 @@
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
+import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
+import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:flutter/material.dart';
 
@@ -48,6 +50,45 @@ class EachBook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget _displayFavorite() {
+      if (currentUser.favoriteBooks!.contains(book!.id)) {
+        return TextButton.icon(
+            onPressed: () {
+              DBFuture()
+                  .cancelFavoriteBook(groupId!, book!.id!, currentUser.uid!);
+            },
+            icon: Icon(
+              Icons.favorite,
+              color: Theme.of(context).primaryColor,
+            ),
+            label: Text(
+              "Favori",
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ));
+      } else {
+        return TextButton.icon(
+            onPressed: () {
+              DBFuture().favoriteBook(groupId!, book!.id!, currentUser.uid!);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BookHistory(
+                          groupId: groupId!,
+                          groupName: currentGroup.name!,
+                          currentGroup: currentGroup,
+                          currentUser: currentUser)));
+            },
+            icon: Icon(
+              Icons.favorite,
+              color: Colors.grey,
+            ),
+            label: Text(
+              "Favori",
+              style: TextStyle(color: Colors.grey),
+            ));
+      }
+    }
+
     return GestureDetector(
       onTap: () => _goToReviewHistory(context),
       child: ShadowContainer(
@@ -96,10 +137,7 @@ class EachBook extends StatelessWidget {
                       Icons.check,
                     ),
                     label: Text("Lu")),
-                TextButton.icon(
-                    onPressed: () {},
-                    icon: Icon(Icons.favorite),
-                    label: Text("Favori"))
+                _displayFavorite(),
               ],
             ),
           ],

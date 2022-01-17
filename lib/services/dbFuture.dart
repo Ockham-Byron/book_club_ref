@@ -10,6 +10,7 @@ class DBFuture {
   Future<String> createUser(UserModel user) async {
     String retVal = "error";
     List<String> readBooks = [];
+    List<String> favoriteBooks = [];
 
     try {
       await _firestore.collection("users").doc(user.uid).set({
@@ -18,6 +19,7 @@ class DBFuture {
         "pictureUrl": user.pictureUrl.trim(),
         "accountCreated": Timestamp.now(),
         "readBooks": readBooks,
+        "favoriteBooks": favoriteBooks,
         "readPages": user.readPages
       });
       retVal = "success";
@@ -365,6 +367,68 @@ class DBFuture {
         "readBooks": FieldValue.arrayUnion(readBooks),
         "readPages": FieldValue.increment(nbPages)
       });
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
+  }
+
+  Future<String> favoriteBook(
+    String groupId,
+    String bookId,
+    String uid,
+  ) async {
+    String retVal = "error";
+    List<String> favoriteBooks = [];
+    //List<String> nbOfFavorites = [];
+
+    try {
+      // nbOfFavorites.add(uid);
+      // await _firestore
+      //     .collection("groups")
+      //     .doc(groupId)
+      //     .collection("books")
+      //     .doc(bookId)
+      //     .update({"nbOfFavorites": FieldValue.arrayUnion(nbOfFavorites)});
+
+      //add finished Book in user profile
+      favoriteBooks.add(bookId);
+      await _firestore.collection("users").doc(uid).update({
+        "favoriteBooks": FieldValue.arrayUnion(favoriteBooks),
+      });
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
+  }
+
+  Future<String> cancelFavoriteBook(
+    String groupId,
+    String bookId,
+    String uid,
+  ) async {
+    String retVal = "error";
+    List<String> favoriteBooks = [];
+    //List<String> nbOfFavorites = [];
+
+    try {
+      // nbOfFavorites.add(uid);
+      // await _firestore
+      //     .collection("groups")
+      //     .doc(groupId)
+      //     .collection("books")
+      //     .doc(bookId)
+      //     .update({"nbOfFavorites": FieldValue.arrayUnion(nbOfFavorites)});
+
+      //add finished Book in user profile
+      favoriteBooks.add(bookId);
+      await _firestore.collection("users").doc(uid).update({
+        "favoriteBooks": FieldValue.arrayRemove(favoriteBooks),
+      });
+      retVal = "success";
     } catch (e) {
       print(e);
     }
