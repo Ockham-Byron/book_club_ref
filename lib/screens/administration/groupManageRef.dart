@@ -2,6 +2,7 @@ import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
+import 'package:book_club_ref/screens/administration/editScreens/editGroupName.dart';
 import 'package:book_club_ref/screens/administration/localwidgets/memberCard.dart';
 import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
@@ -202,7 +203,15 @@ class _GroupManageRefState extends State<GroupManageRef> {
                                       style: TextStyle(fontSize: 30),
                                     ),
                                     TextButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditGroupName(
+                                                        currentGroup:
+                                                            widget.currentGroup,
+                                                      )));
+                                        },
                                         child: Text(
                                           "MODIFIER",
                                           style: TextStyle(
@@ -238,10 +247,10 @@ class _GroupManageRefState extends State<GroupManageRef> {
                                       "MEMBRES",
                                       style: kTitleStyle,
                                     ),
-                                    Text(
-                                      "CRITIQUES",
-                                      style: kTitleStyle,
-                                    ),
+                                    // Text(
+                                    //   "CRITIQUES",
+                                    //   style: kTitleStyle,
+                                    // ),
                                   ],
                                 ),
                                 SizedBox(
@@ -259,10 +268,10 @@ class _GroupManageRefState extends State<GroupManageRef> {
                                       getNbGroupMembers().toString(),
                                       style: kSubtitleStyle,
                                     ),
-                                    Text(
-                                      "47",
-                                      style: kSubtitleStyle,
-                                    ),
+                                    // Text(
+                                    //   "47",
+                                    //   style: kSubtitleStyle,
+                                    // ),
                                   ],
                                 )
                               ],

@@ -1,14 +1,14 @@
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
-import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
-import 'package:book_club_ref/services/dbFuture.dart';
+//import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
+//import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:flutter/material.dart';
 
 import '../reviewHistory.dart';
 
-class EachBook extends StatelessWidget {
+class EachBook extends StatefulWidget {
   final BookModel? book;
   final String? groupId;
   final GroupModel currentGroup;
@@ -21,14 +21,31 @@ class EachBook extends StatelessWidget {
       required this.currentUser})
       : super(key: key);
 
+  @override
+  _EachBookState createState() => _EachBookState();
+}
+
+class _EachBookState extends State<EachBook> {
+  // bool _isFavorited = false;
+
+  // void _toggleFavorite() {
+  //   setState(() {
+  //     if (_isFavorited = false) {
+  //       _isFavorited = true;
+  //     } else {
+  //       _isFavorited = false;
+  //     }
+  //   });
+  // }
+
   String _currentBookCoverUrl() {
     String currentBookCoverUrl;
 
-    if (book!.cover == "") {
+    if (widget.book!.cover == "") {
       currentBookCoverUrl =
           "https://www.azendportafolio.com/static/img/not-found.png";
     } else {
-      currentBookCoverUrl = book!.cover!;
+      currentBookCoverUrl = widget.book!.cover!;
     }
 
     return currentBookCoverUrl;
@@ -39,10 +56,10 @@ class EachBook extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) => ReviewHistory(
-          groupId: groupId!,
-          bookId: book!.id!,
-          currentGroup: currentGroup,
-          currentUser: currentUser,
+          groupId: widget.groupId!,
+          bookId: widget.book!.id!,
+          currentGroup: widget.currentGroup,
+          currentUser: widget.currentUser,
         ),
       ),
     );
@@ -50,44 +67,32 @@ class EachBook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget _displayFavorite() {
-      if (currentUser.favoriteBooks!.contains(book!.id)) {
-        return TextButton.icon(
-            onPressed: () {
-              DBFuture()
-                  .cancelFavoriteBook(groupId!, book!.id!, currentUser.uid!);
-            },
-            icon: Icon(
-              Icons.favorite,
-              color: Theme.of(context).primaryColor,
-            ),
-            label: Text(
-              "Favori",
-              style: TextStyle(color: Theme.of(context).primaryColor),
-            ));
-      } else {
-        return TextButton.icon(
-            onPressed: () {
-              DBFuture().favoriteBook(groupId!, book!.id!, currentUser.uid!);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => BookHistory(
-                          groupId: groupId!,
-                          groupName: currentGroup.name!,
-                          currentGroup: currentGroup,
-                          currentUser: currentUser)));
-            },
-            icon: Icon(
-              Icons.favorite,
-              color: Colors.grey,
-            ),
-            label: Text(
-              "Favori",
-              style: TextStyle(color: Colors.grey),
-            ));
-      }
-    }
+    // Widget _displayFavorite() {
+    //   return TextButton.icon(
+    //     onPressed: () {
+    //       if (widget.currentUser.favoriteBooks!.contains(widget.book!.id)) {
+    //         DBFuture().cancelFavoriteBook(
+    //             widget.groupId!, widget.book!.id!, widget.currentUser.uid!);
+    //         _toggleFavorite();
+    //       } else {
+    //         DBFuture().favoriteBook(
+    //             widget.groupId!, widget.book!.id!, widget.currentUser.uid!);
+    //         _toggleFavorite();
+    //       }
+    //     },
+    //     icon: Icon(Icons.favorite,
+    //         color: _isFavorited == true
+    //             ? Theme.of(context).primaryColor
+    //             : Colors.grey),
+    //     label: Text(
+    //       "Favori",
+    //       style: TextStyle(
+    //           color: _isFavorited == true
+    //               ? Theme.of(context).primaryColor
+    //               : Colors.grey),
+    //     ),
+    //   );
+    // }
 
     return GestureDetector(
       onTap: () => _goToReviewHistory(context),
@@ -108,14 +113,14 @@ class EachBook extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          book!.title ?? "Pas de titre",
+                          widget.book!.title ?? "Pas de titre",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 20,
                               color: Theme.of(context).primaryColor),
                         ),
                         Text(
-                          book!.author ?? "Pas d'auteur",
+                          widget.book!.author ?? "Pas d'auteur",
                           style: TextStyle(fontSize: 20, color: Colors.grey),
                         ),
                       ],
@@ -128,18 +133,18 @@ class EachBook extends StatelessWidget {
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton.icon(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.check,
-                    ),
-                    label: Text("Lu")),
-                _displayFavorite(),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     TextButton.icon(
+            //         onPressed: () {},
+            //         icon: Icon(
+            //           Icons.check,
+            //         ),
+            //         label: Text("Lu")),
+            //     _displayFavorite(),
+            //   ],
+            // ),
           ],
         ),
       ),

@@ -71,6 +71,21 @@ class DBFuture {
     return retVal;
   }
 
+  Future<String> editGroupName(
+      {required String groupId, required String groupName}) async {
+    String retVal = "error";
+
+    try {
+      await _firestore.collection("groups").doc(groupId).update({
+        "name": groupName.trim(),
+      });
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
   //Delete User
   Future<String> deleteUser(String userId, String groupId) async {
     String retVal = "error";
