@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
+import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
@@ -13,6 +14,7 @@ import 'package:intl/intl.dart';
 class EditBook extends StatefulWidget {
   final GroupModel currentGroup;
   final BookModel currentBook;
+
   const EditBook(
       {Key? key, required this.currentGroup, required this.currentBook})
       : super(key: key);
@@ -26,6 +28,8 @@ class _EditBookState extends State<EditBook> {
   String? initialAuthor;
   int? initialPages;
   String? initialBookCover;
+  Timestamp? initialDate;
+  DateTime? _selectedDate;
 
   @override
   void initState() {
@@ -33,7 +37,8 @@ class _EditBookState extends State<EditBook> {
     initialAuthor = widget.currentBook.author;
     initialPages = widget.currentBook.length;
     initialBookCover = widget.currentBook.cover;
-
+    initialDate = widget.currentBook.dateCompleted;
+    _selectedDate = initialDate!.toDate();
     _bookTitleInput.text = initialTitle!;
     _bookAuthorInput.text = initialAuthor!;
     _bookLengthInput.text = initialPages!.toString();
@@ -47,7 +52,8 @@ class _EditBookState extends State<EditBook> {
   TextEditingController _bookLengthInput = TextEditingController();
   TextEditingController _bookCoverInput = TextEditingController();
 
-  DateTime _selectedDate = DateTime.now();
+  //DateTime _selectedDate = DateTime.now();
+  //DateTime? _selectedDate = initialDate?.toDate();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked =
@@ -68,13 +74,14 @@ class _EditBookState extends State<EditBook> {
     String _returnString;
 
     _returnString = await DBFuture().editBook(
-        groupId: groupId,
-        bookId: bookId,
-        bookTitle: bookTitle,
-        bookAuthor: bookAuthor,
-        bookCover: bookCover,
-        bookPages: bookPages,
-        dateCompleted: dateCompleted);
+      groupId: groupId,
+      bookId: bookId,
+      bookTitle: bookTitle,
+      bookAuthor: bookAuthor,
+      bookCover: bookCover,
+      bookPages: bookPages,
+      dateCompleted: dateCompleted,
+    );
 
     if (_returnString == "success") {
       Navigator.of(context)
@@ -198,7 +205,7 @@ class _EditBookState extends State<EditBook> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(DateFormat("dd/MM à HH:mm").format(_selectedDate),
+                    Text(DateFormat("dd/MM à HH:mm").format(_selectedDate!),
                         style: Theme.of(context).textTheme.headline6),
                     TextButton(
                       onPressed: () => _selectDate(context),
@@ -216,7 +223,7 @@ class _EditBookState extends State<EditBook> {
                             _bookAuthorInput.text,
                             _bookCoverInput.text,
                             int.parse(_bookLengthInput.text),
-                            Timestamp.fromDate(_selectedDate));
+                            Timestamp.fromDate(_selectedDate!));
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 50),

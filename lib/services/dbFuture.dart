@@ -86,14 +86,15 @@ class DBFuture {
     return retVal;
   }
 
-  Future<String> editBook(
-      {required String groupId,
-      required String bookId,
-      required String bookTitle,
-      required String bookAuthor,
-      required String bookCover,
-      required int bookPages,
-      required Timestamp dateCompleted}) async {
+  Future<String> editBook({
+    required String groupId,
+    required String bookId,
+    required String bookTitle,
+    required String bookAuthor,
+    required String bookCover,
+    required int bookPages,
+    required Timestamp dateCompleted,
+  }) async {
     String retVal = "error";
 
     try {
