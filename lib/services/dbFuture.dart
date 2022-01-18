@@ -86,6 +86,36 @@ class DBFuture {
     return retVal;
   }
 
+  Future<String> editBook(
+      {required String groupId,
+      required String bookId,
+      required String bookTitle,
+      required String bookAuthor,
+      required String bookCover,
+      required int bookPages,
+      required Timestamp dateCompleted}) async {
+    String retVal = "error";
+
+    try {
+      await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .doc(bookId)
+          .update({
+        "title": bookTitle.trim(),
+        "author": bookAuthor.trim(),
+        "cover": bookCover.trim(),
+        "length": bookPages,
+        "dateCompleted": dateCompleted,
+      });
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
   //Delete User
   Future<String> deleteUser(String userId, String groupId) async {
     String retVal = "error";
