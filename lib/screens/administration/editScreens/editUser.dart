@@ -25,19 +25,19 @@ class EditUser extends StatefulWidget {
 class _EditUserState extends State<EditUser> {
   String? initialPseudo;
   String? initialMail;
-  String? initialPassword;
+
   String? initialProfilePicture;
 
   @override
   void initState() {
     initialPseudo = widget.currentUser.pseudo;
     initialMail = widget.currentUser.email;
-    initialPassword = widget.currentUser.password;
+
     initialProfilePicture = widget.currentUser.pictureUrl;
 
     _userPseudoInput.text = initialPseudo!;
     _userMailInput.text = initialMail!;
-    _userPasswordInput.text = initialPassword!;
+
     _userProfileInput.text = initialProfilePicture!;
 
     super.initState();
@@ -73,134 +73,247 @@ class _EditUserState extends State<EditUser> {
   @override
   Widget build(BuildContext context) {
     //UserModel _currentUser = Provider.of<UserModel>(context, listen: false);
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/background.jpg'),
-              fit: BoxFit.cover),
-        ),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: Center(
-            child: Container(
-              height: 550,
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: ShadowContainer(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _userPseudoInput,
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).canvasColor)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor)),
-                        prefixIcon: Icon(
-                          Icons.book,
-                          color: Theme.of(context).primaryColor,
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).canvasColor,
+            flexibleSpace: Column(
+              children: [
+                TabBar(
+                  unselectedLabelColor: Theme.of(context).primaryColor,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicator: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Theme.of(context).primaryColor),
+                  tabs: [
+                    Tab(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                                width: 1)),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "PROFIL",
+                          ),
                         ),
-                        labelText: "Pseudo",
-                        labelStyle:
-                            TextStyle(color: Theme.of(context).primaryColor),
                       ),
-                      style: Theme.of(context).textTheme.headline6,
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: _userMailInput,
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).canvasColor)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor)),
-                        prefixIcon: Icon(
-                          Icons.face,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        labelText: "Courriel",
-                        labelStyle:
-                            TextStyle(color: Theme.of(context).primaryColor),
-                      ),
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: _userPasswordInput,
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).canvasColor)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor)),
-                        prefixIcon: Icon(
-                          Icons.format_list_numbered,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        labelText: "Mot de passe",
-                        labelStyle:
-                            TextStyle(color: Theme.of(context).primaryColor),
-                      ),
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: _userProfileInput,
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).canvasColor)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor)),
-                        prefixIcon: Icon(
-                          Icons.auto_stories,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        labelText: "Url de votre photo de profil",
-                        labelStyle:
-                            TextStyle(color: Theme.of(context).primaryColor),
-                      ),
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        _editUser(
-                            widget.currentUser.uid!,
-                            _userPseudoInput.text,
-                            _userMailInput.text,
-                            _userPasswordInput.text,
-                            _userProfileInput.text);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 50),
-                        child: Text(
-                          "Modifier".toUpperCase(),
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                    Tab(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                                width: 1)),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "CONNEXION",
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
+              ],
             ),
+          ),
+          body: TabBarView(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/background.jpg'),
+                      fit: BoxFit.cover),
+                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Center(
+                    child: Container(
+                      height: 260,
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: ShadowContainer(
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _userPseudoInput,
+                              decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).canvasColor)),
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).primaryColor)),
+                                prefixIcon: Icon(
+                                  Icons.person,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                labelText: "Pseudo",
+                                labelStyle: TextStyle(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              controller: _userProfileInput,
+                              decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).canvasColor)),
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).primaryColor)),
+                                prefixIcon: Icon(
+                                  Icons.camera,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                labelText: "Url de votre photo de profil",
+                                labelStyle: TextStyle(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 10.0),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(50.0)),
+                                  primary: Theme.of(context).primaryColor),
+                              onPressed: () {
+                                _editUser(
+                                    widget.currentUser.uid!,
+                                    _userPseudoInput.text,
+                                    _userMailInput.text,
+                                    _userPasswordInput.text,
+                                    _userProfileInput.text);
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 50),
+                                child: Text(
+                                  "Modifier".toUpperCase(),
+                                  style: TextStyle(
+                                      color: Theme.of(context).canvasColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/background.jpg'),
+                      fit: BoxFit.cover),
+                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Center(
+                    child: Container(
+                      height: 260,
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: ShadowContainer(
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _userMailInput,
+                              decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).canvasColor)),
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).primaryColor)),
+                                prefixIcon: Icon(
+                                  Icons.alternate_email,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                labelText: "Courriel",
+                                labelStyle: TextStyle(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              controller: _userPasswordInput,
+                              decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).canvasColor)),
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).primaryColor)),
+                                prefixIcon: Icon(
+                                  Icons.lock_outline,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                labelText: "Mot de passe",
+                                labelStyle: TextStyle(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 10.0),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(50.0)),
+                                  primary: Theme.of(context).primaryColor),
+                              onPressed: () {
+                                _editUser(
+                                    widget.currentUser.uid!,
+                                    _userPseudoInput.text,
+                                    _userMailInput.text,
+                                    _userPasswordInput.text,
+                                    _userProfileInput.text);
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 50),
+                                child: Text(
+                                  "Modifier".toUpperCase(),
+                                  style: TextStyle(
+                                      color: Theme.of(context).canvasColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
