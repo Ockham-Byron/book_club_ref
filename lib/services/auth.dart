@@ -96,6 +96,19 @@ class Auth {
     return retVal;
   }
 
+  // Reset password
+  Future<String> resetPassword(String password) async {
+    String retVal = "error";
+    try {
+      _auth.currentUser!.updatePassword(password);
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
+  }
+
   //Delete User
   Future<String> deleteUser() async {
     String retVal = "error";

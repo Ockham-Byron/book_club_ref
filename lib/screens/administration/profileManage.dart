@@ -1,6 +1,7 @@
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
+import 'package:book_club_ref/screens/administration/editScreens/editUser.dart';
 
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
@@ -292,7 +293,12 @@ class _ProfileManageState extends State<ProfileManage> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => EditUser(
+                                    currentGroup: widget.currentGroup,
+                                    currentUser: widget.currentUser)));
+                          },
                           child: Text(
                             "MODIFIER",
                             style: TextStyle(color: Colors.red[300]),

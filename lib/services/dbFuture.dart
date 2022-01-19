@@ -16,6 +16,7 @@ class DBFuture {
       await _firestore.collection("users").doc(user.uid).set({
         "pseudo": user.pseudo!.trim(),
         "email": user.email!.trim(),
+        "password": user.password,
         "pictureUrl": user.pictureUrl.trim(),
         "accountCreated": Timestamp.now(),
         "readBooks": readBooks,
@@ -109,6 +110,30 @@ class DBFuture {
         "cover": bookCover.trim(),
         "length": bookPages,
         "dateCompleted": dateCompleted,
+      });
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  //EditUser
+  Future<String> editUser({
+    required String userId,
+    required String userPseudo,
+    required String userMail,
+    required String userPassword,
+    required String userPicture,
+  }) async {
+    String retVal = "error";
+
+    try {
+      await _firestore.collection("users").doc(userId).update({
+        "pseudo": userPseudo.trim(),
+        "mail": userMail.trim(),
+        "password": userPassword.trim(),
+        "pictureUrl": userPicture.trim(),
       });
       retVal = "success";
     } catch (e) {

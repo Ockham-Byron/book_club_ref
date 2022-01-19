@@ -74,7 +74,7 @@ class _BookCardState extends State<BookCard> {
   }
 
   Widget _displayBookCard() {
-    if (_doneWithBook == true) {
+    if (_doneWithBook == false) {
       return GestureDetector(
         onTap: () => _goToReviewHistory(context),
         child: Container(
