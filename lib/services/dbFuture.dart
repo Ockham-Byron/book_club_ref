@@ -16,7 +16,6 @@ class DBFuture {
       await _firestore.collection("users").doc(user.uid).set({
         "pseudo": user.pseudo!.trim(),
         "email": user.email!.trim(),
-        "password": user.password,
         "pictureUrl": user.pictureUrl.trim(),
         "accountCreated": Timestamp.now(),
         "readBooks": readBooks,
@@ -119,11 +118,9 @@ class DBFuture {
   }
 
   //EditUser
-  Future<String> editUser({
+  Future<String> editUserProfile({
     required String userId,
     required String userPseudo,
-    required String userMail,
-    required String userPassword,
     required String userPicture,
   }) async {
     String retVal = "error";
@@ -131,8 +128,6 @@ class DBFuture {
     try {
       await _firestore.collection("users").doc(userId).update({
         "pseudo": userPseudo.trim(),
-        "mail": userMail.trim(),
-        "password": userPassword.trim(),
         "pictureUrl": userPicture.trim(),
       });
       retVal = "success";

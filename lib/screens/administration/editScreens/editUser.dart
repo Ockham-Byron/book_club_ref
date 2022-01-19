@@ -48,20 +48,16 @@ class _EditUserState extends State<EditUser> {
   TextEditingController _userPasswordInput = TextEditingController();
   TextEditingController _userProfileInput = TextEditingController();
 
-  void _editUser(
+  void _editUserProfile(
     String userId,
     String userPseudo,
-    String userMail,
-    String userPassword,
     String userProfilePicture,
   ) async {
     String _returnString;
 
-    _returnString = await DBFuture().editUser(
+    _returnString = await DBFuture().editUserProfile(
         userId: userId,
         userPseudo: userPseudo,
-        userMail: userMail,
-        userPassword: userPassword,
         userPicture: userProfilePicture);
 
     if (_returnString == "success") {
@@ -193,11 +189,9 @@ class _EditUserState extends State<EditUser> {
                                           BorderRadius.circular(50.0)),
                                   primary: Theme.of(context).primaryColor),
                               onPressed: () {
-                                _editUser(
+                                _editUserProfile(
                                     widget.currentUser.uid!,
                                     _userPseudoInput.text,
-                                    _userMailInput.text,
-                                    _userPasswordInput.text,
                                     _userProfileInput.text);
                               },
                               child: Padding(
@@ -286,14 +280,7 @@ class _EditUserState extends State<EditUser> {
                                       borderRadius:
                                           BorderRadius.circular(50.0)),
                                   primary: Theme.of(context).primaryColor),
-                              onPressed: () {
-                                _editUser(
-                                    widget.currentUser.uid!,
-                                    _userPseudoInput.text,
-                                    _userMailInput.text,
-                                    _userPasswordInput.text,
-                                    _userProfileInput.text);
-                              },
+                              onPressed: () {},
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 50),

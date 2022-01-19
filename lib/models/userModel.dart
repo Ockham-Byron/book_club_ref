@@ -5,7 +5,7 @@ class UserModel {
   String? email;
   Timestamp? accountCreated;
   String? pseudo;
-  String? password;
+
   String? groupId;
   String pictureUrl =
       "https://digitalpainting.school/static/img/default_avatar.png";
@@ -18,7 +18,6 @@ class UserModel {
     this.email,
     this.pseudo,
     this.accountCreated,
-    this.password,
     this.readBooks,
     this.readPages,
     this.favoriteBooks,
@@ -32,7 +31,7 @@ class UserModel {
     email = doc.data()!["email"];
     pseudo = doc.data()!["pseudo"];
     accountCreated = doc.data()!["accountCreated"];
-    password = doc.data()!["password"];
+
     groupId = doc.data()!["groupId"];
     readBooks = List<String>.from(doc.data()!["readBooks"]);
     favoriteBooks = List<String>.from(doc.data()!["favoriteBooks"]);
