@@ -42,6 +42,7 @@ dependencies:
   page_transition: ^2.0.4
   intl: ^0.17.0
   drop_shadow_image: ^0.9.1
+  fluttertoast: ^8.0.8
   
 
 dev_dependencies:

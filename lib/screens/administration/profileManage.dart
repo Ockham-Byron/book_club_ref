@@ -71,51 +71,6 @@ class _ProfileManageState extends State<ProfileManage> {
     }
   }
 
-  void _editUserPseudo(
-      String pseudo, String userId, BuildContext context) async {
-    try {
-      String _returnString = await DBFuture().editUserPseudo(userId, pseudo);
-      if (_returnString == "success") {
-      } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(_returnString)));
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void _editUserMail(String email, String userId, BuildContext context) async {
-    try {
-      String _returnString = await Auth().resetEmail(email);
-
-      if (_returnString == "success") {
-        DBFuture().editUserMail(userId, email);
-      } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(_returnString)));
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void _editUsePicture(
-      String pictureUrl, String userId, BuildContext context) async {
-    try {
-      String _returnString =
-          await DBFuture().editUserPicture(userId, pictureUrl);
-
-      if (_returnString == "success") {
-      } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(_returnString)));
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   void _deleteUser(String userId, String groupId, BuildContext context) async {
     try {
       String _returnString = await Auth().deleteUser();
@@ -130,60 +85,6 @@ class _ProfileManageState extends State<ProfileManage> {
     } catch (e) {
       print(e);
     }
-  }
-
-  Widget _buildPopupDialogPseudo(BuildContext context, String userId) {
-    return new AlertDialog(
-      title: Text("Changer de pseudo"),
-      content: TextField(
-        controller: _pseudoInput,
-      ),
-      actions: <Widget>[
-        new ElevatedButton(
-          onPressed: () {
-            _editUserPseudo(_pseudoInput.text, userId, context);
-            Navigator.of(context).pop();
-          },
-          child: const Text('Ok'),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPopupDialogEmail(BuildContext context, String userId) {
-    return new AlertDialog(
-      title: Text("Changer de courriel"),
-      content: TextField(
-        controller: _mailInput,
-      ),
-      actions: <Widget>[
-        new ElevatedButton(
-          onPressed: () {
-            _editUserMail(_mailInput.text, userId, context);
-            Navigator.of(context).pop();
-          },
-          child: const Text('Ok'),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPopupDialogPicture(BuildContext context, String userId) {
-    return new AlertDialog(
-      title: Text("Changer de tête"),
-      content: TextField(
-        controller: _pictureUrlInput,
-      ),
-      actions: <Widget>[
-        new ElevatedButton(
-          onPressed: () {
-            _editUsePicture(_pictureUrlInput.text, userId, context);
-            Navigator.of(context).pop();
-          },
-          child: const Text('Ok'),
-        ),
-      ],
-    );
   }
 
   Widget _buildPopupDialogDeleteUser(

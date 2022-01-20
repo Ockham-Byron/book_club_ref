@@ -206,11 +206,12 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     );
   }
 
-  void _changePickingUser() {
+  void _changePickingUser() async {
     DBFuture().changePicker(widget.currentGroup.id!);
-    setState(() async {
-      _pickingUser = await DBFuture().getUser(
-          widget.currentGroup.members![widget.currentGroup.indexPickingBook!]);
+    _pickingUser = await DBFuture().getUser(
+        widget.currentGroup.members![widget.currentGroup.indexPickingBook!]);
+    setState(() {
+      _pickingUser = _pickingUser;
     });
   }
 

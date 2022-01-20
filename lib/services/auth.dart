@@ -88,8 +88,11 @@ class Auth {
   Future<String> resetEmail(String email) async {
     String retVal = "error";
     try {
-      _auth.currentUser!.updateEmail(email);
+      await _auth.currentUser!.updateEmail(email);
       retVal = "success";
+    } on PlatformException catch (e) {
+      print(e);
+      retVal = "exception";
     } catch (e) {
       print(e);
     }
