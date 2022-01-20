@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
+import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
+
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
@@ -14,9 +16,15 @@ import 'package:intl/intl.dart';
 class EditBook extends StatefulWidget {
   final GroupModel currentGroup;
   final BookModel currentBook;
+  final UserModel currentUser;
+  final String fromRoute;
 
   const EditBook(
-      {Key? key, required this.currentGroup, required this.currentBook})
+      {Key? key,
+      required this.currentGroup,
+      required this.currentBook,
+      required this.currentUser,
+      required this.fromRoute})
       : super(key: key);
 
   @override
@@ -83,13 +91,21 @@ class _EditBookState extends State<EditBook> {
       dateCompleted: dateCompleted,
     );
 
-    if (_returnString == "success") {
+    if (_returnString == "success" && widget.fromRoute == "fromHome") {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) => OurRoot()));
+    } else if (_returnString == "success" &&
+        widget.fromRoute == "fromHistory") {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => BookHistory(
+                groupId: widget.currentGroup.id!,
+                groupName: widget.currentGroup.name!,
+                currentGroup: widget.currentGroup,
+                currentUser: widget.currentUser,
+              )));
     }
   }
 
-  TextEditingController _groupNameInput = TextEditingController();
   @override
   Widget build(BuildContext context) {
     //UserModel _currentUser = Provider.of<UserModel>(context, listen: false);

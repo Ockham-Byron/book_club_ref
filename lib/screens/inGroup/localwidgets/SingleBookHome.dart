@@ -187,14 +187,16 @@ class _SingleBookHomeState extends State<SingleBookHome> {
               ],
             ),
           ),
-          Transform.rotate(
-            angle: 300,
+          RotatedBox(
+            quarterTurns: 3,
             child: TextButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => EditBook(
                             currentGroup: widget.currentGroup,
                             currentBook: _currentBook,
+                            currentUser: widget.currentUser,
+                            fromRoute: "fromHome",
                           )));
                 },
                 child: Text(
