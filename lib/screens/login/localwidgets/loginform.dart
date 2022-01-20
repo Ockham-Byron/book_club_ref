@@ -187,7 +187,7 @@ class _LoginFormState extends State<LoginForm> {
               },
               child: Text(
                 "Oubli du mot de passe ?",
-                style: TextStyle(color: Theme.of(context).canvasColor),
+                style: TextStyle(color: Theme.of(context).primaryColor),
               ))
         ],
       ),

@@ -149,6 +149,14 @@ class _EditUserState extends State<EditUser> {
     }
   }
 
+  void _resetPassword(String email) async {
+    try {
+      String _returnString = await Auth().sendPasswordResetEmail(email);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void _signOut(BuildContext context) async {
     String _returnedString = await Auth().signOut();
     if (_returnedString == "success") {
@@ -453,6 +461,7 @@ class _EditUserState extends State<EditUser> {
                   ),
                 ),
               ),
+              //Modifier Mot de passe
               Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -481,7 +490,7 @@ class _EditUserState extends State<EditUser> {
                                   Icons.alternate_email,
                                   color: Theme.of(context).primaryColor,
                                 ),
-                                labelText: "Courriel",
+                                labelText: "Votre courriel",
                                 labelStyle: TextStyle(
                                     color: Theme.of(context).primaryColor),
                               ),
@@ -490,25 +499,8 @@ class _EditUserState extends State<EditUser> {
                             SizedBox(
                               height: 20,
                             ),
-                            TextFormField(
-                              controller: _userPasswordInput,
-                              decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context).canvasColor)),
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context).primaryColor)),
-                                prefixIcon: Icon(
-                                  Icons.lock_outline,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                labelText: "Mot de passe",
-                                labelStyle: TextStyle(
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                              style: Theme.of(context).textTheme.headline6,
-                            ),
+                            Text(
+                                "Vous souhaitez changer de mot de passe ? Vérifiez votre courriel ci-dessus, nous allons y envoyer un lien pour modifier votre mot de passe."),
                             SizedBox(
                               height: 20,
                             ),
@@ -520,12 +512,14 @@ class _EditUserState extends State<EditUser> {
                                       borderRadius:
                                           BorderRadius.circular(50.0)),
                                   primary: Theme.of(context).primaryColor),
-                              onPressed: () {},
+                              onPressed: () {
+                                _resetPassword(_userMailInput.text);
+                              },
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 50),
                                 child: Text(
-                                  "Modifier".toUpperCase(),
+                                  "Envoyer".toUpperCase(),
                                   style: TextStyle(
                                       color: Theme.of(context).canvasColor,
                                       fontWeight: FontWeight.bold,

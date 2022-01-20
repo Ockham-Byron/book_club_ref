@@ -38,6 +38,7 @@ class SingleBookHome extends StatefulWidget {
 class _SingleBookHomeState extends State<SingleBookHome> {
   late BookModel _currentBook = BookModel();
   late UserModel _pickingUser = UserModel();
+  late UserModel _newPickingUser = UserModel();
 
   bool _doneWithBook = true;
 
@@ -207,12 +208,24 @@ class _SingleBookHomeState extends State<SingleBookHome> {
   }
 
   void _changePickingUser() async {
-    DBFuture().changePicker(widget.currentGroup.id!);
-    _pickingUser = await DBFuture().getUser(
+    if (widget.currentGroup.indexPickingBook! <
+        widget.currentGroup.members!.length - 1) {
+      DBFuture().changePicker(widget.currentGroup.id!);
+    } else {
+      DBFuture().changePickerFromStart(widget.currentGroup.id!);
+    }
+    _newPickingUser = await DBFuture().getUser(
         widget.currentGroup.members![widget.currentGroup.indexPickingBook!]);
     setState(() {
-      _pickingUser = _pickingUser;
+      _pickingUser = _newPickingUser;
     });
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OurRoot(),
+      ),
+      (route) => false,
+    );
   }
 
   Widget _displayNextBookInfo() {

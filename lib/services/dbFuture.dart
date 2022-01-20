@@ -574,4 +574,17 @@ class DBFuture {
 
     return retVal;
   }
+
+  Future<String> changePickerFromStart(String groupId) async {
+    String retVal = "error";
+
+    try {
+      await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .update({"indexPickingBook": 0});
+    } catch (e) {}
+
+    return retVal;
+  }
 }
