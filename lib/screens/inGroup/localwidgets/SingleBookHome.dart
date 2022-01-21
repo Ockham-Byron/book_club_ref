@@ -302,7 +302,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
             _pickingUserPseudo,
             style: TextStyle(
               fontSize: 20,
-              color: Theme.of(context).focusColor,
+              color: Theme.of(context).primaryColor,
             ),
           ),
         ],
@@ -366,7 +366,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
       } else {
         return CircularProfileAvatar(
           "https://digitalpainting.school/static/img/default_avatar.png",
-          foregroundColor: Theme.of(context).focusColor.withOpacity(0.5),
+          foregroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
           initialsText: Text(
             widget.currentUser.pseudo![0].toUpperCase(),
             style: TextStyle(

@@ -76,6 +76,9 @@ class MemberCard extends StatelessWidget {
     }
 
     return Container(
+      decoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
+          borderRadius: BorderRadius.circular(20)),
       child: Row(
         children: [
           Container(

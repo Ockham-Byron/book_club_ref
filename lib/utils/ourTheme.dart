@@ -20,7 +20,7 @@ class OurTheme {
       )),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          onSurface: _apricot,
+          onSurface: Colors.red[300],
           primary: Colors.red[300],
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

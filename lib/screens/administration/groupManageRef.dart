@@ -5,6 +5,8 @@ import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/administration/editScreens/editGroupName.dart';
 import 'package:book_club_ref/screens/administration/localwidgets/memberCard.dart';
 import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
+import 'package:book_club_ref/screens/root/root.dart';
+import 'package:book_club_ref/services/auth.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/appDrawer.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
@@ -120,9 +122,6 @@ class _GroupManageRefState extends State<GroupManageRef> {
     );
   }
 
-  // This key will be used to show the snack bar
-  //final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-
   // This function is triggered when the copy icon is pressed
   Future<void> _copyToClipboard() async {
     await Clipboard.setData(ClipboardData(text: _getGroupId()));
@@ -141,6 +140,19 @@ class _GroupManageRefState extends State<GroupManageRef> {
     return groupMembers;
   }
 
+  void _signOut(BuildContext context) async {
+    String _returnedString = await Auth().signOut();
+    if (_returnedString == "success") {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OurRoot(),
+        ),
+        (route) => false,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,32 +163,21 @@ class _GroupManageRefState extends State<GroupManageRef> {
               image: AssetImage('assets/images/background.jpg'),
               fit: BoxFit.cover),
         ),
-        child: Container(
-          height: MediaQuery.of(context).size.height * 0.93,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: Theme.of(context).canvasColor,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(50),
-              topRight: Radius.circular(50),
-            ),
-          ),
-          child: FutureBuilder(
-            future: members,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<UserModel>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return ListView.builder(
-                    itemCount: snapshot.data!.length + 1,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index == 0) {
-                        return Column(
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+        child: FutureBuilder(
+          future: members,
+          builder:
+              (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return ListView.builder(
+                  itemCount: snapshot.data!.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) {
+                      return Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
                                   width: 50,
@@ -195,46 +196,61 @@ class _GroupManageRefState extends State<GroupManageRef> {
                                 SizedBox(
                                   width: 20,
                                 ),
-                                Column(
-                                  children: [
-                                    Text(
+                                Expanded(
+                                  child: Container(
+                                    width: 200.0,
+                                    decoration: new BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        color: Colors.grey.shade200
+                                            .withOpacity(0.5)),
+                                    child: Text(
                                       _displayGroupName(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 30),
                                     ),
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditGroupName(
-                                                        currentGroup:
-                                                            widget.currentGroup,
-                                                      )));
-                                        },
-                                        child: Text(
-                                          "MODIFIER",
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColor),
-                                        ))
-                                  ],
+                                  ),
                                 ),
-
                                 SizedBox(
                                   width: 20,
                                 ),
-                                // IconButton(
-                                //   icon: Icon(
-                                //     Icons.logout_rounded,
-                                //     color: Colors.white,
-                                //   ),
-                                //   onPressed: () => _signOut(context),
-                                // )
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.logout_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () => _signOut(context),
+                                )
                               ],
                             ),
-                            Column(
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).canvasColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(50),
+                                topRight: Radius.circular(50),
+                              ),
+                            ),
+                            child: Column(
                               children: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditGroupName(
+                                                    currentGroup:
+                                                        widget.currentGroup,
+                                                  )));
+                                    },
+                                    child: Text(
+                                      "MODIFIER",
+                                      style: TextStyle(
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                    )),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -268,78 +284,82 @@ class _GroupManageRefState extends State<GroupManageRef> {
                                       getNbGroupMembers().toString(),
                                       style: kSubtitleStyle,
                                     ),
-                                    // Text(
-                                    //   "47",
-                                    //   style: kSubtitleStyle,
-                                    // ),
                                   ],
-                                )
-                              ],
-                            ),
-                            Container(
-                              width: 350,
-                              padding: EdgeInsets.all(20),
-                              margin: EdgeInsets.symmetric(vertical: 20),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 1,
-                                      color: Theme.of(context).primaryColor)),
-                              child: Column(
-                                children: [
-                                  Text(
-                                      "Id du groupe à partager aux nouveaux membres"),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                ),
+                                Container(
+                                  width: 350,
+                                  padding: EdgeInsets.all(20),
+                                  margin: EdgeInsets.symmetric(vertical: 20),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 1,
+                                          color:
+                                              Theme.of(context).primaryColor)),
+                                  child: Column(
                                     children: [
-                                      Text(_getGroupId()!),
+                                      Text(
+                                          "Id du groupe à partager aux nouveaux membres"),
                                       SizedBox(
-                                        width: 20,
+                                        height: 30,
                                       ),
-                                      GestureDetector(
-                                        child: Icon(
-                                          Icons.copy,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        onTap: _copyToClipboard,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(_getGroupId()!),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          GestureDetector(
+                                            child: Icon(
+                                              Icons.copy,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                            onTap: _copyToClipboard,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
+                                ),
+                                ElevatedButton(
+                                    onPressed: _goToHistory,
+                                    child:
+                                        Text("Voir tous les livres du groupe")),
+                                SizedBox(
+                                  height: 50,
+                                ),
+                                Text(
+                                  "Membres du groupe",
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                )
+                              ],
                             ),
-                            ElevatedButton(
-                                onPressed: _goToHistory,
-                                child: Text("Voir tous les livres du groupe")),
-                            SizedBox(
-                              height: 50,
-                            ),
-                            Text(
-                              "Membres du groupe",
-                              style: TextStyle(
-                                  fontSize: 30, fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          child: MemberCard(
-                            user: snapshot.data![index - 1],
-                            currentGroup: widget.currentGroup,
                           ),
-                        );
-                      }
-                    });
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
+                        ],
+                      );
+                    } else {
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        child: MemberCard(
+                          user: snapshot.data![index - 1],
+                          currentGroup: widget.currentGroup,
+                        ),
+                      );
+                    }
+                  });
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
         ),
       ),
       drawer: AppDrawer(
