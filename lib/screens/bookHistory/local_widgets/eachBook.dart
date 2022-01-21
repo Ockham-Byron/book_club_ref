@@ -60,6 +60,7 @@ class _EachBookState extends State<EachBook> {
           groupId: widget.groupId!,
           bookId: widget.book!.id!,
           currentGroup: widget.currentGroup,
+          currentBook: widget.book!,
           currentUser: widget.currentUser,
         ),
       ),

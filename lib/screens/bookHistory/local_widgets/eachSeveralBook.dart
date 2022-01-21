@@ -68,6 +68,7 @@ class EachSeveralBook extends StatelessWidget {
           groupId: groupId!,
           bookId: book!.id!,
           currentGroup: currentGroup,
+          currentBook: book!,
           currentUser: currentUser,
         ),
       ),

@@ -67,6 +67,7 @@ class _BookCardState extends State<BookCard> {
           groupId: widget.groupId!,
           bookId: widget.book!.id!,
           currentGroup: widget.currentGroup,
+          currentBook: widget.book!,
           currentUser: widget.currentUser,
         ),
       ),
