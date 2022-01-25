@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
@@ -17,6 +18,7 @@ class EditBook extends StatefulWidget {
   final GroupModel currentGroup;
   final BookModel currentBook;
   final UserModel currentUser;
+  final AuthModel authModel;
   final String fromRoute;
 
   const EditBook(
@@ -24,6 +26,7 @@ class EditBook extends StatefulWidget {
       required this.currentGroup,
       required this.currentBook,
       required this.currentUser,
+      required this.authModel,
       required this.fromRoute})
       : super(key: key);
 
@@ -102,6 +105,8 @@ class _EditBookState extends State<EditBook> {
                 groupName: widget.currentGroup.name!,
                 currentGroup: widget.currentGroup,
                 currentUser: widget.currentUser,
+                currentBook: widget.currentBook,
+                authModel: widget.authModel,
               )));
     }
   }

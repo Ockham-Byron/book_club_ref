@@ -117,6 +117,8 @@ class _GroupManageRefState extends State<GroupManageRef> {
           groupName: widget.currentGroup.name!,
           currentGroup: widget.currentGroup,
           currentUser: widget.currentUser,
+          currentBook: widget.currentBook,
+          authModel: widget.authModel,
         ),
       ),
     );

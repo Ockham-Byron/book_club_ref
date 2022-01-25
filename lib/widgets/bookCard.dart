@@ -1,3 +1,4 @@
+import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
@@ -13,12 +14,14 @@ class BookCard extends StatefulWidget {
   final String? groupId;
   final GroupModel currentGroup;
   final UserModel currentUser;
+  final AuthModel authModel;
   const BookCard(
       {Key? key,
       this.book,
       this.groupId,
       required this.currentGroup,
-      required this.currentUser})
+      required this.currentUser,
+      required this.authModel})
       : super(key: key);
 
   @override
@@ -69,6 +72,7 @@ class _BookCardState extends State<BookCard> {
           currentGroup: widget.currentGroup,
           currentBook: widget.book!,
           currentUser: widget.currentUser,
+          authModel: widget.authModel,
         ),
       ),
     );

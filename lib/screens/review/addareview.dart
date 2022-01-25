@@ -5,6 +5,7 @@ import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
+import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,7 @@ class _AddReviewState extends State<AddReview> {
   int _dropdownValue = 1;
   AuthModel _authModel = AuthModel();
   late BookModel _reviewedBook = BookModel();
+  bool favorite = false;
   TextEditingController _reviewInput = TextEditingController();
   FocusNode? freview;
 
@@ -117,6 +119,23 @@ class _AddReviewState extends State<AddReview> {
               ),
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Ce livre fait-il partie de vos favoris ?"),
+              SizedBox(width: 20),
+              FavoriteButton(
+                iconColor: Theme.of(context).primaryColor,
+                isFavorite: false,
+                valueChanged: (_isFavorite) {
+                  print('Is Favorite : $_isFavorite');
+                },
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 50,
+          ),
           ElevatedButton(
             onPressed: () {
               DBFuture().finishedBook(
@@ -125,7 +144,8 @@ class _AddReviewState extends State<AddReview> {
                   _authModel.uid!,
                   _dropdownValue,
                   _reviewInput.text,
-                  _reviewedBook.length!);
+                  _reviewedBook.length!,
+                  favorite);
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(

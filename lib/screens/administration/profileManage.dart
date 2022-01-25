@@ -1,3 +1,4 @@
+import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
@@ -14,13 +15,15 @@ import 'package:flutter/material.dart';
 
 class ProfileManage extends StatefulWidget {
   final UserModel currentUser;
+  final AuthModel authModel;
   final GroupModel currentGroup;
   final BookModel currentBook;
   ProfileManage(
       {Key? key,
       required this.currentUser,
       required this.currentGroup,
-      required this.currentBook})
+      required this.currentBook,
+      required this.authModel})
       : super(key: key);
 
   @override
@@ -263,17 +266,13 @@ class _ProfileManageState extends State<ProfileManage> {
                         ),
                         Expanded(
                           child: BookSection(
-                              groupId: widget.currentGroup.id!,
-                              groupName: widget.currentGroup.name!,
-                              currentGroup: widget.currentGroup,
-                              currentUser: widget.currentUser),
+                            groupId: widget.currentGroup.id!,
+                            groupName: widget.currentGroup.name!,
+                            currentGroup: widget.currentGroup,
+                            currentUser: widget.currentUser,
+                            authModel: widget.authModel,
+                          ),
                         ),
-
-                        // BookSection(
-                        //     currentGroup: widget.currentGroup,
-                        //     currentUser: widget.currentUser,
-                        //     currentBook: widget.currentBook,
-                        //     heading: "Continuer de lire"),
                       ],
                     ),
                   ),

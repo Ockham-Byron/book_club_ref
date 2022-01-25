@@ -1,3 +1,4 @@
+import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
@@ -15,12 +16,14 @@ class FavoriteHistory extends StatefulWidget {
   final String groupName;
   final GroupModel currentGroup;
   final UserModel currentUser;
+  final AuthModel authModel;
   const FavoriteHistory(
       {Key? key,
       required this.groupId,
       required this.groupName,
       required this.currentGroup,
-      required this.currentUser})
+      required this.currentUser,
+      required this.authModel})
       : super(key: key);
 
   @override
@@ -99,6 +102,7 @@ class _FavoriteHistoryState extends State<FavoriteHistory> {
                       groupId: widget.groupId,
                       currentGroup: widget.currentGroup,
                       currentUser: widget.currentUser,
+                      authModel: widget.authModel,
                     ),
                   );
                 }

@@ -43,6 +43,7 @@ dependencies:
   intl: ^0.17.0
   drop_shadow_image: ^0.9.1
   fluttertoast: ^8.0.8
+  favorite_button: ^0.0.4
   
 
 dev_dependencies:

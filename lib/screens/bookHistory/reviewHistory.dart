@@ -1,3 +1,4 @@
+import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/reviewModel.dart';
@@ -6,6 +7,7 @@ import 'package:book_club_ref/screens/review/addareview.dart';
 import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
+import 'package:book_club_ref/widgets/appDrawer.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +15,7 @@ import 'local_widgets/eachReview.dart';
 
 class ReviewHistory extends StatefulWidget {
   final UserModel currentUser;
+  final AuthModel authModel;
   final String bookId;
   final String groupId;
   final BookModel currentBook;
@@ -23,7 +26,8 @@ class ReviewHistory extends StatefulWidget {
       required this.groupId,
       required this.currentGroup,
       required this.currentBook,
-      required this.currentUser})
+      required this.currentUser,
+      required this.authModel})
       : super(key: key);
 
   @override
@@ -34,6 +38,7 @@ class _ReviewHistoryState extends State<ReviewHistory> {
   late Future<List<ReviewModel>> reviews =
       DBFuture().getReviewHistory(widget.groupId, widget.bookId);
   bool _doneWithBook = false;
+  late int nbOfReviews = 0;
 
   @override
   void didChangeDependencies() async {
@@ -50,6 +55,10 @@ class _ReviewHistoryState extends State<ReviewHistory> {
 
       print(widget.currentUser.uid);
     }
+
+    nbOfReviews =
+        await DBFuture().getNbOfReviews(widget.groupId, widget.bookId);
+
     super.didChangeDependencies();
   }
 
@@ -272,7 +281,7 @@ class _ReviewHistoryState extends State<ReviewHistory> {
                                       style: kTitleStyle,
                                     ),
                                     Text(
-                                      "NOTE",
+                                      "FAVORIS",
                                       style: kTitleStyle,
                                     ),
                                   ],
@@ -286,7 +295,7 @@ class _ReviewHistoryState extends State<ReviewHistory> {
                                   children: [
                                     Text(
                                       //ajouter nombre de reviews
-                                      "4",
+                                      nbOfReviews.toString(),
 
                                       style: kSubtitleStyle,
                                     ),
@@ -305,6 +314,14 @@ class _ReviewHistoryState extends State<ReviewHistory> {
                                 ),
                                 SizedBox(
                                   height: 20,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      left: 10, right: 10, bottom: 20),
+                                  child: Text(
+                                    "Pour info, il n'y a pas de note moyenne, car lorsque l'on a la tête dans le frigo et les pieds dans le four, notre température ne peut être qualifiée de tiède...",
+                                    textAlign: TextAlign.justify,
+                                  ),
                                 )
                               ],
                             ),
@@ -362,6 +379,12 @@ class _ReviewHistoryState extends State<ReviewHistory> {
             }
           },
         ),
+      ),
+      drawer: AppDrawer(
+        currentGroup: widget.currentGroup,
+        currentUser: widget.currentUser,
+        currentBook: widget.currentBook,
+        authModel: widget.authModel,
       ),
     );
   }

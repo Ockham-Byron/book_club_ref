@@ -196,6 +196,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
                             currentGroup: widget.currentGroup,
                             currentBook: _currentBook,
                             currentUser: widget.currentUser,
+                            authModel: widget.authModel,
                             fromRoute: "fromHome",
                           )));
                 },

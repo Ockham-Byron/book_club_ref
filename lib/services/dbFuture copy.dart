@@ -413,7 +413,7 @@ class DBFuture {
   }
 
   Future<String> finishedBook(String groupId, String bookId, String uid,
-      int rating, String review, int nbPages, bool favorite) async {
+      int rating, String review, int nbPages) async {
     String retVal = "error";
     List<String> readBooks = [];
 
@@ -425,7 +425,7 @@ class DBFuture {
           .doc(bookId)
           .collection("reviews")
           .doc(uid)
-          .set({"rating": rating, "review": review, "favorite": favorite});
+          .set({"rating": rating, "review": review});
 
       //add finished Book in user profile
       readBooks.add(bookId);

@@ -53,6 +53,7 @@ class AppDrawer extends StatelessWidget {
                 currentUser: currentUser,
                 currentGroup: currentGroup,
                 currentBook: currentBook,
+                authModel: authModel,
               )));
     }
 
