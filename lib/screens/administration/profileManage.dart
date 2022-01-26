@@ -4,10 +4,10 @@ import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/administration/editScreens/editUser.dart';
 
-import 'package:book_club_ref/screens/root/root.dart';
 import 'package:book_club_ref/services/auth.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/bookSection.dart';
+import 'package:collection/collection.dart';
 
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
@@ -31,22 +31,48 @@ class ProfileManage extends StatefulWidget {
 }
 
 class _ProfileManageState extends State<ProfileManage> {
-  TextEditingController _pseudoInput = TextEditingController();
-  TextEditingController _mailInput = TextEditingController();
-  TextEditingController _pictureUrlInput = TextEditingController();
+  late int nbOfReadPages = 0;
+  List<BookModel> readBooks = [];
+  List<int> readBooksPages = [];
 
-  void _signOut(BuildContext context) async {
-    String _returnedString = await Auth().signOut();
-    if (_returnedString == "success") {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OurRoot(),
-        ),
-        (route) => false,
-      );
-    }
+  @override
+  void initState() {
+    super.initState();
+    nbOfReadPages = 0;
+
+    _countReadPages().whenComplete(() {
+      setState(() {});
+    });
   }
+
+  Future _countReadPages() async {
+    for (String bookId in widget.currentUser.readBooks!) {
+      readBooks.add(await DBFuture().getBook(bookId, widget.currentGroup.id!));
+    }
+    for (BookModel book in readBooks) {
+      readBooksPages.add(book.length!);
+      print(readBooksPages);
+    }
+
+    nbOfReadPages = readBooksPages.sum;
+  }
+
+  // @override
+  // void didChangeDependencies() async {
+
+  //   if (widget.currentUser.readBooks!.length < 0) {
+  //     nbOfReadPages = 0;
+  //   } else {
+  //     for (String bookId in widget.currentUser.readBooks!) {
+  //       readBooks
+  //           .add(await DBFuture().getBook(bookId, widget.currentGroup.id!));
+  //       for (BookModel book in readBooks) {
+  //         nbOfReadPages += book.length!;
+  //       }
+  //     }
+  //   }
+  //   super.didChangeDependencies();
+  // }
 
   bool withProfilePicture() {
     if (widget.currentUser.pictureUrl == "") {
@@ -66,14 +92,6 @@ class _ProfileManageState extends State<ProfileManage> {
     return "${userPseudo[0].toUpperCase()}${userPseudo.substring(1)}";
   }
 
-  void _resetPassword(String email) async {
-    try {
-      String _returnString = await Auth().sendPasswordResetEmail(email);
-    } catch (e) {
-      print(e);
-    }
-  }
-
   void _deleteUser(String userId, String groupId, BuildContext context) async {
     try {
       String _returnString = await Auth().deleteUser();
@@ -88,30 +106,6 @@ class _ProfileManageState extends State<ProfileManage> {
     } catch (e) {
       print(e);
     }
-  }
-
-  Widget _buildPopupDialogDeleteUser(
-      BuildContext context, String userId, String groupId) {
-    return new AlertDialog(
-      title: Text("Avez-vous perdu la tête ??"),
-      content: Text(
-          "Mais bon si vous confirmez que vous souhaitez supprimer votre compte, vous êtes libre..."),
-      actions: <Widget>[
-        new ElevatedButton(
-          onPressed: () {
-            _deleteUser(userId, groupId, context);
-            Navigator.of(context).pop();
-          },
-          child: const Text('Je pars'),
-        ),
-        new ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Finalement je reste'),
-        ),
-      ],
-    );
   }
 
   @override
@@ -244,7 +238,7 @@ class _ProfileManageState extends State<ProfileManage> {
                                     style: kSubtitleStyle,
                                   ),
                                   Text(
-                                    getUserReadPages().toString(),
+                                    nbOfReadPages.toString(),
                                     style: kSubtitleStyle,
                                   ),
                                   // Text(

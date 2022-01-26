@@ -55,6 +55,18 @@ class _EachBookState extends State<EachBook> {
     return currentBookCoverUrl;
   }
 
+  String _nbOfPages() {
+    String nbOfPages;
+
+    if (widget.book!.length != null) {
+      nbOfPages = widget.book!.length!.toString() + " pages";
+    } else {
+      nbOfPages = "Nombre de pages inconnu";
+    }
+
+    return nbOfPages;
+  }
+
   void _goToReviewHistory(BuildContext context) {
     Navigator.push(
       context,
@@ -129,6 +141,10 @@ class _EachBookState extends State<EachBook> {
                           widget.book!.author ?? "Pas d'auteur",
                           style: TextStyle(fontSize: 20, color: Colors.grey),
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(_nbOfPages())
                       ],
                     ),
                   ),
