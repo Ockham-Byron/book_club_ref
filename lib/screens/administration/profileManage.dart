@@ -57,23 +57,6 @@ class _ProfileManageState extends State<ProfileManage> {
     nbOfReadPages = readBooksPages.sum;
   }
 
-  // @override
-  // void didChangeDependencies() async {
-
-  //   if (widget.currentUser.readBooks!.length < 0) {
-  //     nbOfReadPages = 0;
-  //   } else {
-  //     for (String bookId in widget.currentUser.readBooks!) {
-  //       readBooks
-  //           .add(await DBFuture().getBook(bookId, widget.currentGroup.id!));
-  //       for (BookModel book in readBooks) {
-  //         nbOfReadPages += book.length!;
-  //       }
-  //     }
-  //   }
-  //   super.didChangeDependencies();
-  // }
-
   bool withProfilePicture() {
     if (widget.currentUser.pictureUrl == "") {
       return false;

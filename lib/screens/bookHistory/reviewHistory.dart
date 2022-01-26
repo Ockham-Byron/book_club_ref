@@ -35,8 +35,8 @@ class ReviewHistory extends StatefulWidget {
 }
 
 class _ReviewHistoryState extends State<ReviewHistory> {
-  late Future<List<ReviewModel>> reviews =
-      DBFuture().getReviewHistory(widget.groupId, widget.bookId);
+  late Future<List<ReviewModel>> reviews = DBFuture()
+      .getReviewHistory(widget.currentGroup, widget.groupId, widget.bookId);
   bool _doneWithBook = false;
   late int nbOfReviews = 0;
 
@@ -56,7 +56,8 @@ class _ReviewHistoryState extends State<ReviewHistory> {
 
   @override
   void didChangeDependencies() async {
-    reviews = DBFuture().getReviewHistory(widget.groupId, widget.bookId);
+    reviews = DBFuture()
+        .getReviewHistory(widget.currentGroup, widget.groupId, widget.bookId);
     //check if the user is done with book
     if (widget.currentGroup.currentBookId != null) {
       if (await DBFuture().isUserDoneWithBook(

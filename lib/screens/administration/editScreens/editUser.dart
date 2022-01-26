@@ -46,7 +46,7 @@ class _EditUserState extends State<EditUser> {
 
   TextEditingController _userPseudoInput = TextEditingController();
   TextEditingController _userMailInput = TextEditingController();
-  TextEditingController _userPasswordInput = TextEditingController();
+
   TextEditingController _userProfileInput = TextEditingController();
 
   void _editUserPseudo(
@@ -67,6 +67,39 @@ class _EditUserState extends State<EditUser> {
         Fluttertoast.showToast(
             msg:
                 "Ne me demandez pas pourquoi, mais ça n'a pas fonctionné. Il faut parfois accepter l'incertitude...",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Theme.of(context).primaryColor,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _deleteUser(String userId, String groupId, BuildContext context) async {
+    try {
+      String _returnString = await Auth().deleteUser();
+
+      if (_returnString == "success") {
+        DBFuture().deleteUser(userId, groupId);
+        widget.currentGroup.members!.remove(userId);
+        //DBFuture().deleteReview(groupId, userId, widget.c)
+        Fluttertoast.showToast(
+            msg: "Votre compte est supprimé, bonjour tristesse...",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Theme.of(context).primaryColor,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        _signOut(context);
+      } else {
+        Fluttertoast.showToast(
+            msg:
+                "Opération sensible ! Vous devez vous connecter de nouveau pour la mener en toute sécurité.",
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.CENTER,
             timeInSecForIosWeb: 1,
@@ -251,66 +284,88 @@ class _EditUserState extends State<EditUser> {
                 ),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                  child: Center(
-                    child: Container(
-                      height: 200,
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: ShadowContainer(
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              controller: _userPseudoInput,
-                              decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context).canvasColor)),
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context).primaryColor)),
-                                prefixIcon: Icon(
-                                  Icons.person,
-                                  color: Theme.of(context).primaryColor,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 200,
+                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        child: ShadowContainer(
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: _userPseudoInput,
+                                decoration: InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color:
+                                              Theme.of(context).canvasColor)),
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color:
+                                              Theme.of(context).primaryColor)),
+                                  prefixIcon: Icon(
+                                    Icons.person,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  labelText: "Pseudo",
+                                  labelStyle: TextStyle(
+                                      color: Theme.of(context).primaryColor),
                                 ),
-                                labelText: "Pseudo",
-                                labelStyle: TextStyle(
-                                    color: Theme.of(context).primaryColor),
+                                style: Theme.of(context).textTheme.headline6,
                               ),
-                              style: Theme.of(context).textTheme.headline6,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20.0, vertical: 10.0),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(50.0)),
-                                  primary: Theme.of(context).primaryColor),
-                              onPressed: () {
-                                _editUserPseudo(_userPseudoInput.text,
-                                    widget.currentUser.uid!, context);
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 50),
-                                child: Text(
-                                  "Modifier".toUpperCase(),
-                                  style: TextStyle(
-                                      color: Theme.of(context).canvasColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20.0, vertical: 10.0),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50.0)),
+                                    primary: Theme.of(context).primaryColor),
+                                onPressed: () {
+                                  _editUserPseudo(_userPseudoInput.text,
+                                      widget.currentUser.uid!, context);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 50),
+                                  child: Text(
+                                    "Modifier".toUpperCase(),
+                                    style: TextStyle(
+                                        color: Theme.of(context).canvasColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        child: ShadowContainer(
+                            child: TextButton(
+                          onPressed: () => _deleteUser(widget.currentUser.uid!,
+                              widget.currentGroup.id!, context),
+                          child: Text(
+                            "Supprimer mon compte".toUpperCase(),
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          ),
+                        )),
+                      )
+                    ],
                   ),
                 ),
               ),
+
               //Modifier Picture
               Container(
                 decoration: BoxDecoration(

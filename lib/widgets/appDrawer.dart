@@ -181,7 +181,7 @@ class AppDrawer extends StatelessWidget {
                     style: TextStyle(
                         color: Theme.of(context).primaryColor, fontSize: 20),
                   ),
-                  onTap: () => _goToGroupManage(),
+                  onTap: () => _goToBooksHistory(),
                 ),
                 SizedBox(
                   height: 50,

@@ -523,7 +523,7 @@ class DBFuture {
   }
 
   Future<List<ReviewModel>> getReviewHistory(
-      String groupId, String bookId) async {
+      GroupModel currentGroup, String groupId, String bookId) async {
     List<ReviewModel> retVal = [];
 
     try {
@@ -536,7 +536,18 @@ class DBFuture {
           .get();
 
       query.docs.forEach((element) {
-        retVal.add(ReviewModel.fromDocumentSnapshot(doc: element));
+        if (currentGroup.members!.contains(element.id)) {
+          retVal.add(ReviewModel.fromDocumentSnapshot(doc: element));
+        } else {
+          _firestore
+              .collection("groups")
+              .doc(groupId)
+              .collection("books")
+              .doc(bookId)
+              .collection("reviews")
+              .doc(element.id)
+              .delete();
+        }
       });
     } catch (e) {
       print(e);
