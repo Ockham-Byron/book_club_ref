@@ -6,6 +6,7 @@ import 'package:book_club_ref/screens/administration/groupManageRef.dart';
 import 'package:book_club_ref/screens/administration/localwidgets/testScreen.dart';
 
 import 'package:book_club_ref/screens/administration/profileManage.dart';
+import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
 import 'package:book_club_ref/screens/inGroup/localwidgets/SingleBookHome.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
@@ -57,10 +58,15 @@ class AppDrawer extends StatelessWidget {
               )));
     }
 
-    void _goToTestScreen() {
+    void _goToBooksHistory() {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              TestScreen(user: currentUser, group: currentGroup)));
+          builder: (context) => BookHistory(
+              groupId: currentGroup.id!,
+              groupName: currentGroup.name!,
+              currentGroup: currentGroup,
+              currentUser: currentUser,
+              currentBook: currentBook,
+              authModel: authModel)));
     }
 
     bool withProfilePicture() {
@@ -165,8 +171,20 @@ class AppDrawer extends StatelessWidget {
                   ),
                   onTap: () => _goToGroupManage(),
                 ),
+                ListTile(
+                  leading: Icon(
+                    Icons.auto_stories,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  title: Text(
+                    "Livres",
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor, fontSize: 20),
+                  ),
+                  onTap: () => _goToGroupManage(),
+                ),
                 SizedBox(
-                  height: 100,
+                  height: 50,
                 ),
                 Image.network(
                   "https://cdn.pixabay.com/photo/2018/04/24/11/32/book-3346785_1280.png",

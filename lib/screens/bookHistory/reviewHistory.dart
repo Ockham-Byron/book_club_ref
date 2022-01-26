@@ -41,6 +41,20 @@ class _ReviewHistoryState extends State<ReviewHistory> {
   late int nbOfReviews = 0;
 
   @override
+  void initState() {
+    super.initState();
+
+    _getNbOfReviews().whenComplete(() {
+      setState(() {});
+    });
+  }
+
+  Future _getNbOfReviews() async {
+    nbOfReviews =
+        await DBFuture().getNbOfReviews(widget.groupId, widget.bookId);
+  }
+
+  @override
   void didChangeDependencies() async {
     reviews = DBFuture().getReviewHistory(widget.groupId, widget.bookId);
     //check if the user is done with book
@@ -55,9 +69,6 @@ class _ReviewHistoryState extends State<ReviewHistory> {
 
       print(widget.currentUser.uid);
     }
-
-    nbOfReviews =
-        await DBFuture().getNbOfReviews(widget.groupId, widget.bookId);
 
     super.didChangeDependencies();
   }
