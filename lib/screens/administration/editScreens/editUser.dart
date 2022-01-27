@@ -84,7 +84,13 @@ class _EditUserState extends State<EditUser> {
       String _returnString = await Auth().deleteUser();
 
       if (_returnString == "success") {
-        DBFuture().deleteUser(
+        DBFuture().deleteUserFromDb(
+          widget.currentGroup,
+          widget.currentUser.uid!,
+          widget.currentGroup.id!,
+        );
+
+        DBFuture().deleteUserFromGroup(
           widget.currentGroup,
           widget.currentUser.uid!,
           widget.currentGroup.id!,

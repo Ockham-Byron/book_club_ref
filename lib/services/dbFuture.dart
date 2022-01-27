@@ -138,16 +138,27 @@ class DBFuture {
   }
 
   //Delete User
-  Future<String> deleteUser(
+  Future<String> deleteUserFromDb(
       GroupModel currentGroup, String userId, String groupId) async {
     String retVal = "error";
-    List members = currentGroup.members!;
 
     try {
-      members.remove(userId);
       await _firestore.collection("users").doc(userId).delete();
+
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  Future<String> deleteUserFromGroup(
+      GroupModel currentGroup, String userId, String groupId) async {
+    String retVal = "error";
+
+    try {
       await _firestore.collection("groups").doc(groupId).update({
-        "members": FieldValue.arrayUnion(members),
+        "members": FieldValue.arrayRemove([userId])
       });
 
       retVal = "success";
