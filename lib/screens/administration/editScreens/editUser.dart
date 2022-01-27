@@ -84,9 +84,12 @@ class _EditUserState extends State<EditUser> {
       String _returnString = await Auth().deleteUser();
 
       if (_returnString == "success") {
-        DBFuture().deleteUser(userId, groupId);
-        widget.currentGroup.members!.remove(userId);
-        //DBFuture().deleteReview(groupId, userId, widget.c)
+        DBFuture().deleteUser(
+          widget.currentGroup,
+          widget.currentUser.uid!,
+          widget.currentGroup.id!,
+        );
+
         Fluttertoast.showToast(
             msg: "Votre compte est supprimé, bonjour tristesse...",
             toastLength: Toast.LENGTH_LONG,
@@ -96,7 +99,7 @@ class _EditUserState extends State<EditUser> {
             textColor: Colors.white,
             fontSize: 16.0);
         _signOut(context);
-      } else {
+      } else if (_returnString == "error") {
         Fluttertoast.showToast(
             msg:
                 "Opération sensible ! Vous devez vous connecter de nouveau pour la mener en toute sécurité.",

@@ -75,22 +75,6 @@ class _ProfileManageState extends State<ProfileManage> {
     return "${userPseudo[0].toUpperCase()}${userPseudo.substring(1)}";
   }
 
-  void _deleteUser(String userId, String groupId, BuildContext context) async {
-    try {
-      String _returnString = await Auth().deleteUser();
-
-      if (_returnString == "success") {
-        DBFuture().deleteUser(userId, groupId);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-                "Pour supprimer votre compte, vous devez d'abord vous reconnecter pour nous assurer que quelqu'un d'autre ne vous joue pas des tours")));
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Widget displayCircularAvatar() {

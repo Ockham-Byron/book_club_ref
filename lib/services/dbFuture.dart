@@ -138,9 +138,10 @@ class DBFuture {
   }
 
   //Delete User
-  Future<String> deleteUser(String userId, String groupId) async {
+  Future<String> deleteUser(
+      GroupModel currentGroup, String userId, String groupId) async {
     String retVal = "error";
-    List<String> members = [];
+    List members = currentGroup.members!;
 
     try {
       members.remove(userId);
