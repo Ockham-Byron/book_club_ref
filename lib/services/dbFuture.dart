@@ -117,6 +117,37 @@ class DBFuture {
     return retVal;
   }
 
+  //Edit Review
+  Future<String> editReview({
+    required String userId,
+    required String groupId,
+    required String bookId,
+    required String review,
+    required bool favorite,
+    required int rating,
+  }) async {
+    String retVal = "error";
+
+    try {
+      await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .doc(bookId)
+          .collection("reviews")
+          .doc(userId)
+          .update({
+        "review": review.trim(),
+        "rating": rating,
+        "favorite": favorite,
+      });
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
   //EditUser
   Future<String> editUserProfile({
     required String userId,

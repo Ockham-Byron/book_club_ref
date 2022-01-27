@@ -345,6 +345,10 @@ class _ReviewHistoryState extends State<ReviewHistory> {
                         padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                         child: EachReview(
                           review: snapshot.data![index - 1],
+                          currentUser: widget.currentUser,
+                          currentGroup: widget.currentGroup,
+                          book: widget.currentBook,
+                          authModel: widget.authModel,
                         ),
                       );
                     }
