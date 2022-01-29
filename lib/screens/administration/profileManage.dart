@@ -3,8 +3,6 @@ import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/administration/editScreens/editUser.dart';
-
-import 'package:book_club_ref/services/auth.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/bookSection.dart';
 import 'package:collection/collection.dart';

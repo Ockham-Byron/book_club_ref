@@ -1,6 +1,7 @@
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/reviewModel.dart';
+import 'package:book_club_ref/models/reviewModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -618,6 +619,35 @@ class DBFuture {
     }
 
     return retVal;
+  }
+
+  Future<int> getNbOfFavorites(String groupId, String bookId) async {
+    int nbOfFavorites = 0;
+    List<String> favorites = [];
+    List<ReviewModel> reviews = [];
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> query = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .doc(bookId)
+          .collection("reviews")
+          .get();
+
+      query.docs.forEach((element) {
+        reviews.add(ReviewModel.fromDocumentSnapshot(doc: element));
+      });
+      for (ReviewModel reviewItem in reviews) {
+        if (reviewItem.favorite == true) {
+          favorites.add(reviewItem.userId!);
+        }
+      }
+      nbOfFavorites = favorites.length;
+    } catch (e) {
+      print(e);
+    }
+    return nbOfFavorites;
   }
 
   Future<List<UserModel>> getAllUsers(GroupModel currentGroup) async {

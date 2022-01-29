@@ -129,6 +129,11 @@ class _AddReviewState extends State<AddReview> {
                 isFavorite: false,
                 valueChanged: (_isFavorite) {
                   print('Is Favorite : $_isFavorite');
+                  if (_isFavorite = false) {
+                    favorite = false;
+                  } else {
+                    favorite = true;
+                  }
                 },
               ),
             ],

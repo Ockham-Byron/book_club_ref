@@ -60,9 +60,6 @@ class _EditReviewState extends State<EditReview> {
 
   TextEditingController _bookReviewInput = TextEditingController();
 
-  //DateTime _selectedDate = DateTime.now();
-  //DateTime? _selectedDate = initialDate?.toDate();
-
   void _editReview(
     String userId,
     String groupId,
@@ -203,9 +200,13 @@ class _EditReviewState extends State<EditReview> {
                       SizedBox(width: 20),
                       FavoriteButton(
                         iconColor: Theme.of(context).primaryColor,
-                        isFavorite: false,
+                        isFavorite: initialFavorite,
                         valueChanged: (_isFavorite) {
-                          print('Is Favorite : $_isFavorite');
+                          if (_isFavorite == false) {
+                            _favoriteInput = false;
+                          } else {
+                            _favoriteInput = true;
+                          }
                         },
                       ),
                     ],

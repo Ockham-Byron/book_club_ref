@@ -39,6 +39,7 @@ class _ReviewHistoryState extends State<ReviewHistory> {
       .getReviewHistory(widget.currentGroup, widget.groupId, widget.bookId);
   bool _doneWithBook = false;
   late int nbOfReviews = 0;
+  late int nbOfFavorites = 0;
 
   @override
   void initState() {
@@ -52,6 +53,8 @@ class _ReviewHistoryState extends State<ReviewHistory> {
   Future _getNbOfReviews() async {
     nbOfReviews =
         await DBFuture().getNbOfReviews(widget.groupId, widget.bookId);
+    nbOfFavorites =
+        await DBFuture().getNbOfFavorites(widget.groupId, widget.bookId);
   }
 
   @override
@@ -313,7 +316,7 @@ class _ReviewHistoryState extends State<ReviewHistory> {
                                     ),
                                     Text(
                                       //ajouter note
-                                      "10",
+                                      nbOfFavorites.toString(),
 
                                       style: kSubtitleStyle,
                                     ),
