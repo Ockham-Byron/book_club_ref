@@ -355,36 +355,103 @@ class _ReviewHistoryState extends State<ReviewHistory> {
                   },
                 );
               } else {
+                //Si pas de critique
                 return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      height: 300,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                "https://cdn.pixabay.com/photo/2017/05/27/20/51/book-2349419_1280.png"),
-                            fit: BoxFit.contain),
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Builder(
+                                builder: (context) => GestureDetector(
+                                  child: displayCircularAvatar(),
+                                  onTap: () =>
+                                      Scaffold.of(context).openDrawer(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Expanded(
+                            child: Container(
+                              width: 200.0,
+                              decoration: new BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  color: Colors.grey.shade200.withOpacity(0.5)),
+                              child: Text(
+                                _displayGroupName(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 30),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.logout_rounded,
+                              color: Colors.white,
+                            ),
+                            onPressed: () => _signOut(context),
+                          )
+                        ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        "Il n'y a pas encore de critique pour ce livre ;(",
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 20,
+                    Expanded(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).canvasColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(50),
+                            topRight: Radius.circular(50),
+                          ),
                         ),
-                        textAlign: TextAlign.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              height: 300,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        "https://cdn.pixabay.com/photo/2017/05/27/20/51/book-2349419_1280.png"),
+                                    fit: BoxFit.contain),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Text(
+                                "Il n'y a pas encore de critique pour ce livre ;(",
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 20,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            SizedBox(height: 100),
+                            ElevatedButton(
+                              onPressed: () => _goToReview(),
+                              child: Text("Ajouter la première critique"),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () => _goToReview(),
-                      child: Text("Ajouter la première critique"),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    )
                   ],
                 );
               }
