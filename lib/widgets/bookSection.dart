@@ -44,31 +44,26 @@ class _BookSectionState extends State<BookSection> {
       future: books,
       builder: (BuildContext context, AsyncSnapshot<List<BookModel>> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return ListView.builder(
-            //scrollDirection: Axis.horizontal,
-            itemCount: snapshot.data!.length + 1,
-            itemBuilder: (BuildContext context, int index) {
-              if (index == 0) {
-                return Text("");
-                // return Padding(
-                //   padding: const EdgeInsets.all(10.0),
-                //   child: Row(
-                //     children: [
-                //       BackButton(),
-                //     ],
-                //   ),
-                // );
-
-              } else {
-                return BookCard(
-                  book: snapshot.data![index - 1],
-                  groupId: widget.groupId,
-                  currentGroup: widget.currentGroup,
-                  currentUser: widget.currentUser,
-                  authModel: widget.authModel,
-                );
-              }
-            },
+          return Container(
+            width: 350,
+            height: 500,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data!.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == 0) {
+                  return Text("");
+                } else {
+                  return BookCard(
+                    book: snapshot.data![index - 1],
+                    groupId: widget.groupId,
+                    currentGroup: widget.currentGroup,
+                    currentUser: widget.currentUser,
+                    authModel: widget.authModel,
+                  );
+                }
+              },
+            ),
           );
         } else {
           return Center(

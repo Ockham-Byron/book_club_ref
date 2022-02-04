@@ -105,139 +105,111 @@ class _ProfileManageState extends State<ProfileManage> {
       return readBooks;
     }
 
-    int getUserReadPages() {
-      int readPages;
-      if (widget.currentUser.readPages != null) {
-        readPages = widget.currentUser.readPages!;
-      } else {
-        readPages = 0;
-      }
-      return readPages;
-    }
-
     return Scaffold(
-      body: Container(
-        alignment: Alignment.bottomCenter,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/background.jpg'),
-              fit: BoxFit.cover),
-        ),
+      body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height * 0.93,
-          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.only(top: 50),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/background.jpg'),
+                fit: BoxFit.cover),
+          ),
           child: Stack(
             children: [
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.83,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Colors.amber[50],
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50),
-                    ),
+              Container(
+                margin: EdgeInsets.only(top: 50),
+                height: 800,
+                decoration: BoxDecoration(
+                  color: Colors.amber[50],
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.1,
-                      left: 20,
-                      right: 20,
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          getUserPseudo(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 36,
-                          ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 100),
+                  child: Column(
+                    children: [
+                      Text(
+                        getUserPseudo(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 36,
                         ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => EditUser(
-                                    currentGroup: widget.currentGroup,
-                                    currentUser: widget.currentUser)));
-                          },
-                          child: Text(
-                            "MODIFIER",
-                            style: TextStyle(color: Colors.red[300]),
-                          ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => EditUser(
+                                  currentGroup: widget.currentGroup,
+                                  currentUser: widget.currentUser)));
+                        },
+                        child: Text(
+                          "MODIFIER",
+                          style: TextStyle(color: Colors.red[300]),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(top: 10),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    "LIVRES LUS",
-                                    style: kTitleStyle,
-                                  ),
-                                  Text(
-                                    "PAGES LUES",
-                                    style: kTitleStyle,
-                                  ),
-                                  // Text(
-                                  //   "FAVORIS",
-                                  //   style: kTitleStyle,
-                                  // ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    getUserReadBooks().toString(),
-                                    style: kSubtitleStyle,
-                                  ),
-                                  Text(
-                                    nbOfReadPages.toString(),
-                                    style: kSubtitleStyle,
-                                  ),
-                                  // Text(
-                                  //   "47",
-                                  //   style: kSubtitleStyle,
-                                  // ),
-                                ],
-                              )
-                            ],
-                          ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(top: 10),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  "LIVRES LUS",
+                                  style: kTitleStyle,
+                                ),
+                                Text(
+                                  "PAGES LUES",
+                                  style: kTitleStyle,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  getUserReadBooks().toString(),
+                                  style: kSubtitleStyle,
+                                ),
+                                Text(
+                                  nbOfReadPages.toString(),
+                                  style: kSubtitleStyle,
+                                ),
+                              ],
+                            )
+                          ],
                         ),
-                        SizedBox(
-                          height: 50,
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Text(
+                        "Continuer de lire",
+                        style: TextStyle(fontSize: 30),
+                        textAlign: TextAlign.start,
+                      ),
+                      Expanded(
+                        child: BookSection(
+                          groupId: widget.currentGroup.id!,
+                          groupName: widget.currentGroup.name!,
+                          currentGroup: widget.currentGroup,
+                          currentUser: widget.currentUser,
+                          authModel: widget.authModel,
                         ),
-                        Text(
-                          "Continuer de lire",
-                          style: TextStyle(fontSize: 30),
-                          textAlign: TextAlign.start,
-                        ),
-                        Expanded(
-                          child: BookSection(
-                            groupId: widget.currentGroup.id!,
-                            groupName: widget.currentGroup.name!,
-                            currentGroup: widget.currentGroup,
-                            currentUser: widget.currentUser,
-                            authModel: widget.authModel,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Container(
+              Positioned(
+                  child: Container(
                 alignment: Alignment.center,
                 height: MediaQuery.of(context).size.height * 0.2,
                 padding: EdgeInsets.all(2),
@@ -246,7 +218,7 @@ class _ProfileManageState extends State<ProfileManage> {
                 child: ClipRect(
                   child: displayCircularAvatar(),
                 ),
-              )
+              ))
             ],
           ),
         ),

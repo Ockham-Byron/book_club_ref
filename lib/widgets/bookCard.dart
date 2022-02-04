@@ -85,36 +85,22 @@ class _BookCardState extends State<BookCard> {
         child: Container(
           child: Column(
             children: [
-              SizedBox(
-                height: 200,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 100,
-                      child: Image.network(_currentBookCoverUrl()),
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            widget.book!.title ?? "Pas de titre",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Theme.of(context).primaryColor),
-                          ),
-                          Text(
-                            widget.book!.author ?? "Pas d'auteur",
-                            style: TextStyle(fontSize: 20, color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              Container(
+                width: 100,
+                height: 280,
+                child: Image.network(_currentBookCoverUrl()),
               ),
+              Text(
+                widget.book!.title ?? "Pas de titre",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 20, color: Theme.of(context).primaryColor),
+              ),
+              Text(
+                widget.book!.author ?? "Pas d'auteur",
+                style: TextStyle(fontSize: 20, color: Colors.grey),
+              ),
+              IconButton(onPressed: () {}, icon: Icon(Icons.close))
             ],
           ),
         ),
@@ -126,6 +112,6 @@ class _BookCardState extends State<BookCard> {
 
   @override
   Widget build(BuildContext context) {
-    return _displayBookCard();
+    return Container(width: 150, child: _displayBookCard());
   }
 }
