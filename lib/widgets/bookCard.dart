@@ -2,6 +2,7 @@ import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
+import 'package:book_club_ref/screens/bookHistory/finishedBook.dart';
 import 'package:book_club_ref/screens/bookHistory/reviewHistory.dart';
 import 'package:book_club_ref/services/dbFuture.dart';
 //import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
@@ -86,8 +87,8 @@ class _BookCardState extends State<BookCard> {
           child: Column(
             children: [
               Container(
-                width: 100,
-                height: 280,
+                width: 150,
+                height: 200,
                 child: Image.network(_currentBookCoverUrl()),
               ),
               Text(
@@ -100,7 +101,17 @@ class _BookCardState extends State<BookCard> {
                 widget.book!.author ?? "Pas d'auteur",
                 style: TextStyle(fontSize: 20, color: Colors.grey),
               ),
-              IconButton(onPressed: () {}, icon: Icon(Icons.close))
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FinishedBook()));
+                  },
+                  icon: Icon(
+                    Icons.close,
+                    color: Theme.of(context).primaryColor,
+                  ))
             ],
           ),
         ),
@@ -112,6 +123,6 @@ class _BookCardState extends State<BookCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(width: 150, child: _displayBookCard());
+    return _displayBookCard();
   }
 }

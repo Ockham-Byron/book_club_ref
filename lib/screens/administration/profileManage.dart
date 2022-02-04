@@ -195,7 +195,7 @@ class _ProfileManageState extends State<ProfileManage> {
                         style: TextStyle(fontSize: 30),
                         textAlign: TextAlign.start,
                       ),
-                      Expanded(
+                      Container(
                         child: BookSection(
                           groupId: widget.currentGroup.id!,
                           groupName: widget.currentGroup.name!,

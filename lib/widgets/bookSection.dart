@@ -45,8 +45,9 @@ class _BookSectionState extends State<BookSection> {
       builder: (BuildContext context, AsyncSnapshot<List<BookModel>> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return Container(
+            padding: EdgeInsets.only(top: 20),
             width: 350,
-            height: 500,
+            height: 320,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: snapshot.data!.length + 1,
