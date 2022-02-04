@@ -119,6 +119,13 @@ class _ReviewHistoryState extends State<ReviewHistory> {
         builder: (context) => AddReview(
           currentGroup: widget.currentGroup,
           bookId: widget.bookId,
+          fromRoute: ReviewHistory(
+              bookId: widget.bookId,
+              groupId: widget.currentGroup.id!,
+              currentGroup: widget.currentGroup,
+              currentBook: widget.currentBook,
+              currentUser: widget.currentUser,
+              authModel: widget.authModel),
         ),
       ),
     );

@@ -2,7 +2,7 @@ import 'package:book_club_ref/models/authModel.dart';
 import 'package:book_club_ref/models/bookModel.dart';
 
 import 'package:book_club_ref/models/groupModel.dart';
-import 'package:book_club_ref/screens/root/root.dart';
+
 import 'package:book_club_ref/services/dbFuture.dart';
 import 'package:book_club_ref/widgets/shadowContainer.dart';
 import 'package:favorite_button/favorite_button.dart';
@@ -12,12 +12,14 @@ import 'package:provider/provider.dart';
 class AddReview extends StatefulWidget {
   final GroupModel currentGroup;
   final String bookId;
+  final Widget fromRoute;
 
-  const AddReview({
-    Key? key,
-    required this.currentGroup,
-    required this.bookId,
-  }) : super(key: key);
+  const AddReview(
+      {Key? key,
+      required this.currentGroup,
+      required this.bookId,
+      required this.fromRoute})
+      : super(key: key);
 
   @override
   _AddReviewState createState() => _AddReviewState();
@@ -154,7 +156,7 @@ class _AddReviewState extends State<AddReview> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => OurRoot(),
+                  builder: (context) => widget.fromRoute,
                 ),
                 (route) => false,
               );

@@ -336,9 +336,9 @@ class _SingleBookHomeState extends State<SingleBookHome> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AddReview(
-          currentGroup: widget.currentGroup,
-          bookId: widget.currentGroup.currentBookId!,
-        ),
+            currentGroup: widget.currentGroup,
+            bookId: widget.currentGroup.currentBookId!,
+            fromRoute: OurRoot()),
       ),
     );
   }
