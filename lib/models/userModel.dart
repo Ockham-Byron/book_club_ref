@@ -10,6 +10,7 @@ class UserModel {
   String pictureUrl =
       "https://digitalpainting.school/static/img/default_avatar.png";
   List<String>? readBooks;
+  List<String>? dontWantToReadBooks;
   List<String>? favoriteBooks;
   int? readPages;
 
@@ -20,6 +21,7 @@ class UserModel {
     this.accountCreated,
     this.readBooks,
     this.readPages,
+    this.dontWantToReadBooks,
     this.favoriteBooks,
     this.pictureUrl =
         "https://digitalpainting.school/static/img/default_avatar.png",
@@ -34,6 +36,7 @@ class UserModel {
 
     groupId = doc.data()!["groupId"];
     readBooks = List<String>.from(doc.data()!["readBooks"]);
+    dontWantToReadBooks = List<String>.from(doc.data()!["dontWantToReadBooks"]);
     favoriteBooks = List<String>.from(doc.data()!["favoriteBooks"]);
     readPages = doc.data()!["readPages"];
     pictureUrl = doc.data()!["pictureUrl"];

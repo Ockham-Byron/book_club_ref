@@ -202,6 +202,7 @@ class _ProfileManageState extends State<ProfileManage> {
                           currentGroup: widget.currentGroup,
                           currentUser: widget.currentUser,
                           authModel: widget.authModel,
+                          sectionCategory: "continuer",
                         ),
                       ),
                     ],

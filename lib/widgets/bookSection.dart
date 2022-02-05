@@ -14,13 +14,15 @@ class BookSection extends StatefulWidget {
   final GroupModel currentGroup;
   final UserModel currentUser;
   final AuthModel authModel;
+  final String sectionCategory;
   const BookSection(
       {Key? key,
       required this.groupId,
       required this.groupName,
       required this.currentGroup,
       required this.currentUser,
-      required this.authModel})
+      required this.authModel,
+      required this.sectionCategory})
       : super(key: key);
 
   @override
@@ -28,12 +30,13 @@ class BookSection extends StatefulWidget {
 }
 
 class _BookSectionState extends State<BookSection> {
-  late Future<List<BookModel>> books =
-      DBFuture().getBookHistory(widget.groupId);
+  late Future<List<BookModel>> books = DBFuture()
+      .getContinueReadingBooks(widget.currentGroup.id!, widget.currentUser);
 
   @override
   void didChangeDependencies() async {
-    books = DBFuture().getBookHistory(widget.groupId);
+    books = DBFuture()
+        .getContinueReadingBooks(widget.currentGroup.id!, widget.currentUser);
 
     super.didChangeDependencies();
   }
@@ -47,13 +50,13 @@ class _BookSectionState extends State<BookSection> {
           return Container(
             padding: EdgeInsets.only(top: 20),
             width: 350,
-            height: 320,
+            height: 350,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: snapshot.data!.length + 1,
               itemBuilder: (BuildContext context, int index) {
                 if (index == 0) {
-                  return Text("");
+                  return Container();
                 } else {
                   return BookCard(
                     book: snapshot.data![index - 1],

@@ -105,16 +105,6 @@ class _ProfileManageState extends State<ProfileManage> {
       return readBooks;
     }
 
-    int getUserReadPages() {
-      int readPages;
-      if (widget.currentUser.readPages != null) {
-        readPages = widget.currentUser.readPages!;
-      } else {
-        readPages = 0;
-      }
-      return readPages;
-    }
-
     return Scaffold(
       body: Container(
         alignment: Alignment.bottomCenter,
@@ -230,6 +220,7 @@ class _ProfileManageState extends State<ProfileManage> {
                             currentGroup: widget.currentGroup,
                             currentUser: widget.currentUser,
                             authModel: widget.authModel,
+                            sectionCategory: "continuer",
                           ),
                         ),
                       ],

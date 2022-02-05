@@ -1,7 +1,7 @@
 import 'package:book_club_ref/models/bookModel.dart';
 import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/reviewModel.dart';
-import 'package:book_club_ref/models/reviewModel.dart';
+
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -12,6 +12,7 @@ class DBFuture {
     String retVal = "error";
     List<String> readBooks = [];
     List<String> favoriteBooks = [];
+    List<String> dontWantToReadBooks = [];
 
     try {
       await _firestore.collection("users").doc(user.uid).set({
@@ -21,7 +22,8 @@ class DBFuture {
         "accountCreated": Timestamp.now(),
         "readBooks": readBooks,
         "favoriteBooks": favoriteBooks,
-        "readPages": user.readPages
+        "readPages": user.readPages,
+        "dontWantToReadBooks": dontWantToReadBooks
       });
       retVal = "success";
     } catch (e) {
@@ -477,9 +479,67 @@ class DBFuture {
         "readBooks": FieldValue.arrayUnion(readBooks),
         "readPages": FieldValue.increment(nbPages)
       });
+
+      retVal = "success";
     } catch (e) {
       print(e);
     }
+
+    return retVal;
+  }
+
+  Future<String> dontWantToReadBook(String bookId, String userId) async {
+    String retVal = "error";
+    List<String> dontWantToReadBooks = [];
+
+    try {
+      dontWantToReadBooks.add(bookId);
+      await _firestore.collection("users").doc(userId).update(
+          {"dontWantToReadBooks": FieldValue.arrayUnion(dontWantToReadBooks)});
+      retVal = "success";
+    } catch (e) {}
+
+    return retVal;
+  }
+
+  Future<bool> getDontWantToReadBooks(String groupId, UserModel user) async {
+    bool retVal = false;
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> query = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .get();
+
+      query.docs.forEach((element) {
+        if (user.dontWantToReadBooks!.contains(element.id)) {
+          retVal = true;
+        }
+      });
+    } catch (e) {}
+
+    return retVal;
+  }
+
+  Future<List<BookModel>> getContinueReadingBooks(
+      String groupId, UserModel user) async {
+    List<BookModel> retVal = [];
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> query = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .get();
+
+      query.docs.forEach((element) async {
+        if (await isUserDoneWithBook(groupId, element.id, user.uid!) == false ||
+            await getDontWantToReadBooks(groupId, user) == true) {
+          retVal.add(BookModel.fromDocumentSnapshot(doc: element));
+        }
+      });
+    } catch (e) {}
 
     return retVal;
   }

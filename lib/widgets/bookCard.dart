@@ -80,45 +80,48 @@ class _BookCardState extends State<BookCard> {
   }
 
   Widget _displayBookCard() {
-    if (_doneWithBook == false) {
-      return GestureDetector(
-        onTap: () => _goToReviewHistory(context),
-        child: Container(
-          child: Column(
-            children: [
-              Container(
-                width: 150,
-                height: 200,
-                child: Image.network(_currentBookCoverUrl()),
-              ),
-              Text(
-                widget.book!.title ?? "Pas de titre",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 20, color: Theme.of(context).primaryColor),
-              ),
-              Text(
-                widget.book!.author ?? "Pas d'auteur",
-                style: TextStyle(fontSize: 20, color: Colors.grey),
-              ),
-              IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FinishedBook()));
-                  },
-                  icon: Icon(
-                    Icons.close,
-                    color: Theme.of(context).primaryColor,
-                  ))
-            ],
-          ),
+    return GestureDetector(
+      onTap: () => _goToReviewHistory(context),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        width: 150,
+        child: Column(
+          children: [
+            Container(
+              width: 100,
+              //height: 200,
+              child: Image.network(_currentBookCoverUrl()),
+            ),
+            Text(
+              widget.book!.title ?? "Pas de titre",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 20, color: Theme.of(context).primaryColor),
+            ),
+            Text(
+              widget.book!.author ?? "Pas d'auteur",
+              style: TextStyle(fontSize: 20, color: Colors.grey),
+            ),
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FinishedBook(
+                                finishedBook: widget.book!,
+                                currentGroup: widget.currentGroup,
+                                currentUser: widget.currentUser,
+                                authModel: widget.authModel,
+                              )));
+                },
+                icon: Icon(
+                  Icons.close,
+                  color: Theme.of(context).primaryColor,
+                ))
+          ],
         ),
-      );
-    } else {
-      return Container();
-    }
+      ),
+    );
   }
 
   @override
