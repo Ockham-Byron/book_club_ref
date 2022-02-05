@@ -145,6 +145,10 @@ class _AddReviewState extends State<AddReview> {
           ),
           ElevatedButton(
             onPressed: () {
+              if (favorite == true) {
+                DBFuture().favoriteBook(
+                    widget.currentGroup.id!, widget.bookId, _authModel.uid!);
+              }
               DBFuture().finishedBook(
                   widget.currentGroup.id!,
                   widget.bookId,

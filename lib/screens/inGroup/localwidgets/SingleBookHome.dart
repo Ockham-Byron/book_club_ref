@@ -300,7 +300,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
             height: 10,
           ),
           Text(
-            _pickingUserPseudo,
+            "${_pickingUserPseudo[0].toUpperCase()}${_pickingUserPseudo.substring(1)}",
             style: TextStyle(
               fontSize: 20,
               color: Theme.of(context).primaryColor,
@@ -471,7 +471,7 @@ class _SingleBookHomeState extends State<SingleBookHome> {
                             ),
                           ),
                           Text(
-                            widget.currentUser.pseudo!,
+                            "${widget.currentUser.pseudo![0].toUpperCase()}${widget.currentUser.pseudo!.substring(1)}",
                             style: TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.w700,

@@ -36,9 +36,14 @@ class _BookSectionState extends State<BookSection> {
 
   @override
   void didChangeDependencies() async {
-    books = DBFuture()
-        .getContinueReadingBooks(widget.currentGroup.id!, widget.currentUser);
-    nothingText = "Rien à lire pour l'instant !";
+    if (widget.sectionCategory == "continuer") {
+      books = DBFuture()
+          .getContinueReadingBooks(widget.currentGroup.id!, widget.currentUser);
+      nothingText = "Rien à lire pour l'instant !";
+    } else if (widget.sectionCategory == "favoris") {
+      books = DBFuture().getFavoriteBooks(widget.groupId, widget.currentUser);
+      nothingText = "Aucun favori pour l'instant";
+    }
 
     super.didChangeDependencies();
   }

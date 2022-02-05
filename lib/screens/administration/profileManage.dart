@@ -118,7 +118,7 @@ class _ProfileManageState extends State<ProfileManage> {
             children: [
               Container(
                 margin: EdgeInsets.only(top: 50),
-                height: 800,
+                height: 1000,
                 decoration: BoxDecoration(
                   color: Colors.amber[50],
                   borderRadius: BorderRadius.only(
@@ -203,6 +203,24 @@ class _ProfileManageState extends State<ProfileManage> {
                           currentUser: widget.currentUser,
                           authModel: widget.authModel,
                           sectionCategory: "continuer",
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Text(
+                        "Favoris",
+                        style: TextStyle(fontSize: 30),
+                        textAlign: TextAlign.start,
+                      ),
+                      Container(
+                        child: BookSection(
+                          groupId: widget.currentGroup.id!,
+                          groupName: widget.currentGroup.name!,
+                          currentGroup: widget.currentGroup,
+                          currentUser: widget.currentUser,
+                          authModel: widget.authModel,
+                          sectionCategory: "favoris",
                         ),
                       ),
                     ],

@@ -75,6 +75,14 @@ class _EditReviewState extends State<EditReview> {
         rating: rating,
         favorite: favorite);
 
+    if (_favoriteInput != widget.currentReview.favorite) {
+      if (_favoriteInput == true) {
+        DBFuture().favoriteBook(groupId, bookId, widget.currentUser.uid!);
+      } else {
+        DBFuture().cancelFavoriteBook(groupId, bookId, widget.currentUser.uid!);
+      }
+    }
+
     if (_returnString == "success") {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => ReviewHistory(

@@ -513,13 +513,10 @@ class DBFuture {
           .get();
 
       query.docs.forEach((element) {
-        print(element.id);
         if (user.dontWantToReadBooks!.contains(element.id)) {
-          print(element.id + "veut pas le lire");
           retVal = true;
         }
       });
-      print("vérification ne veut pas lire le livre");
     } catch (e) {}
 
     return retVal;
@@ -528,7 +525,6 @@ class DBFuture {
   Future<List<BookModel>> getContinueReadingBooks(
       String groupId, UserModel user) async {
     List<BookModel> retVal = [];
-    bool _isDoneWithBook = false;
 
     try {
       QuerySnapshot<Map<String, dynamic>> queryAllBooks = await _firestore
@@ -556,6 +552,33 @@ class DBFuture {
     return retVal;
   }
 
+  Future<List<BookModel>> getFavoriteBooks(
+      String groupId, UserModel user) async {
+    List<BookModel> retVal = [];
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> query = await _firestore
+          .collection("groups")
+          .doc(groupId)
+          .collection("books")
+          .get();
+
+      query.docs.forEach((element) async {
+        print(element.id);
+        print(user.pseudo);
+        print(user.readBooks);
+        if (user.favoriteBooks!.contains(element.id)) {
+          retVal.add(BookModel.fromDocumentSnapshot(doc: element));
+          print("ajouter aux favoris");
+        } else {
+          print("aucun favori");
+        }
+      });
+    } catch (e) {}
+
+    return retVal;
+  }
+
   Future<String> favoriteBook(
     String groupId,
     String bookId,
@@ -563,18 +586,8 @@ class DBFuture {
   ) async {
     String retVal = "error";
     List<String> favoriteBooks = [];
-    //List<String> nbOfFavorites = [];
 
     try {
-      // nbOfFavorites.add(uid);
-      // await _firestore
-      //     .collection("groups")
-      //     .doc(groupId)
-      //     .collection("books")
-      //     .doc(bookId)
-      //     .update({"nbOfFavorites": FieldValue.arrayUnion(nbOfFavorites)});
-
-      //add finished Book in user profile
       favoriteBooks.add(bookId);
       await _firestore.collection("users").doc(uid).update({
         "favoriteBooks": FieldValue.arrayUnion(favoriteBooks),
@@ -594,18 +607,8 @@ class DBFuture {
   ) async {
     String retVal = "error";
     List<String> favoriteBooks = [];
-    //List<String> nbOfFavorites = [];
 
     try {
-      // nbOfFavorites.add(uid);
-      // await _firestore
-      //     .collection("groups")
-      //     .doc(groupId)
-      //     .collection("books")
-      //     .doc(bookId)
-      //     .update({"nbOfFavorites": FieldValue.arrayUnion(nbOfFavorites)});
-
-      //add finished Book in user profile
       favoriteBooks.add(bookId);
       await _firestore.collection("users").doc(uid).update({
         "favoriteBooks": FieldValue.arrayRemove(favoriteBooks),
