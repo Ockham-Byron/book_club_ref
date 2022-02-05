@@ -69,9 +69,6 @@ class _ReviewHistoryState extends State<ReviewHistory> {
       } else {
         _doneWithBook = false;
       }
-      print(_doneWithBook);
-
-      print(widget.currentUser.uid);
     }
 
     super.didChangeDependencies();

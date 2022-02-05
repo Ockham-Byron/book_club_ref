@@ -513,10 +513,13 @@ class DBFuture {
           .get();
 
       query.docs.forEach((element) {
+        print(element.id);
         if (user.dontWantToReadBooks!.contains(element.id)) {
+          print(element.id + "veut pas le lire");
           retVal = true;
         }
       });
+      print("vérification ne veut pas lire le livre");
     } catch (e) {}
 
     return retVal;
@@ -525,20 +528,29 @@ class DBFuture {
   Future<List<BookModel>> getContinueReadingBooks(
       String groupId, UserModel user) async {
     List<BookModel> retVal = [];
+    bool _isDoneWithBook = false;
 
     try {
-      QuerySnapshot<Map<String, dynamic>> query = await _firestore
+      QuerySnapshot<Map<String, dynamic>> queryAllBooks = await _firestore
           .collection("groups")
           .doc(groupId)
           .collection("books")
           .get();
 
-      query.docs.forEach((element) async {
-        if (await isUserDoneWithBook(groupId, element.id, user.uid!) == false ||
-            await getDontWantToReadBooks(groupId, user) == true) {
-          retVal.add(BookModel.fromDocumentSnapshot(doc: element));
+      queryAllBooks.docs.forEach((element) async {
+        if (user.dontWantToReadBooks!.contains(element.id)) {
+          print("il ne veut plus le lire");
+        } else {
+          if (user.readBooks!.contains(element.id)) {
+            print("il l'a déjà lu");
+          } else {
+            retVal.add(BookModel.fromDocumentSnapshot(doc: element));
+            print("pas encore lu mais il veut le lire");
+          }
         }
       });
+      print("pseudo user : " + user.pseudo!);
+      print(retVal);
     } catch (e) {}
 
     return retVal;

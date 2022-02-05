@@ -30,26 +30,6 @@ class BookCard extends StatefulWidget {
 }
 
 class _BookCardState extends State<BookCard> {
-  @override
-  void initState() {
-    super.initState();
-
-    _initBook().whenComplete(() {
-      setState(() {});
-    });
-  }
-
-  bool _doneWithBook = true;
-
-  Future _initBook() async {
-    if (await DBFuture().isUserDoneWithBook(
-        widget.currentGroup.id!, widget.book!.id!, widget.currentUser.uid!)) {
-      _doneWithBook = true;
-    } else {
-      _doneWithBook = false;
-    }
-  }
-
   String _currentBookCoverUrl() {
     String currentBookCoverUrl;
 
