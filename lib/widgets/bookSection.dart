@@ -30,6 +30,7 @@ class BookSection extends StatefulWidget {
 }
 
 class _BookSectionState extends State<BookSection> {
+  String nothingText = "";
   late Future<List<BookModel>> books = DBFuture()
       .getContinueReadingBooks(widget.currentGroup.id!, widget.currentUser);
 
@@ -37,6 +38,7 @@ class _BookSectionState extends State<BookSection> {
   void didChangeDependencies() async {
     books = DBFuture()
         .getContinueReadingBooks(widget.currentGroup.id!, widget.currentUser);
+    nothingText = "Rien à lire pour l'instant !";
 
     super.didChangeDependencies();
   }
@@ -47,28 +49,41 @@ class _BookSectionState extends State<BookSection> {
       future: books,
       builder: (BuildContext context, AsyncSnapshot<List<BookModel>> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return Container(
-            padding: EdgeInsets.only(top: 20),
-            width: 350,
-            height: 350,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data!.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                if (index == 0) {
-                  return Container();
-                } else {
-                  return BookCard(
-                    book: snapshot.data![index - 1],
-                    groupId: widget.groupId,
-                    currentGroup: widget.currentGroup,
-                    currentUser: widget.currentUser,
-                    authModel: widget.authModel,
-                  );
-                }
-              },
-            ),
-          );
+          if (snapshot.data!.length > 0) {
+            return Container(
+              padding: EdgeInsets.only(top: 20),
+              width: 350,
+              height: 350,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: snapshot.data!.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return Container();
+                  } else {
+                    return BookCard(
+                      book: snapshot.data![index - 1],
+                      groupId: widget.groupId,
+                      currentGroup: widget.currentGroup,
+                      currentUser: widget.currentUser,
+                      authModel: widget.authModel,
+                    );
+                  }
+                },
+              ),
+            );
+          } else {
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                nothingText,
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
+            );
+          }
         } else {
           return Center(
             child: CircularProgressIndicator(),
