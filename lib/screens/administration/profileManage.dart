@@ -118,7 +118,7 @@ class _ProfileManageState extends State<ProfileManage> {
             children: [
               Container(
                 margin: EdgeInsets.only(top: 50),
-                height: 1000,
+                height: 1200,
                 decoration: BoxDecoration(
                   color: Colors.amber[50],
                   borderRadius: BorderRadius.only(
@@ -204,9 +204,6 @@ class _ProfileManageState extends State<ProfileManage> {
                           authModel: widget.authModel,
                           sectionCategory: "continuer",
                         ),
-                      ),
-                      SizedBox(
-                        height: 50,
                       ),
                       Text(
                         "Favoris",

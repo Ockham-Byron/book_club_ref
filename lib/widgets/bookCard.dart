@@ -4,9 +4,6 @@ import 'package:book_club_ref/models/groupModel.dart';
 import 'package:book_club_ref/models/userModel.dart';
 import 'package:book_club_ref/screens/bookHistory/finishedBook.dart';
 import 'package:book_club_ref/screens/bookHistory/reviewHistory.dart';
-import 'package:book_club_ref/services/dbFuture.dart';
-//import 'package:book_club_ref/screens/bookHistory/bookHistory.dart';
-//import 'package:book_club_ref/services/dbFuture.dart';
 
 import 'package:flutter/material.dart';
 
